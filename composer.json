@@ -1,0 +1,21 @@
+{
+  "name": "netistrar/reseller-api",
+  "version": "0.0.1",
+  "description": "Reseller API for Netistrar Registrar Services",
+  "keywords": [
+    "PHP",
+    "API",
+    "Domain Names",
+    "Registrar"
+  ],
+  "homepage": "https://www.netistrar.com",
+  "type": "library",
+  "require": {
+    "oxil/kinikit-core": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Netistrar\\": "src/Netistrar"
+    }
+  }
+}
