@@ -24,6 +24,11 @@ class DomainAvailabilityResults extends SerialisableObject {
      */
     protected $tldResults;
 
+    /**
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][]
+     */
+    protected $suggestions;
+
 
 
     /**
@@ -60,6 +65,15 @@ class DomainAvailabilityResults extends SerialisableObject {
      */
     public function getTldResults(){
         return $this->tldResults;
+    }
+
+    /**
+     * Get the suggestions
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][]
+     */
+    public function getSuggestions(){
+        return $this->suggestions;
     }
 
 

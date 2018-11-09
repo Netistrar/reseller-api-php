@@ -24,6 +24,11 @@ class DomainNameAvailabilityDescriptor extends SerialisableObject {
      */
     private $tlds;
 
+    /**
+     * @var boolean
+     */
+    private $suggestions;
+
 
 
     /**
@@ -32,12 +37,14 @@ class DomainNameAvailabilityDescriptor extends SerialisableObject {
     * @param  $searchString
     * @param  $tldCategories
     * @param  $tlds
+    * @param  $suggestions
     */
-    public function __construct($searchString = null, $tldCategories = null, $tlds = null){
+    public function __construct($searchString = null, $tldCategories = null, $tlds = null, $suggestions = null){
 
         $this->searchString = $searchString;
         $this->tldCategories = $tldCategories;
         $this->tlds = $tlds;
+        $this->suggestions = $suggestions;
         
     }
 
@@ -93,6 +100,24 @@ class DomainNameAvailabilityDescriptor extends SerialisableObject {
      */
     public function setTlds($tlds){
         $this->tlds = $tlds;
+    }
+
+    /**
+     * Get the suggestions
+     *
+     * @return boolean
+     */
+    public function getSuggestions(){
+        return $this->suggestions;
+    }
+
+    /**
+     * Set the suggestions
+     *
+     * @param boolean $suggestions
+     */
+    public function setSuggestions($suggestions){
+        $this->suggestions = $suggestions;
     }
 
 

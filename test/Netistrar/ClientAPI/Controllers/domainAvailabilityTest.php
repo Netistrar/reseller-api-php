@@ -19,11 +19,20 @@ class domainAvailabilityTest extends \ClientAPITestBase {
     public function testCanGetHintedDomainAvailabilityViaAPI() {
 
         $availability = $this->api->domains()->hintedAvailability(new DomainNameAvailabilityDescriptor("test.com"));
+
         $this->assertTrue($availability instanceof DomainAvailabilityResults);
         $directResult = $availability->getDirectResult();
         $this->assertTrue($directResult instanceof DomainAvailability);
-        $this->assertEquals(DomainAvailability::HINTED_UNAVAILABLE, $directResult->getAvailability());
+
+        $this->assertEquals("HINTED_UNAVAILABLE", $directResult->getAvailability());
         $this->assertEquals(1, sizeof($directResult->getPrices()["transfer"]));
+
+
+        $availability = $this->api->domains()->hintedAvailability(new DomainNameAvailabilityDescriptor("bodybuilding", null, array("com", "net", "org"), true));
+
+        $this->assertEquals("bodybuilding.com", $availability->getTldResults()["com"]->getDomainName());
+        $this->assertTrue(sizeof($availability->getSuggestions()["org"]) > 0);
+
 
     }
 
