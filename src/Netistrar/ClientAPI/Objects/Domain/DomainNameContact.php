@@ -98,7 +98,7 @@ class DomainNameContact extends SerialisableObject {
     protected $status;
 
     /**
-     * @var DomainNameContact
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
      */
     protected $pendingContact;
 
@@ -445,7 +445,7 @@ class DomainNameContact extends SerialisableObject {
     /**
      * Get the pendingContact
      *
-     * @return DomainNameContact
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
      */
     public function getPendingContact(){
         return $this->pendingContact;

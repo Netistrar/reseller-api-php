@@ -69,7 +69,7 @@ class DomainNameCreateDescriptor extends SerialisableObject {
     * @param  $privacyProxy
     * @param  $autoRenew
     */
-    public function __construct($domainNames = null, $registrationYears = null, $ownerContact = null, $nameservers = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = null, $autoRenew = null){
+    public function __construct($domainNames = null, $registrationYears = null, $ownerContact = null, $nameservers = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $autoRenew = null){
 
         $this->domainNames = $domainNames;
         $this->registrationYears = $registrationYears;

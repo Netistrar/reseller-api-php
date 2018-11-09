@@ -18,7 +18,8 @@ class utility extends WebServiceProxy {
      * @return string
      */
     public function ping(){
-        return parent::callMethod("ping", "GET", array(),null,"string");
+        $expectedExceptions = array();
+        return parent::callMethod("ping", "GET", array(),null,"string",$expectedExceptions);
     }
 
     /**
@@ -29,7 +30,8 @@ class utility extends WebServiceProxy {
      * @return string
      */
     public function createBulkOperation(){
-        return parent::callMethod("bulkoperation", "POST", array(),null,"string");
+        $expectedExceptions = array();
+        return parent::callMethod("bulkoperation", "POST", array(),null,"string",$expectedExceptions);
     }
 
     /**
@@ -41,7 +43,8 @@ class utility extends WebServiceProxy {
      * @return \Netistrar\ClientAPI\Objects\Utility\BulkOperationProgress
      */
     public function getBulkOperationProgress($bulkOperationProgressKey){
-        return parent::callMethod("bulkoperation/$bulkOperationProgressKey", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Utility\BulkOperationProgress");
+        $expectedExceptions = array();
+        return parent::callMethod("bulkoperation/$bulkOperationProgressKey", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Utility\BulkOperationProgress",$expectedExceptions);
     }
 
 

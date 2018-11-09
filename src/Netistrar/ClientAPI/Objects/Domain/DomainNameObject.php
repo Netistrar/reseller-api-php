@@ -71,7 +71,7 @@ class DomainNameObject extends SerialisableObject {
     protected $autoRenew;
 
     /**
-     * @var boolean
+     * @var integer
      */
     protected $privacyProxy;
 
@@ -212,7 +212,7 @@ class DomainNameObject extends SerialisableObject {
     /**
      * Get the privacyProxy
      *
-     * @return boolean
+     * @return integer
      */
     public function getPrivacyProxy(){
         return $this->privacyProxy;

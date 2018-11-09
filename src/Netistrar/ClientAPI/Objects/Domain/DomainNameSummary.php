@@ -4,6 +4,9 @@ namespace Netistrar\ClientAPI\Objects\Domain;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
+ *
+ * Domain name summary object
+ */
 class DomainNameSummary extends SerialisableObject {
 
     /**
@@ -47,7 +50,7 @@ class DomainNameSummary extends SerialisableObject {
     protected $autoRenew;
 
     /**
-     * @var boolean
+     * @var integer
      */
     protected $privacyProxy;
 
@@ -152,7 +155,7 @@ class DomainNameSummary extends SerialisableObject {
     /**
      * Get the privacyProxy
      *
-     * @return boolean
+     * @return integer
      */
     public function getPrivacyProxy(){
         return $this->privacyProxy;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Netistrar\ClientAPI\Objects\Domain;
+namespace Netistrar\ClientAPI\Objects\Transaction;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
@@ -9,7 +9,7 @@ use Kinikit\Core\Object\SerialisableObject;
  *
  *
  */
-class DomainNameTransaction extends SerialisableObject {
+class Transaction extends SerialisableObject {
 
     /**
      * @var string
@@ -27,37 +27,37 @@ class DomainNameTransaction extends SerialisableObject {
     protected $transactionStatus;
 
     /**
-     * @var mixed
+     * @var integer
      */
-    protected $netistrarOrderId;
+    protected $orderId;
 
     /**
-     * @var mixed
+     * @var string
      */
-    protected $netistrarOrderCurrency;
+    protected $orderCurrency;
 
     /**
-     * @var mixed
+     * @var float
      */
-    protected $netistrarOrderSubtotal;
+    protected $orderSubtotal;
 
     /**
-     * @var mixed
+     * @var float
      */
-    protected $netistrarOrderTaxes;
+    protected $orderTaxes;
 
     /**
-     * @var mixed
+     * @var float
      */
-    protected $netistrarOrderTotal;
+    protected $orderTotal;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameTransactionElement[string]
+     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionElement[string]
      */
     protected $transactionElements;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameError
+     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError
      */
     protected $transactionError;
 
@@ -100,54 +100,54 @@ class DomainNameTransaction extends SerialisableObject {
     }
 
     /**
-     * Get the netistrarOrderId
+     * Get the orderId
      *
-     * @return mixed
+     * @return integer
      */
-    public function getNetistrarOrderId(){
-        return $this->netistrarOrderId;
+    public function getOrderId(){
+        return $this->orderId;
     }
 
     /**
-     * Get the netistrarOrderCurrency
+     * Get the orderCurrency
      *
-     * @return mixed
+     * @return string
      */
-    public function getNetistrarOrderCurrency(){
-        return $this->netistrarOrderCurrency;
+    public function getOrderCurrency(){
+        return $this->orderCurrency;
     }
 
     /**
-     * Get the netistrarOrderSubtotal
+     * Get the orderSubtotal
      *
-     * @return mixed
+     * @return float
      */
-    public function getNetistrarOrderSubtotal(){
-        return $this->netistrarOrderSubtotal;
+    public function getOrderSubtotal(){
+        return $this->orderSubtotal;
     }
 
     /**
-     * Get the netistrarOrderTaxes
+     * Get the orderTaxes
      *
-     * @return mixed
+     * @return float
      */
-    public function getNetistrarOrderTaxes(){
-        return $this->netistrarOrderTaxes;
+    public function getOrderTaxes(){
+        return $this->orderTaxes;
     }
 
     /**
-     * Get the netistrarOrderTotal
+     * Get the orderTotal
      *
-     * @return mixed
+     * @return float
      */
-    public function getNetistrarOrderTotal(){
-        return $this->netistrarOrderTotal;
+    public function getOrderTotal(){
+        return $this->orderTotal;
     }
 
     /**
      * Get the transactionElements
      *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransactionElement[string]
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionElement[string]
      */
     public function getTransactionElements(){
         return $this->transactionElements;
@@ -156,7 +156,7 @@ class DomainNameTransaction extends SerialisableObject {
     /**
      * Get the transactionError
      *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameError
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError
      */
     public function getTransactionError(){
         return $this->transactionError;

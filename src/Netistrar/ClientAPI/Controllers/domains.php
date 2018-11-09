@@ -12,6 +12,37 @@ use Kinikit\Core\Util\HTTP\WebServiceProxy;
 class domains extends WebServiceProxy {
 
     /**
+     * Provides fast hinted search results for one or more TLDs or predefined TLD Categories for a supplied domain prefix string.  This allows for rapid indicative search results without the overhead of real time checking via each registry.
+     *
+     * It is strongly recommended that a call is made to the <b>getLiveAvailability</b> function for individual domains before confirming a sale or adding to an application cart.
+     *
+     * Hinted availability is provided via the use of cached zone file data and an indicator of the cache age is returned
+     * as part of the results.  Pricing data is returned according to the availability detected and where premium pricing may apply for a given TLD, a hint of the premium status and pricing is returned via cached premium data where available.
+     * The returned object contains DomainAvailability objects structured according to the parameters passed.
+     *
+     * 
+     * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameAvailabilityDescriptor $descriptor
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityResults
+     */
+    public function hintedAvailability($descriptor){
+        $expectedExceptions = array();
+        return parent::callMethod("hinted", "POST", array(),$descriptor,"\Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityResults",$expectedExceptions);
+    }
+
+    /**
+     * Get live domain availability for a single domain name.  This actually checks the real time availability with the Registry and returns a single <a href="domain-availability-object">DomainAvailability</a> object with actual availability and confirmed pricing.  This method
+     * should be called before committing to a sale (usually at the point of adding to a cart).
+     *
+     * 
+     * @param string $domainName
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailability
+     */
+    public function liveAvailability($domainName){
+        $expectedExceptions = array();
+        return parent::callMethod("available/$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainAvailability",$expectedExceptions);
+    }
+
+    /**
      * List domains currently contained within your account as <a href="../../object/DomainNameSummaryObject">DomainNameSummaryObject</a> items.
      *
      * This method supports paging operations using the <i>pageSize</i> and <i>page</i> parameters and allows for sorting of results using the <i>orderBy</i> and <i>orderDirection</i> parameters.
@@ -25,7 +56,8 @@ class domains extends WebServiceProxy {
      * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameListResults
      */
     public function list($searchTerm = "", $pageSize = 10, $page = 1, $orderBy = "domainName", $orderDirection = "ASC"){
-        return parent::callMethod("", "GET", array("searchTerm" => $searchTerm, "pageSize" => $pageSize, "page" => $page, "orderBy" => $orderBy, "orderDirection" => $orderDirection),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameListResults");
+        $expectedExceptions = array();
+        return parent::callMethod("", "GET", array("searchTerm" => $searchTerm, "pageSize" => $pageSize, "page" => $page, "orderBy" => $orderBy, "orderDirection" => $orderDirection),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameListResults",$expectedExceptions);
     }
 
     /**
@@ -35,9 +67,12 @@ class domains extends WebServiceProxy {
      * 
      * @param string $domainName
      * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameObject
+    * @throws \Netistrar\ClientAPI\Exception\TransactionException
      */
     public function get($domainName){
-        return parent::callMethod("$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject");
+        $expectedExceptions = array();
+        $expectedExceptions["\Netistrar\WebServices\Common\Exception\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        return parent::callMethod("$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject",$expectedExceptions);
     }
 
     /**
@@ -45,10 +80,14 @@ class domains extends WebServiceProxy {
      *
      * 
      * @param string[] $domainNames
+     * @param boolean $ignoreMissingItems
      * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameObject[]
+    * @throws \Netistrar\ClientAPI\Exception\TransactionException
      */
-    public function getMultiple($domainNames){
-        return parent::callMethod("multiple", "POST", array(),$domainNames,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject[]");
+    public function getMultiple($domainNames, $ignoreMissingItems = 1){
+        $expectedExceptions = array();
+        $expectedExceptions["\Netistrar\WebServices\Common\Exception\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        return parent::callMethod("multiple", "POST", array("ignoreMissingItems" => $ignoreMissingItems),$domainNames,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject[]",$expectedExceptions);
     }
 
     /**
@@ -56,10 +95,11 @@ class domains extends WebServiceProxy {
      *
      * 
      * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameCreateDescriptor $createDescriptor
-     * @return mixed[string]
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string][string]
      */
     public function validate($createDescriptor){
-        return parent::callMethod("validate", "POST", array(),$createDescriptor,"mixed[string]");
+        $expectedExceptions = array();
+        return parent::callMethod("validate", "POST", array(),$createDescriptor,"\Netistrar\ClientAPI\Objects\Transaction\TransactionError[string][string]",$expectedExceptions);
     }
 
     /**
@@ -68,10 +108,11 @@ class domains extends WebServiceProxy {
      * 
      * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameCreateDescriptor $createDescriptor
      * @param string $bulkOperationProgressKey
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
      */
     public function create($createDescriptor, $bulkOperationProgressKey = ""){
-        return parent::callMethod("", "POST", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$createDescriptor,"\Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction");
+        $expectedExceptions = array();
+        return parent::callMethod("", "POST", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$createDescriptor,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
     }
 
     /**
@@ -82,21 +123,93 @@ class domains extends WebServiceProxy {
      * 
      * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameUpdateDescriptor $updateDescriptor
      * @param string $bulkOperationProgressKey
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
      */
     public function update($updateDescriptor, $bulkOperationProgressKey = ""){
-        return parent::callMethod("", "PATCH", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$updateDescriptor,"\Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction");
+        $expectedExceptions = array();
+        return parent::callMethod("", "PATCH", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$updateDescriptor,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
     }
 
     /**
+     * Renew multiple domains
      *
      * 
      * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameRenewDescriptor $renewDescriptor
      * @param string $bulkOperationProgressKey
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
      */
     public function renew($renewDescriptor, $bulkOperationProgressKey = ""){
-        return parent::callMethod("renew", "POST", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$renewDescriptor,"\Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction");
+        $expectedExceptions = array();
+        return parent::callMethod("renew", "POST", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$renewDescriptor,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
+    }
+
+    /**
+     * Check the transfer status for a domain name.  This will return a <b>DomainNameTransferStatus</b> object detailing the timings for the transfer window in progress where the
+     * domain is currently in a transfer cycle or N/A if this is not the case
+     *
+     * 
+     * @param string $domainName
+     * @param string $authCode
+     * @return string
+     */
+    public function transferCheck($domainName, $authCode = ""){
+        $expectedExceptions = array();
+        return parent::callMethod("transfer/$domainName/$authCode", "GET", array("authCode" => $authCode),null,"string",$expectedExceptions);
+    }
+
+    /**
+     * Validate multiple domains for transfer in.  This accepts a transfer descriptor which encodes one or more domain names for transfer in along with proposed contact details.
+     *
+     * <b>NB: </b>Since the introduction of the 2018 Temporary Specification for GTLD registration data, post transfer contact details need to be supplied upfront when creating / validating incoming transfers
+     * as these are no longer readable via WHOIS due to privacy redaction.
+     *
+     * 
+     * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameTransferDescriptor $transferDescriptor
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string][string]
+     */
+    public function transferValidate($transferDescriptor){
+        $expectedExceptions = array();
+        return parent::callMethod("transfer/validate", "POST", array(),$transferDescriptor,"\Netistrar\ClientAPI\Objects\Transaction\TransactionError[string][string]",$expectedExceptions);
+    }
+
+    /**
+     * Create multiple domains for transfer in. This accepts a transfer descriptor which encodes one or more domain names for transfer in along with proposed contact details.  This call should usually be preceded by a call to <b>validateIncomingTransferDomains</b> to confirm auth codes etc.
+     *
+     * <b>NB: </b>Since the introduction of the 2018 Temporary Specification for GTLD registration data, post transfer contact details need to be supplied upfront when creating / validating incoming transfers
+     * as these are no longer readable via WHOIS due to privacy redaction.
+     * <br /><br />
+     * If successful, this method starts the transfer process for the supplied domains by taking payment for the transfer (for Pull Transfer operations) and starting the transfer operation with the Registry.
+     * It returns a <b>DomainNameTransaction</b> object detailing the result of the operation.
+     *
+     * <b>For Pull Transfers:</b> Once a transfer is created it will be added to your account with a status of <i>TRANSFER_IN_AWAITING_RESPONSE</i> until it is either cancelled, accepted,
+     * rejected or automatically accepted after 5 days.
+     *
+     * <b>For Push Transfers</b>: the domain name will be imported and activated within your account.
+     *
+     * 
+     * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameTransferDescriptor $transferDescriptor
+     * @param string $bulkOperationProgressKey
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
+     */
+    public function transferCreate($transferDescriptor, $bulkOperationProgressKey = ""){
+        $expectedExceptions = array();
+        return parent::callMethod("transfer", "POST", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$transferDescriptor,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
+    }
+
+    /**
+     * Cancel incoming transfer operations for one or more domain names.  Domain transfers can be cancelled while domains have <i>TRANSFER_IN_PENDING_CONFIRMATION</i> or <i>TRANSFER_IN_AWAITING_RESPONSE</i>
+     * status (applicable for Pull Transfers only).
+     * This operation if successful will cancel the transfer operation and remove the domain name from your account.
+     *
+     * A <b>DomainNameTransaction</b> object is returned detailing the success or failure for each attempted domain name.
+     *
+     * 
+     * @param string[] $domainNames
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
+     */
+    public function transferCancel($domainNames){
+        $expectedExceptions = array();
+        return parent::callMethod("transfer", "DELETE", array(),$domainNames,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
     }
 
     /**
@@ -106,10 +219,11 @@ class domains extends WebServiceProxy {
      *
      * 
      * @param string[] $domainNames
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
      */
-    public function cancelPendingOwnerChanges($domainNames){
-        return parent::callMethod("cancelownerchanges", "DELETE", array(),$domainNames,"\Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction");
+    public function ownerChangeCancel($domainNames){
+        $expectedExceptions = array();
+        return parent::callMethod("cancelownerchanges", "DELETE", array(),$domainNames,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
     }
 
     /**
@@ -123,9 +237,12 @@ class domains extends WebServiceProxy {
      * 
      * @param string $domainName
      * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameGlueRecord[]
+    * @throws \Netistrar\ClientAPI\Exception\TransactionException
      */
-    public function listGlueRecords($domainName){
-        return parent::callMethod("gluerecords/$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameGlueRecord[]");
+    public function glueRecordsList($domainName){
+        $expectedExceptions = array();
+        $expectedExceptions["\Netistrar\WebServices\Common\Exception\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        return parent::callMethod("gluerecords/$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameGlueRecord[]",$expectedExceptions);
     }
 
     /**
@@ -141,10 +258,11 @@ class domains extends WebServiceProxy {
      * @param string $domainName
      * @param \Netistrar\ClientAPI\Objects\Domain\DomainNameGlueRecord[] $glueRecords
      * @param string $bulkOperationProgressKey
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
      */
-    public function setGlueRecords($domainName, $glueRecords, $bulkOperationProgressKey = ""){
-        return parent::callMethod("gluerecords/$domainName", "PATCH", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$glueRecords,"\Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction");
+    public function glueRecordsSet($domainName, $glueRecords, $bulkOperationProgressKey = ""){
+        $expectedExceptions = array();
+        return parent::callMethod("gluerecords/$domainName", "PATCH", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$glueRecords,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
     }
 
     /**
@@ -159,10 +277,34 @@ class domains extends WebServiceProxy {
      * @param string $domainName
      * @param string[] $glueRecordSubdomains
      * @param string $bulkOperationProgressKey
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
      */
-    public function removeGlueRecords($domainName, $glueRecordSubdomains, $bulkOperationProgressKey = ""){
-        return parent::callMethod("gluerecords/$domainName", "DELETE", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$glueRecordSubdomains,"\Netistrar\ClientAPI\Objects\Domain\DomainNameTransaction");
+    public function glueRecordsRemove($domainName, $glueRecordSubdomains, $bulkOperationProgressKey = ""){
+        $expectedExceptions = array();
+        return parent::callMethod("gluerecords/$domainName", "DELETE", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$glueRecordSubdomains,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
+    }
+
+    /**
+     * Get all available TLDs enabled within the system.  This can optionally be limited by one of the categories obtained from the method <b>getAllTLDCategories</b> below.
+     *
+     * 
+     * @param string $categoryName
+     * @return string[]
+     */
+    public function tldList($categoryName = ""){
+        $expectedExceptions = array();
+        return parent::callMethod("tld", "GET", array("categoryName" => $categoryName),null,"string[]",$expectedExceptions);
+    }
+
+    /**
+     * Get all defined TLD categories as a string array.
+     *
+     * 
+     * @return string[]
+     */
+    public function tldCategoryList(){
+        $expectedExceptions = array();
+        return parent::callMethod("tldcategory", "GET", array(),null,"string[]",$expectedExceptions);
     }
 
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Netistrar\ClientAPI\Objects\Domain;
+namespace Netistrar\ClientAPI\Objects\Transaction;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
  * Domain name error object
  */
-class DomainNameError extends SerialisableObject {
+class TransactionError extends SerialisableObject {
 
     /**
      * @var string
@@ -29,7 +29,7 @@ class DomainNameError extends SerialisableObject {
     protected $additionalInfo;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameError[]
+     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     protected $relatedErrors;
 
@@ -83,7 +83,7 @@ class DomainNameError extends SerialisableObject {
     /**
      * Get the relatedErrors
      *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameError[]
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     public function getRelatedErrors(){
         return $this->relatedErrors;

@@ -1,18 +1,23 @@
 <?php
 
-namespace Netistrar\ClientAPI\Objects\Domain;
+namespace Netistrar\ClientAPI\Objects\Transaction;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
  * Transaction element object.  Represents a single domain name result within a transaction returned from the operations found in the Domain API.
  *
  */
-class DomainNameTransactionElement extends SerialisableObject {
+class TransactionElement extends SerialisableObject {
 
     /**
      * @var string
      */
-    protected $domainName;
+    protected $type;
+
+    /**
+     * @var string
+     */
+    protected $description;
 
     /**
      * @var string
@@ -25,24 +30,24 @@ class DomainNameTransactionElement extends SerialisableObject {
     protected $operationData;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameError[string]
+     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     protected $elementErrors;
 
     /**
-     * @var mixed
+     * @var float
      */
-    protected $netistrarOrderLineSubtotal;
+    protected $orderLineSubtotal;
 
     /**
-     * @var mixed
+     * @var float
      */
-    protected $netistrarOrderLineTaxes;
+    protected $orderLineTaxes;
 
     /**
-     * @var mixed
+     * @var float
      */
-    protected $netistrarOrderLineTotal;
+    protected $orderLineTotal;
 
 
 
@@ -56,12 +61,21 @@ class DomainNameTransactionElement extends SerialisableObject {
     }
 
     /**
-     * Get the domainName
+     * Get the type
      *
      * @return string
      */
-    public function getDomainName(){
-        return $this->domainName;
+    public function getType(){
+        return $this->type;
+    }
+
+    /**
+     * Get the description
+     *
+     * @return string
+     */
+    public function getDescription(){
+        return $this->description;
     }
 
     /**
@@ -85,37 +99,37 @@ class DomainNameTransactionElement extends SerialisableObject {
     /**
      * Get the elementErrors
      *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameError[string]
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     public function getElementErrors(){
         return $this->elementErrors;
     }
 
     /**
-     * Get the netistrarOrderLineSubtotal
+     * Get the orderLineSubtotal
      *
-     * @return mixed
+     * @return float
      */
-    public function getNetistrarOrderLineSubtotal(){
-        return $this->netistrarOrderLineSubtotal;
+    public function getOrderLineSubtotal(){
+        return $this->orderLineSubtotal;
     }
 
     /**
-     * Get the netistrarOrderLineTaxes
+     * Get the orderLineTaxes
      *
-     * @return mixed
+     * @return float
      */
-    public function getNetistrarOrderLineTaxes(){
-        return $this->netistrarOrderLineTaxes;
+    public function getOrderLineTaxes(){
+        return $this->orderLineTaxes;
     }
 
     /**
-     * Get the netistrarOrderLineTotal
+     * Get the orderLineTotal
      *
-     * @return mixed
+     * @return float
      */
-    public function getNetistrarOrderLineTotal(){
-        return $this->netistrarOrderLineTotal;
+    public function getOrderLineTotal(){
+        return $this->orderLineTotal;
     }
 
 

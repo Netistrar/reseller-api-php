@@ -4,15 +4,15 @@ namespace Netistrar\ClientAPI\Objects\Domain\Descriptor;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
- * Descriptor for a domain name update operation.  This should be passed to the update operation on the Domains API.
+ * Descriptor for a domain name create operation.  This should be passed to validate and create transfer operations on the Domains API.
  *
  */
-class DomainNameUpdateDescriptor extends SerialisableObject {
+class DomainNameTransferDescriptor extends SerialisableObject {
 
     /**
      * @var string[]
      */
-    private $domainNames;
+    private $transferIdentifiers;
 
     /**
      * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
@@ -35,16 +35,6 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
     private $technicalContact;
 
     /**
-     * @var string[]
-     */
-    private $nameservers;
-
-    /**
-     * @var boolean
-     */
-    private $locked;
-
-    /**
      * @var integer
      */
     private $privacyProxy;
@@ -59,46 +49,42 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
     /**
      * Constructor
      *
-    * @param  $domainNames
+    * @param  $transferIdentifiers
     * @param  $ownerContact
     * @param  $adminContact
     * @param  $billingContact
     * @param  $technicalContact
-    * @param  $nameservers
-    * @param  $locked
     * @param  $privacyProxy
     * @param  $autoRenew
     */
-    public function __construct($domainNames = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $nameservers = null, $locked = null, $privacyProxy = 1, $autoRenew = null){
+    public function __construct($transferIdentifiers = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $autoRenew = null){
 
-        $this->domainNames = $domainNames;
+        $this->transferIdentifiers = $transferIdentifiers;
         $this->ownerContact = $ownerContact;
         $this->adminContact = $adminContact;
         $this->billingContact = $billingContact;
         $this->technicalContact = $technicalContact;
-        $this->nameservers = $nameservers;
-        $this->locked = $locked;
         $this->privacyProxy = $privacyProxy;
         $this->autoRenew = $autoRenew;
         
     }
 
     /**
-     * Get the domainNames
+     * Get the transferIdentifiers
      *
      * @return string[]
      */
-    public function getDomainNames(){
-        return $this->domainNames;
+    public function getTransferIdentifiers(){
+        return $this->transferIdentifiers;
     }
 
     /**
-     * Set the domainNames
+     * Set the transferIdentifiers
      *
-     * @param string[] $domainNames
+     * @param string[] $transferIdentifiers
      */
-    public function setDomainNames($domainNames){
-        $this->domainNames = $domainNames;
+    public function setTransferIdentifiers($transferIdentifiers){
+        $this->transferIdentifiers = $transferIdentifiers;
     }
 
     /**
@@ -171,42 +157,6 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
      */
     public function setTechnicalContact($technicalContact){
         $this->technicalContact = $technicalContact;
-    }
-
-    /**
-     * Get the nameservers
-     *
-     * @return string[]
-     */
-    public function getNameservers(){
-        return $this->nameservers;
-    }
-
-    /**
-     * Set the nameservers
-     *
-     * @param string[] $nameservers
-     */
-    public function setNameservers($nameservers){
-        $this->nameservers = $nameservers;
-    }
-
-    /**
-     * Get the locked
-     *
-     * @return boolean
-     */
-    public function getLocked(){
-        return $this->locked;
-    }
-
-    /**
-     * Set the locked
-     *
-     * @param boolean $locked
-     */
-    public function setLocked($locked){
-        $this->locked = $locked;
     }
 
     /**
