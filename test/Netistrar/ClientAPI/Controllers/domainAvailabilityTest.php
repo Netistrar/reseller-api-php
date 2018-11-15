@@ -4,6 +4,7 @@
 namespace Netistrar\ClientAPI\Controllers;
 
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameAvailabilityDescriptor;
+use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameSuggestionOptions;
 use Netistrar\ClientAPI\Objects\Domain\DomainAvailability;
 use Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityPrice;
 use Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityResults;
@@ -31,9 +32,29 @@ class domainAvailabilityTest extends \ClientAPITestBase {
         $availability = $this->api->domains()->hintedAvailability(new DomainNameAvailabilityDescriptor("bodybuilding", null, array("com", "net", "org"), true));
 
         $this->assertEquals("bodybuilding.com", $availability->getTldResults()["com"]->getDomainName());
-        $this->assertTrue(sizeof($availability->getSuggestions()["org"]) > 0);
+        $this->assertTrue(sizeof($availability->getTldSuggestions()["org"]) > 0);
 
 
+    }
+
+
+    public function testCanFillHintedSuggestionsUsingSuggestedOptions() {
+        $suggestedOptions = new DomainNameSuggestionOptions(true, true, 20);
+        $descriptor = new DomainNameAvailabilityDescriptor("testing1234567", null, null, true, $suggestedOptions);
+        $availability = $this->api->domains()->hintedAvailability($descriptor);
+
+        $this->assertTrue($availability instanceof DomainAvailabilityResults);
+        $this->assertEquals($suggestedOptions->getFillCount(), sizeof($availability->getSuggestions()));
+    }
+
+
+    public function testCanRemoveTldsFromSuggestionsUsingSuggestedOptions() {
+        $suggestedOptions = new DomainNameSuggestionOptions(false, null, 10);
+        $descriptor = new DomainNameAvailabilityDescriptor("testing123456", null, null, true, $suggestedOptions);
+        $availability = $this->api->domains()->hintedAvailability($descriptor);
+
+        $this->assertTrue($availability instanceof DomainAvailabilityResults);
+        $this->assertEquals(sizeof($availability->getSuggestions()), 0);
     }
 
 
@@ -65,9 +86,9 @@ class domainAvailabilityTest extends \ClientAPITestBase {
         $this->assertTrue(in_array("scot", $tlds));
 
         $tlds = $this->api->domains()->tldList("Popular");
-        $this->assertEquals(8, sizeof($tlds));
-        $this->assertTrue(in_array("uk", $tlds));
-        $this->assertTrue(in_array("com", $tlds));
+        $this->assertEquals(7, sizeof($tlds));
+        $this->assertTrue(in_array("computer", $tlds));
+        $this->assertTrue(in_array("community", $tlds));
 
     }
 

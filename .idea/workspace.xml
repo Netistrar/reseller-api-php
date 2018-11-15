@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3c499719-9761-4699-bc8d-88030e15bd59" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/Descriptor/DomainNameAvailabilityDescriptor.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/Descriptor/DomainNameAvailabilityDescriptor.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/DomainAvailabilityResults.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/DomainAvailabilityResults.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" beforeDir="false" afterPath="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/oxil/kinikit-core/src/Util/HTTP/HttpRemoteRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/oxil/kinikit-core/src/Util/HTTP/HttpRemoteRequest.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,46 +14,55 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+  <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="-1108623404">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.open.time.0" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.0" value="2" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="php" value="5" />
+          <entry key="php" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PHP" value="5" />
+          <entry key="PHP" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="php" value="328" />
+          <entry key="php" value="950" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PHP" value="328" />
+          <entry key="PHP" value="950" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
-              <caret line="33" column="78" selection-start-line="33" selection-start-column="78" selection-end-line="33" selection-end-column="78" />
+            <state relative-caret-position="230">
+              <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/Descriptor/DomainNameAvailabilityDescriptor.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="377">
+              <caret line="20" selection-start-line="20" selection-end-line="20" />
             </state>
           </provider>
         </entry>
@@ -59,7 +70,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Controllers/domains.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
+            <state relative-caret-position="378">
               <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
             </state>
           </provider>
@@ -68,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vendor/oxil/kinikit-core/src/Util/HTTP/HttpRemoteRequest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="100" selection-start-line="100" selection-end-line="100" />
+            <state relative-caret-position="256">
+              <caret line="89" column="23" selection-start-line="89" selection-start-column="23" selection-end-line="89" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -77,8 +88,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/DomainAvailabilityResults.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
+            <state relative-caret-position="613">
+              <caret line="31" column="7" lean-forward="true" selection-start-line="31" selection-start-column="7" selection-end-line="31" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -92,6 +103,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/vendor/oxil/kinikit-core/src/Util/HTTP/HttpRemoteRequest.php" />
+        <option value="$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/DomainAvailabilityResults.php" />
         <option value="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" />
       </list>
     </option>
@@ -121,6 +133,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -138,6 +151,40 @@
               <item name="reseller-api-php" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="Netistrar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="reseller-api-php" type="b2602c69:ProjectViewProjectNode" />
+              <item name="reseller-api-php" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Netistrar" type="462c0819:PsiDirectoryNode" />
+              <item name="ClientAPI" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="reseller-api-php" type="b2602c69:ProjectViewProjectNode" />
+              <item name="reseller-api-php" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Netistrar" type="462c0819:PsiDirectoryNode" />
+              <item name="ClientAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="Objects" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="reseller-api-php" type="b2602c69:ProjectViewProjectNode" />
+              <item name="reseller-api-php" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Netistrar" type="462c0819:PsiDirectoryNode" />
+              <item name="ClientAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="Objects" type="462c0819:PsiDirectoryNode" />
+              <item name="Domain" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="reseller-api-php" type="b2602c69:ProjectViewProjectNode" />
+              <item name="reseller-api-php" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Netistrar" type="462c0819:PsiDirectoryNode" />
+              <item name="ClientAPI" type="462c0819:PsiDirectoryNode" />
+              <item name="Objects" type="462c0819:PsiDirectoryNode" />
+              <item name="Domain" type="462c0819:PsiDirectoryNode" />
+              <item name="Descriptor" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="reseller-api-php" type="b2602c69:ProjectViewProjectNode" />
@@ -169,7 +216,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -191,16 +237,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="PHPUnit.domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI">
+  <component name="RunManager" selected="PHPUnit.domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions">
     <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
       <CommandLine workingDirectory="$PROJECT_DIR$/test" />
       <TestRunner />
       <option name="workingDirectory" value="$PROJECT_DIR$/test" />
       <method v="2" />
     </configuration>
-    <configuration name="domainAvailabilityTest" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+    <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
       <CommandLine workingDirectory="$PROJECT_DIR$/test" />
-      <TestRunner class="Netistrar\ClientAPI\Controllers\domainAvailabilityTest" file="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" scope="Class" />
+      <TestRunner class="Netistrar\ClientAPI\Controllers\domainAvailabilityTest" file="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" method="testCanFillHintedSuggestionsUsingSuggestedOptions" scope="Method" />
+      <option name="workingDirectory" value="$PROJECT_DIR$/test" />
+      <method v="2" />
+    </configuration>
+    <configuration name="domainAvailabilityTest.testCanGetAllTLDsOptionallyLimitedByCategory" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <CommandLine workingDirectory="$PROJECT_DIR$/test" />
+      <TestRunner class="Netistrar\ClientAPI\Controllers\domainAvailabilityTest" file="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" method="testCanGetAllTLDsOptionallyLimitedByCategory" scope="Method" />
+      <option name="workingDirectory" value="$PROJECT_DIR$/test" />
+      <method v="2" />
+    </configuration>
+    <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilitySuggestionWithSuggestedOptions" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+      <CommandLine workingDirectory="$PROJECT_DIR$/test" />
+      <TestRunner class="Netistrar\ClientAPI\Controllers\domainAvailabilityTest" file="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" method="testCanGetHintedDomainAvailabilitySuggestionWithSuggestedOptions" scope="Method" />
       <option name="workingDirectory" value="$PROJECT_DIR$/test" />
       <method v="2" />
     </configuration>
@@ -210,22 +268,26 @@
       <option name="workingDirectory" value="$PROJECT_DIR$/test" />
       <method v="2" />
     </configuration>
-    <configuration name="domainAvailabilityTest.testCanGetLiveAvailabilityViaAPI" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
+    <configuration name="domainAvailabilityTest.testCanRemoveTldsFromSuggestionsUsingSuggestedOptions" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
       <CommandLine workingDirectory="$PROJECT_DIR$/test" />
-      <TestRunner class="Netistrar\ClientAPI\Controllers\domainAvailabilityTest" file="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" method="testCanGetLiveAvailabilityViaAPI" scope="Method" />
+      <TestRunner class="Netistrar\ClientAPI\Controllers\domainAvailabilityTest" file="$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php" method="testCanRemoveTldsFromSuggestionsUsingSuggestedOptions" scope="Method" />
       <option name="workingDirectory" value="$PROJECT_DIR$/test" />
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetLiveAvailabilityViaAPI" />
       <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" />
-      <item itemvalue="PHPUnit.domainAvailabilityTest" />
+      <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetAllTLDsOptionallyLimitedByCategory" />
+      <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetHintedDomainAvailabilitySuggestionWithSuggestedOptions" />
+      <item itemvalue="PHPUnit.domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" />
+      <item itemvalue="PHPUnit.domainAvailabilityTest.testCanRemoveTldsFromSuggestionsUsingSuggestedOptions" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="PHPUnit.domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" />
+        <item itemvalue="PHPUnit.domainAvailabilityTest.testCanRemoveTldsFromSuggestionsUsingSuggestedOptions" />
+        <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetHintedDomainAvailabilitySuggestionWithSuggestedOptions" />
         <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" />
-        <item itemvalue="PHPUnit.domainAvailabilityTest" />
-        <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetLiveAvailabilityViaAPI" />
+        <item itemvalue="PHPUnit.domainAvailabilityTest.testCanGetAllTLDsOptionallyLimitedByCategory" />
       </list>
     </recent_temporary>
   </component>
@@ -240,56 +302,52 @@
       <option name="presentableId" value="Default" />
       <updated>1541778296437</updated>
       <workItem from="1541778297558" duration="2887000" />
+      <workItem from="1542277516405" duration="8575000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="domainAvailabilityTest_testCanGetLiveAvailabilityViaAPI - 2018.11.09 at 16h 13m 25s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetLiveAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 21m 13s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetLiveAvailabilityViaAPI - 2018.11.09 at 16h 13m 50s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetLiveAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 21m 31s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetHintedDomainAvailabilityViaAPI - 2018.11.09 at 16h 13m 53s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 21m 48s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetHintedDomainAvailabilityViaAPI - 2018.11.09 at 16h 14m 05s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 21m 57s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetHintedDomainAvailabilityViaAPI - 2018.11.09 at 16h 22m 21s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 23m 34s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetHintedDomainAvailabilityViaAPI - 2018.11.09 at 16h 24m 15s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 25m 29s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest - 2018.11.09 at 16h 24m 24s.xml">
-      <configuration name="domainAvailabilityTest" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 25m 54s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetHintedDomainAvailabilityViaAPI - 2018.11.09 at 16h 28m 16s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 31m 15s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetHintedDomainAvailabilityViaAPI - 2018.11.09 at 16h 29m 53s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 32m 05s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
-    <history-entry file="domainAvailabilityTest_testCanGetHintedDomainAvailabilityViaAPI - 2018.11.09 at 16h 30m 58s.xml">
-      <configuration name="domainAvailabilityTest.testCanGetHintedDomainAvailabilityViaAPI" configurationId="PHPUnitRunConfigurationType" />
+    <history-entry file="domainAvailabilityTest_testCanFillHintedSuggestionsUsingSuggestedOptions - 2018.11.15 at 12h 32m 20s.xml">
+      <configuration name="domainAvailabilityTest.testCanFillHintedSuggestionsUsingSuggestedOptions" configurationId="PHPUnitRunConfigurationType" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2887000" />
+    <option name="totallyTimeSpent" value="11462000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2509" height="1350" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24969599" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25172275" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" weight="0.32955465" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32955465" />
@@ -297,10 +355,15 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="9" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.32955465" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Database" order="3" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -310,38 +373,45 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/DomainAvailabilityResults.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Controllers/domains.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
+        <state relative-caret-position="378">
           <caret line="18" column="46" selection-start-line="18" selection-start-column="46" selection-end-line="18" selection-end-column="46" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/vendor/oxil/kinikit-core/src/Util/HTTP/HttpRemoteRequest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="100" selection-start-line="100" selection-end-line="100" />
+        <state relative-caret-position="256">
+          <caret line="89" column="23" selection-start-line="89" selection-start-column="23" selection-end-line="89" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/Descriptor/DomainNameSuggestionOptions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="756">
+          <caret line="36" column="20" selection-start-line="36" selection-start-column="20" selection-end-line="36" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/Descriptor/DomainNameAvailabilityDescriptor.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="535">
-          <caret line="41" column="20" selection-start-line="41" selection-start-column="20" selection-end-line="41" selection-end-column="20" />
+        <state relative-caret-position="377">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Netistrar/ClientAPI/Objects/Domain/DomainAvailabilityResults.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="613">
+          <caret line="31" column="7" lean-forward="true" selection-start-line="31" selection-start-column="7" selection-end-line="31" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/Netistrar/ClientAPI/Controllers/domainAvailabilityTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="33" column="78" selection-start-line="33" selection-start-column="78" selection-end-line="33" selection-end-column="78" />
+        <state relative-caret-position="230">
+          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
         </state>
       </provider>
     </entry>

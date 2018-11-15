@@ -29,6 +29,11 @@ class DomainNameAvailabilityDescriptor extends SerialisableObject {
      */
     private $suggestions;
 
+    /**
+     * @var \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameSuggestionOptions
+     */
+    private $suggestionOptions;
+
 
 
     /**
@@ -38,13 +43,15 @@ class DomainNameAvailabilityDescriptor extends SerialisableObject {
     * @param  $tldCategories
     * @param  $tlds
     * @param  $suggestions
+    * @param  $suggestionOptions
     */
-    public function __construct($searchString = null, $tldCategories = null, $tlds = null, $suggestions = null){
+    public function __construct($searchString = null, $tldCategories = null, $tlds = null, $suggestions = null, $suggestionOptions = null){
 
         $this->searchString = $searchString;
         $this->tldCategories = $tldCategories;
         $this->tlds = $tlds;
         $this->suggestions = $suggestions;
+        $this->suggestionOptions = $suggestionOptions;
         
     }
 
@@ -118,6 +125,24 @@ class DomainNameAvailabilityDescriptor extends SerialisableObject {
      */
     public function setSuggestions($suggestions){
         $this->suggestions = $suggestions;
+    }
+
+    /**
+     * Get the suggestionOptions
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameSuggestionOptions
+     */
+    public function getSuggestionOptions(){
+        return $this->suggestionOptions;
+    }
+
+    /**
+     * Set the suggestionOptions
+     *
+     * @param \Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameSuggestionOptions $suggestionOptions
+     */
+    public function setSuggestionOptions($suggestionOptions){
+        $this->suggestionOptions = $suggestionOptions;
     }
 
 

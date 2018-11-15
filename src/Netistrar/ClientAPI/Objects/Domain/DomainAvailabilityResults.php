@@ -15,7 +15,7 @@ class DomainAvailabilityResults extends SerialisableObject {
     protected $directResult;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string]
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][string]
      */
     protected $categoryResults;
 
@@ -26,6 +26,11 @@ class DomainAvailabilityResults extends SerialisableObject {
 
     /**
      * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][]
+     */
+    protected $tldSuggestions;
+
+    /**
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[]
      */
     protected $suggestions;
 
@@ -52,7 +57,7 @@ class DomainAvailabilityResults extends SerialisableObject {
     /**
      * Get the categoryResults
      *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string]
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][string]
      */
     public function getCategoryResults(){
         return $this->categoryResults;
@@ -68,9 +73,18 @@ class DomainAvailabilityResults extends SerialisableObject {
     }
 
     /**
-     * Get the suggestions
+     * Get the tldSuggestions
      *
      * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][]
+     */
+    public function getTldSuggestions(){
+        return $this->tldSuggestions;
+    }
+
+    /**
+     * Get the suggestions
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[]
      */
     public function getSuggestions(){
         return $this->suggestions;
