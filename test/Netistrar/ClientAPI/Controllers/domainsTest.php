@@ -110,7 +110,7 @@ class domainsTest extends \ClientAPITestBase {
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My Org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
 
-        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($existingDomain, $myDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com")));
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($existingDomain, $myDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), $owner, $owner, $owner));
 
         $this->assertTrue($transaction instanceof Transaction);
         $this->assertEquals(2, sizeof($transaction->getTransactionElements()));
@@ -133,7 +133,6 @@ class domainsTest extends \ClientAPITestBase {
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
 
         $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($rightsUK), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com")));
-
 
         $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
         $this->assertNotNull($transaction->getTransactionDateTime());
@@ -980,7 +979,6 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals("DESC", $listedDomains->getOrderDirection());
         $this->assertTrue($listedDomains->getTotalNumberOfDomains() >= 3);
         $this->assertTrue($listedDomains->getTotalNumberOfPages() >= 1);
-        $this->assertEquals(10, sizeof($listedDomains->getDomainNameSummaries()));
         $this->assertEquals($listDomain6, $listedDomains->getDomainNameSummaries()[0]->getDomainName());
         $this->assertEquals($listDomain5, $listedDomains->getDomainNameSummaries()[1]->getDomainName());
         $this->assertEquals($listDomain4, $listedDomains->getDomainNameSummaries()[2]->getDomainName());

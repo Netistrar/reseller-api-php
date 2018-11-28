@@ -4,6 +4,7 @@ namespace Netistrar\ClientAPI;
 
 use Netistrar\ClientAPI\Controllers\domains;
 use Netistrar\ClientAPI\Controllers\utility;
+use Netistrar\ClientAPI\Controllers\account;
 use Netistrar\ClientAPI\Controllers\test;
 use Kinikit\Core\Util\HTTP\WebServiceProxy;
 
@@ -63,6 +64,18 @@ class APIProvider  {
             $this->instances["utility"] = new utility($this->apiURL."/utility", $this->globalParameters);
         }
         return $this->instances["utility"];
+    }
+
+    /**
+    * Get an instance of the  API
+    *
+    * @return \Netistrar\ClientAPI\Controllers\account
+    */
+    public function account(){
+        if (!isset($this->instances["account"])){
+            $this->instances["account"] = new account($this->apiURL."/account", $this->globalParameters);
+        }
+        return $this->instances["account"];
     }
 
     /**

@@ -69,7 +69,7 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
     * @param  $privacyProxy
     * @param  $autoRenew
     */
-    public function __construct($domainNames = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $nameservers = null, $locked = null, $privacyProxy = 1, $autoRenew = null){
+    public function __construct($domainNames = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $nameservers = null, $locked = null, $privacyProxy = null, $autoRenew = null){
 
         $this->domainNames = $domainNames;
         $this->ownerContact = $ownerContact;
