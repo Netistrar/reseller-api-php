@@ -71,7 +71,7 @@ class domains extends WebServiceProxy {
      */
     public function get($domainName){
         $expectedExceptions = array();
-        $expectedExceptions["\Netistrar\WebServices\Common\Exception\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        $expectedExceptions["\\Netistrar\\WebServices\\Common\\Exception\\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
         return parent::callMethod("$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject",$expectedExceptions);
     }
 
@@ -81,13 +81,13 @@ class domains extends WebServiceProxy {
      * 
      * @param string[] $domainNames
      * @param boolean $ignoreMissingItems
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameObject[]
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameObject[string]
     * @throws \Netistrar\ClientAPI\Exception\TransactionException
      */
-    public function getMultiple($domainNames, $ignoreMissingItems = 1){
+    public function getMultiple($domainNames, $ignoreMissingItems){
         $expectedExceptions = array();
-        $expectedExceptions["\Netistrar\WebServices\Common\Exception\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
-        return parent::callMethod("multiple", "POST", array("ignoreMissingItems" => $ignoreMissingItems),$domainNames,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject[]",$expectedExceptions);
+        $expectedExceptions["\\Netistrar\\WebServices\\Common\\Exception\\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        return parent::callMethod("multiple", "POST", array("ignoreMissingItems" => $ignoreMissingItems),$domainNames,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject[string]",$expectedExceptions);
     }
 
     /**
@@ -241,7 +241,7 @@ class domains extends WebServiceProxy {
      */
     public function glueRecordsList($domainName){
         $expectedExceptions = array();
-        $expectedExceptions["\Netistrar\WebServices\Common\Exception\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        $expectedExceptions["\\Netistrar\\WebServices\\Common\\Exception\\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
         return parent::callMethod("gluerecords/$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameGlueRecord[]",$expectedExceptions);
     }
 

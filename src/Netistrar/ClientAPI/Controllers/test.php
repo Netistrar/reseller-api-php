@@ -32,7 +32,7 @@ class test extends WebServiceProxy {
      */
     public function updateDomains($testDomainNameUpdateDescriptor){
         $expectedExceptions = array();
-        $expectedExceptions["\Netistrar\WebServices\Common\Exception\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        $expectedExceptions["\\Netistrar\\WebServices\\Common\\Exception\\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
         return parent::callMethod("updateDomains", "PUT", array(),$testDomainNameUpdateDescriptor,"boolean",$expectedExceptions);
     }
 

@@ -16,7 +16,7 @@ class BulkOperationProgressItem extends SerialisableObject {
     protected $title;
 
     /**
-     * @var integer
+     * @var float
      */
     protected $progressPercentage;
 
@@ -26,7 +26,7 @@ class BulkOperationProgressItem extends SerialisableObject {
     protected $status;
 
     /**
-     * @var mixed[]
+     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     protected $failureErrors;
 
@@ -53,7 +53,7 @@ class BulkOperationProgressItem extends SerialisableObject {
     /**
      * Get the progressPercentage
      *
-     * @return integer
+     * @return float
      */
     public function getProgressPercentage(){
         return $this->progressPercentage;
@@ -71,7 +71,7 @@ class BulkOperationProgressItem extends SerialisableObject {
     /**
      * Get the failureErrors
      *
-     * @return mixed[]
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     public function getFailureErrors(){
         return $this->failureErrors;

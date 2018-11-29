@@ -25,7 +25,7 @@ class BulkOperationProgress extends SerialisableObject {
     protected $completedItems;
 
     /**
-     * @var integer
+     * @var float
      */
     protected $percentageComplete;
 
@@ -80,7 +80,7 @@ class BulkOperationProgress extends SerialisableObject {
     /**
      * Get the percentageComplete
      *
-     * @return integer
+     * @return float
      */
     public function getPercentageComplete(){
         return $this->percentageComplete;

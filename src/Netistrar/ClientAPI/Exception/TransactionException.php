@@ -11,7 +11,7 @@ use Kinikit\Core\Exception\SerialisableException;
 class TransactionException extends SerialisableException {
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[]
+     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     protected $transactionErrors;
 
@@ -28,7 +28,7 @@ class TransactionException extends SerialisableException {
     /**
      * Get the transactionErrors
      *
-     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[]
+     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
      */
     public function getTransactionErrors(){
         return $this->transactionErrors;
