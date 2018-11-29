@@ -84,7 +84,7 @@ class domains extends WebServiceProxy {
      * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameObject[string]
     * @throws \Netistrar\ClientAPI\Exception\TransactionException
      */
-    public function getMultiple($domainNames, $ignoreMissingItems){
+    public function getMultiple($domainNames, $ignoreMissingItems = 1){
         $expectedExceptions = array();
         $expectedExceptions["\\Netistrar\\WebServices\\Common\\Exception\\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
         return parent::callMethod("multiple", "POST", array("ignoreMissingItems" => $ignoreMissingItems),$domainNames,"\Netistrar\ClientAPI\Objects\Domain\DomainNameObject[string]",$expectedExceptions);
@@ -149,12 +149,13 @@ class domains extends WebServiceProxy {
      *
      * 
      * @param string $domainName
-     * @param string $authCode
-     * @return string
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameTransferStatus
+    * @throws \Netistrar\ClientAPI\Exception\TransactionException
      */
-    public function transferCheck($domainName, $authCode = ""){
+    public function transferCheck($domainName){
         $expectedExceptions = array();
-        return parent::callMethod("transfer/$domainName/$authCode", "GET", array("authCode" => $authCode),null,"string",$expectedExceptions);
+        $expectedExceptions["\\Netistrar\\WebServices\\Common\\Exception\\TransactionException"] = "\Netistrar\ClientAPI\Exception\TransactionException";
+        return parent::callMethod("transfer/$domainName", "GET", array(),null,"\Netistrar\ClientAPI\Objects\Domain\DomainNameTransferStatus",$expectedExceptions);
     }
 
     /**

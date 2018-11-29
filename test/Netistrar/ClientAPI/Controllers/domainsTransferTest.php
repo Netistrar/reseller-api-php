@@ -2,6 +2,8 @@
 
 namespace Netistrar\ClientAPI\Controllers;
 
+use Netistrar\ClientAPI\Exception\TransactionException;
+use Netistrar\ClientAPI\Objects\Account\AccountNotification;
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameCreateDescriptor;
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameTransferDescriptor;
 use Netistrar\ClientAPI\Objects\Domain\DomainNameContact;
@@ -264,34 +266,30 @@ class domainsTransferTest extends \ClientAPITestBase {
 
     public function testGenericTransferExceptionReturnedIfOtherIssueWhenCancellingDomainTransferAndNoRefundIssued() {
 
-        $rodeoTestDomain = "transfer-" . date("U") . ".rodeo";
 
-        $originalBalance = $this->api->utility()->getAccountBalance("GBP")["amount"];
+        $domains = $this->api->test()->createPullTransferRodeoDomains(1);
+        $originalBalance = $this->api->account()->balance();
 
-        // Create a rodeo and uk domain ready for transfer
-        $eppWorker = new EPPDomainWorker($rodeoTestDomain, $this->rodeoSecondEPPAPI);
-        $newDomain = new DomainName($rodeoTestDomain, null, null, null, 0, null, null, $this->contact, $this->contact, $this->contact, $this->contact, array(new DomainNameserver("ns1.monkey.com"), new DomainNameserver("ns2.monkey.com")));
-        $newDomain->setAuthCode("BIGGLES123");
-        $eppWorker->createDomain($newDomain);
+        $rodeoTestDomain = $domains[0][0];
+        $authCode = $domains[0][1];
 
-
-        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Hello Inc", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
 
 
         // Create the transfers
-        $this->api->domains()->createIncomingTransferDomains(array($rodeoTestDomain), $owner, array("BIGGLES123"));
+        $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoTestDomain . "," . $authCode), $owner));
 
-        $this->assertEquals($originalBalance - 66.14, $this->oauthClient->utilityAPI()->getAccountBalance("GBP")["amount"]);
+        $this->assertEquals($originalBalance - 66.14, $this->api->account()->balance());
 
         // Now manually accept the transfer to simulate a none-detected issue.
-        $eppWorker->getEppAPI()->domain()->approveTransfer($rodeoTestDomain, "BIGGLES123");
+        $this->api->test()->approveIncomingTransferOtherRegistrar(array($rodeoTestDomain));
 
-        $transaction = $this->api->domains()->cancelIncomingTransferDomains(array($rodeoTestDomain));
-        $this->assertTrue($transaction instanceof DomainNameTransaction);
-        $this->assertEquals(DomainNameTransaction::TRANSACTION_TYPE_DOMAIN_TRANSFER_IN_CANCEL, $transaction->getTransactionType());
-        $this->assertEquals(DomainNameTransaction::TRANSACTION_STATUS_ALL_ELEMENTS_FAILED, $transaction->getTransactionStatus());
+        $transaction = $this->api->domains()->transferCancel(array($rodeoTestDomain));
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_TRANSFER_IN_CANCEL", $transaction->getTransactionType());
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
         $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
-        $this->assertTrue(isset($transaction->getTransactionElements()[$rodeoTestDomain]->getElementErrors()[DomainOperationError::DOMAIN_TRANSFER_ERROR]));
+        $this->assertTrue(isset($transaction->getTransactionElements()[$rodeoTestDomain]->getElementErrors()["DOMAIN_TRANSFER_NOT_CANCELLABLE"]));
 
 
     }
@@ -299,32 +297,27 @@ class domainsTransferTest extends \ClientAPITestBase {
 
     public function testCanCancelTransferAndGetRefundIfAwaitingConfirmation() {
 
-        $rodeoTestDomain = "transfer-" . date("U") . ".rodeo";
+        $domains = $this->api->test()->createPullTransferRodeoDomains(1);
+        $originalBalance = $this->api->account()->balance();
 
-        $originalBalance = $this->oauthClient->utilityAPI()->getAccountBalance("GBP")["amount"];
+        $rodeoTestDomain = $domains[0][0];
+        $authCode = $domains[0][1];
 
-        // Create a rodeo and uk domain ready for transfer
-        $eppWorker = new EPPDomainWorker($rodeoTestDomain, $this->rodeoSecondEPPAPI);
-        $newDomain = new DomainName($rodeoTestDomain, null, null, null, 0, null, null, $this->contact, $this->contact, $this->contact, $this->contact, array(new DomainNameserver("ns1.monkey.com"), new DomainNameserver("ns2.monkey.com")));
-        $newDomain->setAuthCode("BIGGLES123");
-        $eppWorker->createDomain($newDomain);
-
-
-        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Hello Inc", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
 
 
         // Create the transfers
-        $this->api->domains()->createIncomingTransferDomains(array($rodeoTestDomain), $owner, array("BIGGLES123"));
+        $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoTestDomain . "," . $authCode), $owner));
 
-        $this->assertEquals($originalBalance - 66.14, $this->oauthClient->utilityAPI()->getAccountBalance("GBP")["amount"]);
+        $this->assertEquals($originalBalance - 66.14, $this->api->account()->balance());
+
+        // Cancel the transfer
+        $transaction = $this->api->domains()->transferCancel(array($rodeoTestDomain));
 
 
-        // Get the transaction
-        $transaction = $this->api->domains()->cancelIncomingTransferDomains(array($rodeoTestDomain));
-
-        $this->assertTrue($transaction instanceof DomainNameTransaction);
-        $this->assertEquals(DomainNameTransaction::TRANSACTION_TYPE_DOMAIN_TRANSFER_IN_CANCEL, $transaction->getTransactionType());
-        $this->assertEquals(DomainNameTransaction::TRANSACTION_STATUS_SUCCEEDED, $transaction->getTransactionStatus());
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_TRANSFER_IN_CANCEL", $transaction->getTransactionType());
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
         $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
         $this->assertEquals(-55.12, $transaction->getOrderSubtotal());
         $this->assertEquals(-11.02, $transaction->getOrderTaxes());
@@ -335,97 +328,67 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertEquals(-11.02, $element1->getOrderLineTaxes());
         $this->assertEquals(-66.14, $element1->getOrderLineTotal());
 
-        $this->assertEquals($originalBalance, $this->oauthClient->utilityAPI()->getAccountBalance("GBP")["amount"]);
+        $this->assertEquals($originalBalance, $this->api->account()->balance());
 
         try {
-            $this->domainWorker->getDomainNameByName($rodeoTestDomain);
-            $this->fail("Should have now been deleted");
-        } catch (ObjectNotFoundException $e) {
-            // Success
+            $this->api->domains()->get($rodeoTestDomain);
+            $this->fail("Should have thrown here");
+        } catch (TransactionException $e) {
+            // Expected
         }
 
-        try {
-            $this->rodeoSecondEPPAPI->domain()->queryTransfer($rodeoTestDomain, "BIGGLES123");
-            $this->fail("Should have been cancelled");
-        } catch (Exception $e) {
-            // Success
-        }
 
     }
 
 
-    public function testCheckingTransferStatusReturnsStatusObjectsOrNotApplicableString() {
+    public function testCheckingTransferStatusReturnsStatusObjectsOrThrowsExceptionsIfNotInTransfer() {
 
-        DefaultDatabaseConnection::instance()->query("DELETE FROM netistrar_domain_name WHERE domain_name = 'ganymede-netistrar.co.uk'");
-
-        $rodeoTestDomain = "transfer-" . date("U") . ".rodeo";
-
-        // Create a rodeo and uk domain ready for transfer
-        $eppWorker = new EPPDomainWorker($rodeoTestDomain, $this->rodeoSecondEPPAPI);
-        $newDomain = new DomainName($rodeoTestDomain, null, null, null, 0, null, null, $this->contact, $this->contact, $this->contact, $this->contact, array(new DomainNameserver("ns1.monkey.com"), new DomainNameserver("ns2.monkey.com")));
-        $newDomain->setAuthCode("BIGGLES123");
-        $eppWorker->createDomain($newDomain);
-
-        $rodeoTestDomain2 = "transfer-" . (date("U") + 1) . ".rodeo";
-
-        // Create a rodeo and uk domain ready for transfer
-        $eppWorker = new EPPDomainWorker($rodeoTestDomain, $this->rodeoSecondEPPAPI);
-        $newDomain = new DomainName($rodeoTestDomain2, null, null, null, 0, null, null, $this->contact, $this->contact, $this->contact, $this->contact, array(new DomainNameserver("ns1.monkey.com"), new DomainNameserver("ns2.monkey.com")));
-        $newDomain->setAuthCode("BIGGLES124");
-        $eppWorker->createDomain($newDomain);
-
-        $ukDomain1 = "transfer-out-" . date("U") . ".UK";
-        $ukDomain2 = "transfer-out-" . date("U") . "-2.UK";
-
-        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
-        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
-
-        $this->oauthClient->domainLifecycleAPI()->createDomainNames(array($ukDomain1, $ukDomain2), 1, $owner, array("ns1.oxil.com", "ns2.oxil.com"));
+        $rodeoDomains = $this->api->test()->createPullTransferRodeoDomains(2);
 
 
-        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
-
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Hello", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
 
         // Start incoming transfers
-        $transaction = $this->api->domains()->createIncomingTransferDomains(array($rodeoTestDomain, $rodeoTestDomain2, "ganymede-netistrar.co.uk"), $owner, array("BIGGLES123", "BIGGLES124"));
-        $this->assertEquals(DomainNameTransaction::TRANSACTION_STATUS_SUCCEEDED, $transaction->getTransactionStatus());
-
-        // Start outgoing transfers
-        $transaction = $this->api->domains()->createOutgoingPushTransferDomains(array($ukDomain1), "NETISTRAR_");
-        $this->assertEquals(DomainNameTransaction::TRANSACTION_STATUS_SUCCEEDED, $transaction->getTransactionStatus());
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoDomains[0][0] . "," . $rodeoDomains[0][1], $rodeoDomains[1][0] . "," . $rodeoDomains[1][1]), $owner));
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
 
 
         // Now do a transfer check
-        $checks = $this->api->domains()->checkStatusForTransferDomains(array($rodeoTestDomain, $rodeoTestDomain2, "ganymede-netistrar.co.uk", $ukDomain1, $ukDomain2, "noneexistent123.uk", "noneexistent567.com"), array("BIGGLES123", "BIGGLES124"));
-        $this->assertTrue(is_array($checks));
-        $this->assertEquals(7, sizeof($checks));
+        $checks = $this->api->domains()->transferCheck($rodeoDomains[0][0]);
+        $this->assertEquals("TRANSFER_IN_AWAITING_RESPONSE", $checks->getStatus());
+        $this->assertEquals($rodeoDomains[0][0], $checks->getDomainName());
+        $this->assertNotNull($checks->getDomainExpiryDate());
+        $this->assertNotNull($checks->getTransferExpiryDate());
+        $this->assertNotNull($checks->getTransferStartedDate());
+        $this->assertEquals("Pending", $checks->getTransferStatus());
 
-        /**
-         * @var $check1 DomainNameTransferStatus
-         */
-        $check1 = $checks[$rodeoTestDomain];
-
-        $startedDate = date("d/m/Y");
-        $transferExpiry = new DateTime();
-        $transferExpiry = $transferExpiry->add(new DateInterval("P5D"))->format("d/m/Y");
-        $expiry = new DateTime();
-        $expiry = $expiry->add(new DateInterval("P2Y"))->format("d/m/Y");
-
-        $this->assertTrue($check1 instanceof DomainNameTransferStatus);
-        $this->assertEquals($rodeoTestDomain, $check1->getDomainName());
-        $this->assertEquals(DomainNameSummaryObject::STATUS_TRANSFER_IN_AWAITING_RESPONSE, $check1->getStatus());
-        $this->assertEquals("Pending", $check1->getTransferStatus());
-        $this->assertEquals($startedDate, substr($check1->getTransferStartedDate(), 0, 10));
-        $this->assertEquals($transferExpiry, substr($check1->getTransferExpiryDate(), 0, 10));
-        $this->assertEquals($expiry, substr($check1->getDomainExpiryDate(), 0, 10));
-
-        $this->assertEquals(new DomainNameTransferStatus("ganymede-netistrar.co.uk", DomainNameSummaryObject::STATUS_TRANSFER_IN_PENDING_CONFIRMATION), $checks["ganymede-netistrar.co.uk"]);
-        $this->assertEquals(new DomainNameTransferStatus($ukDomain1, DomainNameSummaryObject::STATUS_TRANSFER_OUT_PENDING_CONFIRMATION), $checks[$ukDomain1]);
-        $this->assertEquals("N/A", $checks[$ukDomain2]);
-        $this->assertEquals("N/A", $checks["noneexistent123.uk"]);
-        $this->assertEquals("N/A", $checks["noneexistent567.com"]);
+        // Now do a transfer check
+        $checks = $this->api->domains()->transferCheck($rodeoDomains[1][0]);
+        $this->assertEquals("TRANSFER_IN_AWAITING_RESPONSE", $checks->getStatus());
+        $this->assertEquals($rodeoDomains[1][0], $checks->getDomainName());
+        $this->assertNotNull($checks->getDomainExpiryDate());
+        $this->assertNotNull($checks->getTransferExpiryDate());
+        $this->assertNotNull($checks->getTransferStartedDate());
+        $this->assertEquals("Pending", $checks->getTransferStatus());
 
 
+        // Now complete and check
+        $this->api->test()->approveIncomingTransferOtherRegistrar(array($rodeoDomains[0][0]));
+        $this->api->test()->rejectIncomingTransferOtherRegistrar(array($rodeoDomains[1][0]));
+
+        try {
+            $this->api->domains()->transferCheck($rodeoDomains[0][0]);
+            $this->fail("Should have thrown here");
+        } catch (TransactionException $e) {
+            $this->assertEquals("DOMAIN_TRANSFER_NOT_MID_TRANSFER", $e->getTransactionErrors()["DOMAIN_TRANSFER_NOT_MID_TRANSFER"]->getCode());
+        }
+
+        try {
+            $this->api->domains()->transferCheck($rodeoDomains[1][0]);
+            $this->fail("Should have thrown here");
+        } catch (TransactionException $e) {
+            $this->assertEquals("DOMAIN_TRANSFER_NOT_MID_TRANSFER", $e->getTransactionErrors()["DOMAIN_TRANSFER_NOT_MID_TRANSFER"]->getCode());
+        }
     }
 
 
@@ -440,7 +403,7 @@ class domainsTransferTest extends \ClientAPITestBase {
         $rodeoTestAuth2 = $testDomains[1][1];
 
 
-        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
 
 
         // Start incoming transfers
@@ -449,7 +412,7 @@ class domainsTransferTest extends \ClientAPITestBase {
 
 
         // Now check the account notifications
-        $accountNotifications = $this->oauthClient->utilityAPI()->listAccountNotifications();
+        $accountNotifications = $this->api->account()->listNotifications();
         $this->assertTrue($accountNotifications[0] instanceof AccountNotification);
         $this->assertEquals("Domain Transfer In", $accountNotifications[0]->getNotificationType());
         $this->assertEquals("Initiated", $accountNotifications[0]->getNotificationSubType());
@@ -463,11 +426,11 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertEquals($rodeoTestDomain, $accountNotifications[1]->getRefersTo());
         $this->assertNotNull($accountNotifications[1]->getMessage());
 
-        $this->api->test()->approveIncomingPullTransferRodeoDomainsAtOtherRegistrar(array($rodeoTestDomain));
-        $this->api->test()->rejectIncomingPullTransferRodeoDomainsAtOtherRegistrar(array($rodeoTestDomain2));
+        $this->api->test()->approveIncomingTransferOtherRegistrar(array($rodeoTestDomain));
+        $this->api->test()->rejectIncomingTransferOtherRegistrar(array($rodeoTestDomain2));
 
         // Now check the account notifications
-        $accountNotifications = $this->oauthClient->utilityAPI()->listAccountNotifications();
+        $accountNotifications = $this->api->account()->listNotifications();
         $this->assertTrue($accountNotifications[0] instanceof AccountNotification);
         $this->assertEquals("Domain Transfer In", $accountNotifications[0]->getNotificationType());
         $this->assertEquals("Rejected", $accountNotifications[0]->getNotificationSubType());
@@ -485,20 +448,21 @@ class domainsTransferTest extends \ClientAPITestBase {
 
     public function testAccountNotificationsAreCorrectlyAddedWhenPushTransferInsAreCompletedOrRejected() {
 
-        $domainNames = $this->api->test()->createPushTransferUKDomainsReadyForTransferIn(2);
+        $domainNames = $this->api->test()->createPushTransferUKDomains(2);
         $domain1 = $domainNames[0];
         $domain2 = $domainNames[1];
 
-        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My Org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
 
-        $transaction = $this->api->domains()->createIncomingTransferDomains(array($domain1, $domain2), $owner);
-        $this->assertEquals(DomainNameTransaction::TRANSACTION_STATUS_SUCCEEDED, $transaction->getTransactionStatus());
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($domain1, $domain2), $owner));
 
-        $this->api->test()->acceptOwnershipConfirmationForTransfer(array($domain1));
-        $this->api->test()->declineOwnershipConfirmationForTransfer(array($domain2));
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+        $this->api->test()->acceptOwnershipConfirmation(array($domain1));
+        $this->api->test()->declineOwnershipConfirmation(array($domain2));
 
         // Now check the account notifications
-        $accountNotifications = $this->oauthClient->utilityAPI()->listAccountNotifications();
+        $accountNotifications = $this->api->account()->listNotifications();
         $this->assertTrue($accountNotifications[0] instanceof AccountNotification);
         $this->assertEquals("Domain Transfer In", $accountNotifications[0]->getNotificationType());
         $this->assertEquals("Declined", $accountNotifications[0]->getNotificationSubType());
