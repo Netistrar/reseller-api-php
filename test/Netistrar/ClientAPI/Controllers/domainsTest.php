@@ -296,7 +296,7 @@ class domainsTest extends \ClientAPITestBase {
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
         $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain1, $newUKDomain2), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, true));
 
-        $transaction = $this->api->domains()->renew(new DomainNameRenewDescriptor(array($newUKDomain1, $newUKDomain2), 10));
+        $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor(array($newUKDomain1, $newUKDomain2), 10));
 
         $this->assertTrue($transaction instanceof Transaction);
 
@@ -329,7 +329,7 @@ class domainsTest extends \ClientAPITestBase {
         $newUKDomain1 = "validdomain-" . date("U") . ".uk";
         $newUKDomain2 = "validdomain-" . date("U") . "1.uk";
 
-        $transaction = $this->api->domains()->renew(new DomainNameRenewDescriptor(array($newUKDomain1, $newUKDomain2), 1));
+        $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor(array($newUKDomain1, $newUKDomain2), 1));
 
 
         $this->assertTrue($transaction instanceof Transaction);
@@ -368,7 +368,7 @@ class domainsTest extends \ClientAPITestBase {
 
         $this->api->test()->updateDomains(new TestDomainNameUpdateDescriptor(array($newUKDomain1), "RGP"));
 
-        $transaction = $this->api->domains()->renew(new DomainNameRenewDescriptor(array($newUKDomain1), 1));
+        $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor(array($newUKDomain1), 1));
 
         $this->assertTrue($transaction instanceof Transaction);
 
@@ -404,7 +404,7 @@ class domainsTest extends \ClientAPITestBase {
         // Renew these domains
         $bulkKey = $this->api->utility()->createBulkOperation();
 
-        $transaction = $this->api->domains()->renew(new DomainNameRenewDescriptor(array(
+        $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor(array(
             $newUKDomain1, $newUKDomain2), 2), $bulkKey);
 
 
@@ -450,6 +450,44 @@ class domainsTest extends \ClientAPITestBase {
 
         $domainName = $this->api->domains()->get($newUKDomain2);
         $this->assertEquals($expiryDate->format("d/m/Y"), explode(" ", $domainName->getExpiryDate())[0]);
+
+    }
+
+
+    public function testCanRenewSingleDomain() {
+
+        // Create a couple of new domains
+        $newUKDomain1 = "validdomain-" . date("U") . ".uk";
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My Org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain1), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, true));
+
+        $transaction = $this->api->domains()->renew($newUKDomain1, 2);
+
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertNotNull($transaction->getTransactionDateTime());
+        $this->assertEquals("DOMAIN_RENEW", $transaction->getTransactionType());
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+        $this->assertNotNull($transaction->getOrderId());
+        $this->assertEquals("GBP", $transaction->getOrderCurrency());
+        $this->assertEquals(7.00, $transaction->getOrderSubtotal());
+        $this->assertEquals(1.40, $transaction->getOrderTaxes());
+        $this->assertEquals(8.40, $transaction->getOrderTotal());
+
+        $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
+        $elements = $transaction->getTransactionElements();
+
+         $element = $elements[$newUKDomain1];
+        $this->assertEquals($newUKDomain1, $element->getDescription());
+        $this->assertEquals("SUCCEEDED"
+            , $element->getElementStatus());
+        $expiryDate = new \DateTime();
+        $expiryDate->add(new \DateInterval("P3Y"));
+        $this->assertEquals(array("registrationYears" => 2, "expiryDate" => $expiryDate->format("d/m/Y")), $element->getOperationData());
+        $this->assertEquals(7.00, $element->getOrderLineSubtotal());
+        $this->assertEquals(1.40, $element->getOrderLineTaxes());
+        $this->assertEquals(8.40, $element->getOrderLineTotal());
 
     }
 
@@ -762,6 +800,7 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals(2, $domainName->getPrivacyProxy());
         $this->assertEquals(1, $domainName->getAutoRenew());
     }
+
 
     public function testTransactionProgressForUpdatesAreMonitoredCorrectlyWhenProgressKeyPassed() {
 
@@ -1354,6 +1393,58 @@ class domainsTest extends \ClientAPITestBase {
 
         $this->assertEquals("LIVE", $domainName->getOwnerContact()->getStatus());
         $this->assertEquals("", $domainName->getOwnerContact()->getPendingContact());
+
+    }
+
+    public function testCanAddTagsToDomainNameOnCreateUpdateThemAndSeeThemInDomainListings() {
+
+        $prefix = "validdomain-" . date("U");
+        $newUKDomain = $prefix . ".uk";
+        $newRodeoDomain = $prefix . ".rodeo";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain, $newRodeoDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+
+        // Now grab the domains in question and check for existence of tags
+        $domains = $this->api->domains()->getMultiple(array($newUKDomain, $newRodeoDomain));
+
+        $this->assertEquals(array("Film", "Media", "Television"), $domains[$newUKDomain]->getTags());
+        $this->assertEquals(array("Film", "Media", "Television"), $domains[$newRodeoDomain]->getTags());
+
+
+        $this->api->domains()->update(new DomainNameUpdateDescriptor(array($newUKDomain), null, null, null, null, null, null, null, null, array("Fishing", "Philosophy"), null), null);
+        $this->api->domains()->update(new DomainNameUpdateDescriptor(array($newRodeoDomain), null, null, null, null, null, null, null, null, null, array("Television", "Media")), null);
+
+
+        // Now grab the domains in question and check for tag updates
+        $domains = $this->api->domains()->getMultiple(array($newUKDomain, $newRodeoDomain));
+
+        $this->assertEquals(array("Film", "Fishing", "Media", "Philosophy", "Television"), $domains[$newUKDomain]->getTags());
+        $this->assertEquals(array("Film"), $domains[$newRodeoDomain]->getTags());
+
+        $this->api->domains()->update(new DomainNameUpdateDescriptor(array($newUKDomain, $newRodeoDomain), null, null, null, null, null, null, null, null, array("Cooking", "Shopping"), array("Film")), null);
+
+        // Now grab the domains in question and check for tag updates
+        $domains = $this->api->domains()->getMultiple(array($newUKDomain, $newRodeoDomain));
+
+        $this->assertEquals(array("Cooking", "Fishing", "Media", "Philosophy", "Shopping", "Television"), $domains[$newUKDomain]->getTags());
+        $this->assertEquals(array("Cooking", "Shopping"), $domains[$newRodeoDomain]->getTags());
+
+
+        // Now get a list and confirm that tags are present
+        $list = $this->api->domains()->list($prefix);
+
+        $this->assertEquals(2, sizeof($list->getDomainNameSummaries()));
+        $firstSummary = $list->getDomainNameSummaries()[0];
+        $this->assertEquals($prefix . ".rodeo", $firstSummary->getDomainName());
+        $this->assertEquals(array("Cooking", "Shopping"), $firstSummary->getTags());
+
+        $secondSummary = $list->getDomainNameSummaries()[1];
+        $this->assertEquals($prefix . ".uk", $secondSummary->getDomainName());
+        $this->assertEquals(array("Cooking", "Fishing", "Media", "Philosophy", "Shopping", "Television"), $secondSummary->getTags());
+
 
     }
 

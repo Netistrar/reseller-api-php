@@ -131,6 +131,19 @@ class domains extends WebServiceProxy {
     }
 
     /**
+     * Renew a single domain for the number of years supplied.
+     *
+     * 
+     * @param string $domainName
+     * @param integer $numberOfYears
+     * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
+     */
+    public function renew($domainName, $numberOfYears){
+        $expectedExceptions = array();
+        return parent::callMethod("renew/$domainName/$numberOfYears", "Get", array(),$numberOfYears,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
+    }
+
+    /**
      * Renew multiple domains
      *
      * 
@@ -138,7 +151,7 @@ class domains extends WebServiceProxy {
      * @param string $bulkOperationProgressKey
      * @return \Netistrar\ClientAPI\Objects\Transaction\Transaction
      */
-    public function renew($renewDescriptor, $bulkOperationProgressKey = ""){
+    public function renewMultiple($renewDescriptor, $bulkOperationProgressKey = ""){
         $expectedExceptions = array();
         return parent::callMethod("renew", "POST", array("bulkOperationProgressKey" => $bulkOperationProgressKey),$renewDescriptor,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
     }

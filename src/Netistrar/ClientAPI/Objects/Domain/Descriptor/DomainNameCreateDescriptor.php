@@ -54,6 +54,11 @@ class DomainNameCreateDescriptor extends SerialisableObject {
      */
     private $autoRenew;
 
+    /**
+     * @var string[]
+     */
+    private $tags;
+
 
 
     /**
@@ -68,8 +73,9 @@ class DomainNameCreateDescriptor extends SerialisableObject {
     * @param  $technicalContact
     * @param  $privacyProxy
     * @param  $autoRenew
+    * @param  $tags
     */
-    public function __construct($domainNames = null, $registrationYears = null, $ownerContact = null, $nameservers = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $autoRenew = null){
+    public function __construct($domainNames = null, $registrationYears = null, $ownerContact = null, $nameservers = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $autoRenew = null, $tags = null){
 
         $this->domainNames = $domainNames;
         $this->registrationYears = $registrationYears;
@@ -80,6 +86,7 @@ class DomainNameCreateDescriptor extends SerialisableObject {
         $this->technicalContact = $technicalContact;
         $this->privacyProxy = $privacyProxy;
         $this->autoRenew = $autoRenew;
+        $this->tags = $tags;
         
     }
 
@@ -243,6 +250,24 @@ class DomainNameCreateDescriptor extends SerialisableObject {
      */
     public function setAutoRenew($autoRenew){
         $this->autoRenew = $autoRenew;
+    }
+
+    /**
+     * Get the tags
+     *
+     * @return string[]
+     */
+    public function getTags(){
+        return $this->tags;
+    }
+
+    /**
+     * Set the tags
+     *
+     * @param string[] $tags
+     */
+    public function setTags($tags){
+        $this->tags = $tags;
     }
 
 

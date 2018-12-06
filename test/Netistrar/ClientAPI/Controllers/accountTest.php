@@ -40,6 +40,9 @@ class accountTest extends \ClientAPITestBase {
         $validContact = new DomainNameContact("Test", "test@test.com", "", "hello street", "hello road", "hello", "helloshire", "he12 144", "GB", "", "", "", "", "", "", array(), array("nominetRegistrantType" => "IND"));
 
         $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoTestIdentifier, $rodeoTestIdentifier2), $validContact, null, null, null, 1, true));
+
+
+
         $this->api->test()->approveIncomingTransferOtherRegistrar(array($rodeoTestDomain));
         $this->api->test()->rejectIncomingTransferOtherRegistrar(array($rodeoTestDomain2));
 

@@ -54,6 +54,16 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
      */
     private $autoRenew;
 
+    /**
+     * @var string[]
+     */
+    private $addTags;
+
+    /**
+     * @var string[]
+     */
+    private $removeTags;
+
 
 
     /**
@@ -68,8 +78,10 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
     * @param  $locked
     * @param  $privacyProxy
     * @param  $autoRenew
+    * @param  $addTags
+    * @param  $removeTags
     */
-    public function __construct($domainNames = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $nameservers = null, $locked = null, $privacyProxy = null, $autoRenew = null){
+    public function __construct($domainNames = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $nameservers = null, $locked = null, $privacyProxy = null, $autoRenew = null, $addTags = null, $removeTags = null){
 
         $this->domainNames = $domainNames;
         $this->ownerContact = $ownerContact;
@@ -80,6 +92,8 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
         $this->locked = $locked;
         $this->privacyProxy = $privacyProxy;
         $this->autoRenew = $autoRenew;
+        $this->addTags = $addTags;
+        $this->removeTags = $removeTags;
         
     }
 
@@ -243,6 +257,42 @@ class DomainNameUpdateDescriptor extends SerialisableObject {
      */
     public function setAutoRenew($autoRenew){
         $this->autoRenew = $autoRenew;
+    }
+
+    /**
+     * Get the addTags
+     *
+     * @return string[]
+     */
+    public function getAddTags(){
+        return $this->addTags;
+    }
+
+    /**
+     * Set the addTags
+     *
+     * @param string[] $addTags
+     */
+    public function setAddTags($addTags){
+        $this->addTags = $addTags;
+    }
+
+    /**
+     * Get the removeTags
+     *
+     * @return string[]
+     */
+    public function getRemoveTags(){
+        return $this->removeTags;
+    }
+
+    /**
+     * Set the removeTags
+     *
+     * @param string[] $removeTags
+     */
+    public function setRemoveTags($removeTags){
+        $this->removeTags = $removeTags;
     }
 
 

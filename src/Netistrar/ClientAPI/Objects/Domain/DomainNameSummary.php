@@ -60,6 +60,11 @@ class DomainNameSummary extends SerialisableObject {
     protected $status;
 
     /**
+     * @var string[]
+     */
+    protected $tags;
+
+    /**
      * @var string
      */
     protected $dnsProvider;
@@ -168,6 +173,15 @@ class DomainNameSummary extends SerialisableObject {
      */
     public function getStatus(){
         return $this->status;
+    }
+
+    /**
+     * Get the tags
+     *
+     * @return string[]
+     */
+    public function getTags(){
+        return $this->tags;
     }
 
     /**
