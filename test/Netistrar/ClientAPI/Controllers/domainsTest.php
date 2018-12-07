@@ -676,6 +676,38 @@ class domainsTest extends \ClientAPITestBase {
     }
 
 
+    public function testValidationErrorsOccurIfBulkUpdatingNameserverForDuplicateNames(){
+
+        $newUKDomain1 = "validdomain-" . date("U") . ".uk";
+        $newUKDomain2 = "validdomain-" . date("U") . "1.uk";
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My Org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain1, $newUKDomain2), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, true));
+
+        $transaction = $this->api->domains()->update(new DomainNameUpdateDescriptor(array($newUKDomain1, $newUKDomain2), null, null, null, null, array("ns1.oxil.com", "ns1.oxil.com")));
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_UPDATE", $transaction->getTransactionType());
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+        $this->assertEquals(2, sizeof($transaction->getTransactionElements()));
+
+        $element1 = $transaction->getTransactionElements()[$newUKDomain1];
+        $this->assertEquals($newUKDomain1, $element1->getDescription());
+        $this->assertEquals("FAILED", $element1->getElementStatus());
+        $this->assertEquals(1, sizeof($element1->getElementErrors()));
+        $this->assertTrue(isset($element1->getElementErrors()["DOMAIN_DUPLICATE_NAMESERVER"]));
+
+
+        $element2 = $transaction->getTransactionElements()[$newUKDomain2];
+        $this->assertEquals($newUKDomain2, $element2->getDescription());
+        $this->assertEquals("FAILED", $element2->getElementStatus());
+        $this->assertEquals(1, sizeof($element2->getElementErrors()));
+        $this->assertTrue(isset($element2->getElementErrors()["DOMAIN_DUPLICATE_NAMESERVER"]));
+
+
+    }
+
+
     public function testSuccessfulTransactionIsReturnedWhenNameserverUpdateSucceeds() {
 
 
