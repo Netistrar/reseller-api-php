@@ -6,36 +6,48 @@ use Kinikit\Core\Object\SerialisableObject;
 /**
  * A generic account notification.  This are used to encode events described by the <a href="#notificationType">notificationType</a> and <a href="#notificationSubType">notificationSubType</a> properties.
  * A human readable message is also returned along with the description of an associated object contained in the <a href="#refersTo">refersTo</a> property if relevant to this notification.
- */
+*/
 class AccountNotification extends SerialisableObject {
 
     /**
-     * @var integer
+     * The id for this notification.
+     *
+     * @var integer 
      */
     protected $id;
 
     /**
-     * @var string
+     * The date/time that this notification was created.
+     *
+     * @var string 
      */
     protected $dateTime;
 
     /**
-     * @var string
+     * The general type for this notification
+     *
+     * @var string 
      */
     protected $notificationType;
 
     /**
-     * @var string
+     * A more specific sub type for this notification
+     *
+     * @var string 
      */
     protected $notificationSubType;
 
     /**
-     * @var string
+     * A description for an item that this notification refers to if applicable.
+     *
+     * @var string 
      */
     protected $refersTo;
 
     /**
-     * @var string
+     * A descriptive message giving more detail about this notification.
+     *
+     * @var string 
      */
     protected $message;
 
@@ -44,7 +56,7 @@ class AccountNotification extends SerialisableObject {
     /**
      * Constructor
      *
-    */
+     */
     public function __construct(){
 
         

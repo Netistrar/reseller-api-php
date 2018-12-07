@@ -5,100 +5,156 @@ namespace Netistrar\ClientAPI\Objects\Domain;
 use Kinikit\Core\Object\SerialisableObject;
 /**
  * An updatable contact object used within the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a> methods and as a related object to a <a href="domain-name-object">DomainNameObject</a>.
- * 
  * Changes to key data for the owner contact for GTLD domain names require verification via email to the current owner for the domain name before these changes can be applied.  If the change is accepted the
  * domain name will be locked for 60 days for transfer.
- *
-  */
+*/
 class DomainNameContact extends SerialisableObject {
 
     /**
-     * @var string
+     * The full name of this contact
+     *
+     * @var string 
      */
     private $name;
 
     /**
-     * @var string
+     * The email address for this contact.
+     *
+     * @var string 
      */
     private $emailAddress;
 
     /**
-     * @var string
+     * The organisation if applicable for this contact.
+     *
+     * @var string 
      */
     private $organisation;
 
     /**
-     * @var string
+     * The first line of the street address for this contact
+     *
+     * @var string 
      */
     private $street1;
 
     /**
-     * @var string
+     * The second line of the street address for this contact
+     *
+     * @var string 
      */
     private $street2;
 
     /**
-     * @var string
+     * The city of the street address for this contact
+     *
+     * @var string 
      */
     private $city;
 
     /**
-     * @var string
+     * The county of the street address for this contact
+     *
+     * @var string 
      */
     private $county;
 
     /**
-     * @var string
+     * The postcode for this contact
+     *
+     * @var string 
      */
     private $postcode;
 
     /**
-     * @var string
+     * The 2 digit country code for this contact (e.g. GB).  If not supplied, this will default to <b>GB</b>
+     *
+     * @var string 
      */
     private $country;
 
     /**
-     * @var string
+     * The telephone international dialling code with leading + if a telephone number is being supplied (e.g. +44, +1 etc)
+     *
+     * @var string 
      */
     private $telephoneDiallingCode;
 
     /**
-     * @var string
+     * The local telephone number bit after the dialling code with no spaces (e.g. 1235987878)
+     *
+     * @var string 
      */
     private $telephone;
 
     /**
-     * @var string
+     * An optional telephone extension (e.g. 201)
+     *
+     * @var string 
      */
     private $telephoneExt;
 
     /**
-     * @var string
+     * The fax international dialling code with leading + if a fax number is being supplied (e.g. +44, +1 etc)
+     *
+     * @var string 
      */
     private $faxDiallingCode;
 
     /**
-     * @var string
+     * The local number bit after the dialling code with no spaces (e.g. 1235987878)
+     *
+     * @var string 
      */
     private $fax;
 
     /**
-     * @var string
+     * An optional fax extension (e.g. 201)
+     *
+     * @var string 
      */
     private $faxExt;
 
     /**
-     * @var mixed[string]
+     * An associative array of data where specific TLDs support / require additional properties
+     * <b>Nominet UK domains:</b>
+     * <br />
+     * The following additional fields are supported for Nominet .UK domains
+     * <b>nominetRegistrantType</b> String (required): One of the following code values
+     * LTD: <i>UK Limited Company: </i><br />
+     * PLC: <i>UK Public Limited Company: </i><br />
+     * PTNR: <i>UK Partnership: </i><br />
+     * STRA: <i>UK Sole Trader: </i><br />
+     * LLP: <i>UK Limited Liability Partnership: </i><br />
+     * IP: <i>UK Industrial/Provident Registered Company: </i><br />
+     * IND: <i>UK Individual (representing self): </i><br />
+     * SCH: <i>UK School: </i><br />
+     * RCHAR: <i>UK Registered Charity: </i><br />
+     * GOV: <i>UK Government Body: </i><br />
+     * CRC: <i>UK Corporation by Royal Charter: </i><br />
+     * STAT: <i>UK Statutory Body: </i><br />
+     * OTHER: <i>UK Entity that does not fit into any of the above (e.g. clubs, associations, : </i><br />
+     * <b>nominetTradingName</b> String (optional): An optional trading name which will display in WHOIS if set.
+     * <b>nominetCompanyNumber</b> String (conditionally required):  The company number - required if the nominetRegistrantType field is set to any of the values
+     * LTD, PLC, LLP, IP, SCH or RCHAR.
+     *
+     * @var mixed[string] 
      */
     private $additionalData;
 
     /**
-     * @var string
+     * The status of this contact (read only).  This will contain one of the following values.
+     * <b>LIVE:</b> For all Admin, Billing, Technical and newly created Owner contacts
+     * <b>PENDING_CHANGES:</b> For any GTLD Owner Contacts where key data has been changed and is awaiting verification by the owner.  This is usually following a call to <i>updateDomainNames</i> on the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a>.  For contacts with pending changes, the <a href="#pendingContact">pendingContact</a> member will contain the queued data awaiting approval.
+     *
+     * @var string 
      */
     protected $status;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     * Pending contact field.  This is only populated when the <a href="#status">status</a> member is set to <b>PENDING_CHANGES</b>.  This will contain a nested <a href="domain-name-contact">DomainNameContact</a> object containing the data awaiting verification by the owner of the domain.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
      */
     protected $pendingContact;
 
@@ -107,23 +163,23 @@ class DomainNameContact extends SerialisableObject {
     /**
      * Constructor
      *
-    * @param  $name
-    * @param  $emailAddress
-    * @param  $organisation
-    * @param  $street1
-    * @param  $street2
-    * @param  $city
-    * @param  $county
-    * @param  $postcode
-    * @param  $country
-    * @param  $telephoneDiallingCode
-    * @param  $telephone
-    * @param  $telephoneExt
-    * @param  $faxDiallingCode
-    * @param  $fax
-    * @param  $faxExt
-    * @param  $additionalData
-    */
+     * @param  $name
+     * @param  $emailAddress
+     * @param  $organisation
+     * @param  $street1
+     * @param  $street2
+     * @param  $city
+     * @param  $county
+     * @param  $postcode
+     * @param  $country
+     * @param  $telephoneDiallingCode
+     * @param  $telephone
+     * @param  $telephoneExt
+     * @param  $faxDiallingCode
+     * @param  $fax
+     * @param  $faxExt
+     * @param  $additionalData
+     */
     public function __construct($name = null, $emailAddress = null, $organisation = null, $street1 = null, $street2 = null, $city = null, $county = null, $postcode = null, $country = null, $telephoneDiallingCode = null, $telephone = null, $telephoneExt = null, $faxDiallingCode = null, $fax = null, $faxExt = null, $additionalData = null){
 
         $this->name = $name;
@@ -158,9 +214,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the name
      *
      * @param string $name
+     * @return DomainNameContact
      */
     public function setName($name){
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -176,9 +234,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the emailAddress
      *
      * @param string $emailAddress
+     * @return DomainNameContact
      */
     public function setEmailAddress($emailAddress){
         $this->emailAddress = $emailAddress;
+        return $this;
     }
 
     /**
@@ -194,9 +254,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the organisation
      *
      * @param string $organisation
+     * @return DomainNameContact
      */
     public function setOrganisation($organisation){
         $this->organisation = $organisation;
+        return $this;
     }
 
     /**
@@ -212,9 +274,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the street1
      *
      * @param string $street1
+     * @return DomainNameContact
      */
     public function setStreet1($street1){
         $this->street1 = $street1;
+        return $this;
     }
 
     /**
@@ -230,9 +294,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the street2
      *
      * @param string $street2
+     * @return DomainNameContact
      */
     public function setStreet2($street2){
         $this->street2 = $street2;
+        return $this;
     }
 
     /**
@@ -248,9 +314,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the city
      *
      * @param string $city
+     * @return DomainNameContact
      */
     public function setCity($city){
         $this->city = $city;
+        return $this;
     }
 
     /**
@@ -266,9 +334,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the county
      *
      * @param string $county
+     * @return DomainNameContact
      */
     public function setCounty($county){
         $this->county = $county;
+        return $this;
     }
 
     /**
@@ -284,9 +354,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the postcode
      *
      * @param string $postcode
+     * @return DomainNameContact
      */
     public function setPostcode($postcode){
         $this->postcode = $postcode;
+        return $this;
     }
 
     /**
@@ -302,9 +374,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the country
      *
      * @param string $country
+     * @return DomainNameContact
      */
     public function setCountry($country){
         $this->country = $country;
+        return $this;
     }
 
     /**
@@ -320,9 +394,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the telephoneDiallingCode
      *
      * @param string $telephoneDiallingCode
+     * @return DomainNameContact
      */
     public function setTelephoneDiallingCode($telephoneDiallingCode){
         $this->telephoneDiallingCode = $telephoneDiallingCode;
+        return $this;
     }
 
     /**
@@ -338,9 +414,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the telephone
      *
      * @param string $telephone
+     * @return DomainNameContact
      */
     public function setTelephone($telephone){
         $this->telephone = $telephone;
+        return $this;
     }
 
     /**
@@ -356,9 +434,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the telephoneExt
      *
      * @param string $telephoneExt
+     * @return DomainNameContact
      */
     public function setTelephoneExt($telephoneExt){
         $this->telephoneExt = $telephoneExt;
+        return $this;
     }
 
     /**
@@ -374,9 +454,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the faxDiallingCode
      *
      * @param string $faxDiallingCode
+     * @return DomainNameContact
      */
     public function setFaxDiallingCode($faxDiallingCode){
         $this->faxDiallingCode = $faxDiallingCode;
+        return $this;
     }
 
     /**
@@ -392,9 +474,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the fax
      *
      * @param string $fax
+     * @return DomainNameContact
      */
     public function setFax($fax){
         $this->fax = $fax;
+        return $this;
     }
 
     /**
@@ -410,9 +494,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the faxExt
      *
      * @param string $faxExt
+     * @return DomainNameContact
      */
     public function setFaxExt($faxExt){
         $this->faxExt = $faxExt;
+        return $this;
     }
 
     /**
@@ -428,9 +514,11 @@ class DomainNameContact extends SerialisableObject {
      * Set the additionalData
      *
      * @param mixed[string] $additionalData
+     * @return DomainNameContact
      */
     public function setAdditionalData($additionalData){
         $this->additionalData = $additionalData;
+        return $this;
     }
 
     /**

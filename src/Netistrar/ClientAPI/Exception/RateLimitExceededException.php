@@ -5,17 +5,9 @@ namespace Netistrar\ClientAPI\Exception;
 use Kinikit\Core\Exception\SerialisableException;
 
 /**
- * Transaction Exception raised when an issue occurs usually in a call to
- * as single update function.
-*/
-class TransactionException extends SerialisableException {
 
-    /**
-     * Nested array of errors
-     *
-     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string] 
-     */
-    protected $transactionErrors;
+*/
+class RateLimitExceededException extends SerialisableException {
 
     /**
      * Indexed string array of exception data in the case that a non-serialisable
@@ -57,15 +49,6 @@ class TransactionException extends SerialisableException {
     public function __construct(){
 
         
-    }
-
-    /**
-     * Get the transactionErrors
-     *
-     * @return \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string]
-     */
-    public function getTransactionErrors(){
-        return $this->transactionErrors;
     }
 
 

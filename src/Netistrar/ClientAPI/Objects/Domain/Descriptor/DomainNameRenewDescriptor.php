@@ -5,17 +5,18 @@ namespace Netistrar\ClientAPI\Objects\Domain\Descriptor;
 use Kinikit\Core\Object\SerialisableObject;
 /**
  * Descriptor for a domain name renew operation.  This should be passed to the renew operation on the Domains API.
- *
- */
+*/
 class DomainNameRenewDescriptor extends SerialisableObject {
 
     /**
-     * @var string[]
+     *
+     * @var string[] the array of domain names to be renewed.
      */
     private $domainNames;
 
     /**
-     * @var integer
+     *
+     * @var integer The number of years to be added to the supplied domain names
      */
     private $additionalYears;
 
@@ -24,9 +25,9 @@ class DomainNameRenewDescriptor extends SerialisableObject {
     /**
      * Constructor
      *
-    * @param  $domainNames
-    * @param  $additionalYears
-    */
+     * @param  $domainNames
+     * @param  $additionalYears
+     */
     public function __construct($domainNames = null, $additionalYears = null){
 
         $this->domainNames = $domainNames;
@@ -47,9 +48,11 @@ class DomainNameRenewDescriptor extends SerialisableObject {
      * Set the domainNames
      *
      * @param string[] $domainNames
+     * @return DomainNameRenewDescriptor
      */
     public function setDomainNames($domainNames){
         $this->domainNames = $domainNames;
+        return $this;
     }
 
     /**
@@ -65,9 +68,11 @@ class DomainNameRenewDescriptor extends SerialisableObject {
      * Set the additionalYears
      *
      * @param integer $additionalYears
+     * @return DomainNameRenewDescriptor
      */
     public function setAdditionalYears($additionalYears){
         $this->additionalYears = $additionalYears;
+        return $this;
     }
 
 

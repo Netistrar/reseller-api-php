@@ -178,8 +178,7 @@ class domainsTest extends \ClientAPITestBase {
 
         $key = $this->api->utility()->createBulkOperation();
 
-        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, 1, $key));
-
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, 1), $key);
 
         $this->assertTrue($transaction instanceof Transaction);
         $this->assertNotNull($transaction->getTransactionDateTime());
@@ -478,7 +477,7 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
         $elements = $transaction->getTransactionElements();
 
-         $element = $elements[$newUKDomain1];
+        $element = $elements[$newUKDomain1];
         $this->assertEquals($newUKDomain1, $element->getDescription());
         $this->assertEquals("SUCCEEDED"
             , $element->getElementStatus());
@@ -676,7 +675,7 @@ class domainsTest extends \ClientAPITestBase {
     }
 
 
-    public function testValidationErrorsOccurIfBulkUpdatingNameserverForDuplicateNames(){
+    public function testValidationErrorsOccurIfBulkUpdatingNameserverForDuplicateNames() {
 
         $newUKDomain1 = "validdomain-" . date("U") . ".uk";
         $newUKDomain2 = "validdomain-" . date("U") . "1.uk";

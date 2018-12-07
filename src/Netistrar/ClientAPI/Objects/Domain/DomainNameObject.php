@@ -6,92 +6,140 @@ use Kinikit\Core\Object\SerialisableObject;
 /**
  * A value object used within the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a> methods to capture all of the properties of a domain name including related
  * Contacts and Nameservers objects.
- *
- */
+*/
 class DomainNameObject extends SerialisableObject {
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     * The owner contact for this domain as a  <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
      */
     protected $ownerContact;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     * The admin contact for this domain (if defined) as a <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
      */
     protected $adminContact;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     * The billing contact for this domain (if defined) as a <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
      */
     protected $billingContact;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     * The technical contact for this domain (if defined) as a  <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
      */
     protected $technicalContact;
 
     /**
-     * @var string[]
+     * The array of nameservers currently in use for this domain name.
+     *
+     * @var string[] 
      */
     protected $nameservers;
 
     /**
-     * @var string
+     * The full domain name as a string
+     *
+     * @var string 
      */
     protected $domainName;
 
     /**
-     * @var string
+     * The date of registration for this domain name if known.  NB:  This may not always be populated when domains have been transferred from elsewhere.
+     *
+     * @var string 
      */
     protected $registeredDate;
 
     /**
-     * @var string
+     * The expiry date for this domain name.
+     *
+     * @var string 
      */
     protected $expiryDate;
 
     /**
-     * @var boolean
+     * An indicator as to whether or not this domain name is currently locked.  Locking a domain provides an extra level of security as it prevents it from being either deleted or transferred until the lock is removed.
+     * <br><br>
+     * When unlocked the <a href="#authCode">authCode</a> field will be populated with the authorisation code required to move this domain to another provider.
+     * <br><br>
+     * Some operations (e.g. new registration, transfer) result in a mandatory lock of a domain for a period of time.  In this case the <a href="#lockedUntil">lockedUntil</a> field will be populated with a date after which the domain will be available for unlocking.
+     *
+     * @var boolean 
      */
     protected $locked;
 
     /**
-     * @var string
+     * A date after which the mandatory lock period for this domain name will cease.  This is used in conjunction with the <a href="#locked">locked</a> field in the case that a mandatory lock has been applied to this domain following an operation (e.g. new registration, transfer).
+     *
+     * @var string 
      */
     protected $lockedUntil;
 
     /**
-     * @var string
+     * The authorisation code required for most domain transfers (notable exceptions are .UK domains and some other country TLDs).  This is only available when this domain is unlocked (i.e. the <a href="#locked">locked</a> member is true).
+     * If the domain is locked this will be set to <b>N/A</b>.
+     *
+     * @var string 
      */
     protected $authCode;
 
     /**
-     * @var boolean
+     * An indicator as to whether or not an attempt will be made to auto renew this domain.  If this is set to true an attempt will be made around 30 days prior to the expiry date to renew the domain using any available payment
+     * methods defined within your account in the Netistrar Control Panel.
+     *
+     * @var boolean 
      */
     protected $autoRenew;
 
     /**
-     * @var integer
+     * An indicator as to whether or not the free Netistrar Privacy Proxy service is being used for this domain.  If set to true, standard Netistrar privacy contacts will be transmitted to the domain registry for display in Public WHOIS
+     * in lieu of the true contact details which will still be held on the Netistrar side.
+     *
+     * @var integer 
      */
     protected $privacyProxy;
 
     /**
-     * @var string
+     * One of the following status values representing the current Netistrar Domain Name status for this domain name.
+     * <b>ACTIVE</b> - The domain name is active and in use.
+     * <b>EXPIRED</b> - The domain name has expired.
+     * <b>SUSPENDED</b> - The domain name has been suspended (either for unlawful behaviour or invalid ownership details).
+     * <b>RGP</b> - The domain has entered the Redemption Grace Period (usually around 45 days after expiry).  During this period additional costs are incurred to redeem the domain.
+     * <b>DELETED</b> - The domain has dropped completely and has been deleted (usually around 75 days after expiry once the RGP has completed).
+     * <b>TRANSFER_IN_PENDING_CONFIRMATION</b> - The domain is being transferred in and is awaiting confirmation from the legal owner.
+     * <b>TRANSFER_IN_OWNER_DECLINED</b> - The domain is being transferred in but the legal owner declined the transfer.
+     * <b>TRANSFER_IN_AWAITING_RESPONSE</b> - The domain transfer in operation has been started and is awaiting a response from the current Registrar.  If no response is received after 5 days the transfer would simply complete.
+     * <b>TRANSFER_IN_REJECTED</b> - The domain transfer in operation has been rejected by the current Registrar.
+     * <b>TRANSFER_OUT_PENDING_CONFIRMATION</b> - The domain has been requested to be transferred out and is awaiting confirmation from the legal owner.
+     *
+     * @var string 
      */
     protected $status;
 
     /**
-     * @var string[]
+     * An array of tags which have been added to this domain for organisational purposes.
+     *
+     * @var string[] 
      */
     protected $tags;
 
     /**
-     * @var string
+     *
+     * @var string 
      */
     protected $dnsProvider;
 
     /**
-     * @var string
+     *
+     * @var string 
      */
     protected $emailProvider;
 
@@ -100,7 +148,7 @@ class DomainNameObject extends SerialisableObject {
     /**
      * Constructor
      *
-    */
+     */
     public function __construct(){
 
         

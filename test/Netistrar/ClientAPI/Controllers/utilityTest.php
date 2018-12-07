@@ -9,6 +9,7 @@
 namespace Netistrar\ClientAPI\Controllers;
 
 
+use Netistrar\ClientAPI\Exception\RateLimitExceededException;
 use Netistrar\ClientAPI\Objects\Utility\BulkOperationProgress;
 
 include_once "ClientAPITestBase.php";
@@ -20,7 +21,7 @@ class utilityTest extends \ClientAPITestBase {
         $this->assertEquals("OK", $this->api->utility()->ping());
     }
 
-    public function testCanCreateABulkOperation(){
+    public function testCanCreateABulkOperation() {
 
         $bulkOperationKey = $this->api->utility()->createBulkOperation();
         $this->assertNotNull($bulkOperationKey);
@@ -28,7 +29,7 @@ class utilityTest extends \ClientAPITestBase {
     }
 
 
-    public function testCanGetBulkOperationProgress(){
+    public function testCanGetBulkOperationProgress() {
 
         $bulkOperationKey = $this->api->utility()->createBulkOperation();
 
@@ -38,5 +39,21 @@ class utilityTest extends \ClientAPITestBase {
         $this->assertEquals("PENDING", $status->getStatus());
 
     }
+
+
+    public function testRateLimitExceededExceptionRaisedWhenRateExceeded() {
+
+        try {
+            for ($i = 0; $i < 11; $i++) {
+                $this->api->utility()->ping();
+            }
+            $this->fail("should have failed");
+        } catch (RateLimitExceededException $e) {
+        }
+
+        $this->assertTrue(true);
+
+    }
+
 
 }

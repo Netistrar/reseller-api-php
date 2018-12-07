@@ -5,37 +5,51 @@ namespace Netistrar\ClientAPI\Objects\Utility;
 use Kinikit\Core\Object\SerialisableObject;
 /**
  * Encodes information about the current progress of a bulk operation.  This includes the status of all contained <a href="bulk-operation-progress-item">BulkOperationProgressItem</a> objects which make up the bulk operation as well as general information about the progress of the whole operation both as a percentage and as a number of completed items for use in progressively updating GUIs etc.
- *
- */
+*/
 class BulkOperationProgress extends SerialisableObject {
 
     /**
-     * @var string
+     * The overall status of this bulk operation.  This will be set to one of the following values.
+     * <b>PENDING:</b> When the bulk operation has been created but not yet started.
+     * <b>RUNNING:</b> When the bulk operation has been started.
+     * <b>COMPLETED:</b> When the bulk operation has finished.
+     *
+     * @var string 
      */
     protected $status;
 
     /**
-     * @var integer
+     * The total number of progress items making up this bulk operation.
+     *
+     * @var integer 
      */
     protected $totalNumberOfItems;
 
     /**
-     * @var integer
+     * The number of completed progress items (either successfully or not).
+     *
+     * @var integer 
      */
     protected $completedItems;
 
     /**
-     * @var float
+     * The current percentage (between 0 and 100) of progress through the bulk operation.
+     *
+     * @var float 
      */
     protected $percentageComplete;
 
     /**
-     * @var boolean
+     * An indicator as to whether or not there are currently any failed items in this bulk operation (useful for changing colours of progress bars etc).
+     *
+     * @var boolean 
      */
     protected $hasFailedItems;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Utility\BulkOperationProgressItem[]
+     * An array of <a href="bulk-operation-progress-item">BulkOperationProgressItem</a> items each representing the progress for an individual element within a bulk operation.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Utility\BulkOperationProgressItem[] 
      */
     protected $progressItems;
 
@@ -44,7 +58,7 @@ class BulkOperationProgress extends SerialisableObject {
     /**
      * Constructor
      *
-    */
+     */
     public function __construct(){
 
         

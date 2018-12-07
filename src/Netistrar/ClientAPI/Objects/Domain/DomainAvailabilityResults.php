@@ -5,32 +5,44 @@ namespace Netistrar\ClientAPI\Objects\Domain;
 use Kinikit\Core\Object\SerialisableObject;
 /**
  * Encodes the results from a call to <b>getHintedAvailability</b>
- *
- */
+*/
 class DomainAvailabilityResults extends SerialisableObject {
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability
+     * The direct domain result as a DomainAvailability object.  This will only be available if the domainString argument to getHintedAvailability is a fully qualified domain name e.g. mydomain.com
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability 
      */
     protected $directResult;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][string]
+     * An associative array indexed by the requested category names supplied in the tldCategories argument to getHintedAvailability.
+     * Each array item is itself an associative array indexed by the TLD names for each TLD in the given category.
+     * The entries of this array are DomainAvailability objects pertaining to the domain name formed by combining the prefix of the domainString and the respective TLD.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][string] 
      */
     protected $categoryResults;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string]
+     * An associative array indexed by the requested TLD names supplied in the tlds argument to getHintedAvailability.  Each array item is a DomainAvailability object pertaining to the domain name formed by combining the prefix of the domainString and the TLD in question.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string] 
      */
     protected $tldResults;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][]
+     * An associative array indexed by tld of suggestions.  Each array item is itself an array of suggestions for the given tld.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[string][] 
      */
     protected $tldSuggestions;
 
     /**
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[]
+     * An array of available suggestions for search result listings, this will prioritise exact matches and return
+     * suggestions if not available.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailability[] 
      */
     protected $suggestions;
 
@@ -39,7 +51,7 @@ class DomainAvailabilityResults extends SerialisableObject {
     /**
      * Constructor
      *
-    */
+     */
     public function __construct(){
 
         
