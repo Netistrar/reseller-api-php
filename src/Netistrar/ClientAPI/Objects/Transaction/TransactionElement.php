@@ -24,8 +24,8 @@ class TransactionElement extends SerialisableObject {
 
     /**
      * The status of this element.  This will contain one of the following values:
-     * <br /><br />
-     * <b>SUCCEEDED:</b> When this element succeeded.<br />
+     * <br><br>
+     * <b>SUCCEEDED:</b> When this element succeeded.<br>
      * <b>FAILED:</b> When this element failed.
      *
      * @var string 
@@ -52,7 +52,7 @@ class TransactionElement extends SerialisableObject {
     /**
      * The subtotal for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <i>netistrarOrderId</i> element is defined for the wrapping <a href="domain-name-transaction">DomainNameTransaction</a> object
      * and will be the net total (pre taxes) for this domain operation in the currency defined in the transaction.
-     * <br /><br />
+     * <br><br>
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var float 
@@ -62,7 +62,7 @@ class TransactionElement extends SerialisableObject {
     /**
      * The taxes for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <i>netistrarOrderId</i> element is defined for the wrapping <a href="domain-name-transaction">DomainNameTransaction</a> object
      * and will be the tax amount (VAT) for this domain operation in the currency defined in the transaction.
-     * <br /><br />
+     * <br><br>
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var float 
@@ -72,7 +72,7 @@ class TransactionElement extends SerialisableObject {
     /**
      * The total for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <i>netistrarOrderId</i> element is defined for the wrapping <a href="domain-name-transaction">DomainNameTransaction</a> object
      * and will be the total including taxes for this domain operation in the currency defined in the transaction.
-     * <br /><br />
+     * <br><br>
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var float 

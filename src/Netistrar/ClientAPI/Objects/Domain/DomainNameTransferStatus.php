@@ -6,7 +6,7 @@ use Kinikit\Core\Object\SerialisableObject;
 /**
  * This encodes details about a domain transfer.  When a domain name is in the <i>TRANSFER_IN_AWAITING_RESPONSE</i> status this will be fully populated with details about the
  * transfer window as obtained from the Registry.
- * <br /><br />
+ * <br><br>
  * Otherwise if the domain name is in a pending confirmation status this will only have the <a href="#domainName">domainName</a> and <a href="#status">status</a> members set.
 */
 class DomainNameTransferStatus extends SerialisableObject {
@@ -28,7 +28,7 @@ class DomainNameTransferStatus extends SerialisableObject {
 
     /**
      * The transfer status as returned from the Registry.  This is usually "Pending"
-     * <br /><br />
+     * <br><br>
      * This is only set when the <a href="#status">status</a> is set to <i>TRANSFER_IN_AWAITING_RESPONSE</i> otherwise <b>N/A</b> will be returned.
      *
      * @var string 
@@ -37,7 +37,7 @@ class DomainNameTransferStatus extends SerialisableObject {
 
     /**
      * The date and time that the transfer was started in <b>dd/mm/YYYY HH:mm:ss</b> format
-     * <br /><br />
+     * <br><br>
      * This is only set when the <a href="#status">status</a> is set to <i>TRANSFER_IN_AWAITING_RESPONSE</i> otherwise <b>N/A</b> will be returned.
      *
      * @var string 
@@ -46,7 +46,7 @@ class DomainNameTransferStatus extends SerialisableObject {
 
     /**
      * The date and time that the transfer expires - usually 5 days after the transfer started date in <b>dd/mm/YYYY HH:mm:ss</b> format
-     * <br /><br />
+     * <br><br>
      * This is only set when the <a href="#status">status</a> is set to <i>TRANSFER_IN_AWAITING_RESPONSE</i> otherwise <b>N/A</b> will be returned.
      *
      * @var string 
@@ -55,7 +55,7 @@ class DomainNameTransferStatus extends SerialisableObject {
 
     /**
      * The date and time for the new expiry date for the domain after the transfer completes (usually 1yr more than current expiry) in <b>dd/mm/YYYY HH:mm:ss</b> format
-     * <br /><br />
+     * <br><br>
      * This is only set when the <a href="#status">status</a> is set to <i>TRANSFER_IN_AWAITING_RESPONSE</i> otherwise <b>N/A</b> will be returned.
      *
      * @var string 

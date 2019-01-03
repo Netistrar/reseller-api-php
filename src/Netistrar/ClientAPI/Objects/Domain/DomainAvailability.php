@@ -50,7 +50,7 @@ class DomainAvailability extends SerialisableObject {
      * and <b>HINTED_UNAVAILABLE</b> cases this will comprise an array containing a single <a href="domain-availability-price-object">DomainAvailabilityPrice</a> item for one year renewal price.
      * Transfer prices are included only when the availability property is set to <b>UNAVAILABLE</b> or <b>HINTED_UNAVAILABLE</b>.  This will comprise an array containing a single <a href="domain-availability-price-object">DomainAvailabilityPrice</a> item for one year transfer price.
      *
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityPrice[string][integer] 
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityPrice[string][] 
      */
     protected $prices;
 
@@ -102,7 +102,7 @@ class DomainAvailability extends SerialisableObject {
     /**
      * Get the prices
      *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityPrice[string][integer]
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainAvailabilityPrice[string][]
      */
     public function getPrices(){
         return $this->prices;

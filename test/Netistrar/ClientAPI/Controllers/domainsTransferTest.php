@@ -211,11 +211,11 @@ class domainsTransferTest extends \ClientAPITestBase {
 
     public function testCanCreatePushTransferInDomainsWhenValidationSucceedsAndTheseAreProcessedAsOrdersCorrectly() {
 
-        $this->api->test()->removeDomainFromAccount("ganymede-netistrar.co.uk");
+        $pushTransferDomains = $this->api->test()->createPushTransferUKDomains(1);
 
         $validContact = new DomainNameContact("Test", "test@test.com", "hello street", "hello road", "hello", "helloshire", "he12 144", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
 
-        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array("ganymede-netistrar.co.uk"), $validContact));
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($pushTransferDomains[0]), $validContact));
 
 
         $this->assertTrue($transaction instanceof Transaction);
@@ -232,8 +232,8 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
         $elements = $transaction->getTransactionElements();
 
-        $element = $elements["ganymede-netistrar.co.uk"];
-        $this->assertEquals("ganymede-netistrar.co.uk", $element->getDescription());
+        $element = $elements[$pushTransferDomains[0]];
+        $this->assertEquals($pushTransferDomains[0], $element->getDescription());
         $this->assertEquals("SUCCEEDED", $element->getElementStatus());
         $this->assertNull($element->getOrderLineSubtotal());
         $this->assertNull($element->getOrderLineTaxes());
