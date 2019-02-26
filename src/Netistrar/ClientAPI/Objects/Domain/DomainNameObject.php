@@ -45,6 +45,13 @@ class DomainNameObject extends SerialisableObject {
     protected $nameservers;
 
     /**
+     * Related information for this item
+     *
+     * @var string[] 
+     */
+    protected $relatedProductInfo;
+
+    /**
      * The full domain name as a string
      *
      * @var string 
@@ -197,6 +204,15 @@ class DomainNameObject extends SerialisableObject {
      */
     public function getNameservers(){
         return $this->nameservers;
+    }
+
+    /**
+     * Get the relatedProductInfo
+     *
+     * @return string[]
+     */
+    public function getRelatedProductInfo(){
+        return $this->relatedProductInfo;
     }
 
     /**

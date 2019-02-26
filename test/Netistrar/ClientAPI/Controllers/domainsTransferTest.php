@@ -77,8 +77,10 @@ class domainsTransferTest extends \ClientAPITestBase {
 
         $this->assertEquals(2, sizeof($validationErrors));
 
+        var_dump($validationErrors);
+
         $this->assertNotNull($validationErrors["ganymede-netistrar_.co.uk"]["TRANSFER_DOMAIN_NOT_ASSIGNED"]);
-        $this->assertNotNull($validationErrors["ganymede-2020media.co.uk"]["TRANSFER_DOMAIN_NOT_ASSIGNED"]);
+        $this->assertNotNull($validationErrors["ganymede-2020media.co.uk"]["TRANSFER_DOMAIN_NOT_REGISTERED"]);
 
 
         // Test for an missing auth code first.
