@@ -11,21 +11,6 @@ use Kinikit\Core\Exception\SerialisableException;
 class TransactionException extends SerialisableException {
 
     /**
-     * Nested array of errors
-     *
-     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string] 
-     */
-    protected $transactionErrors;
-
-    /**
-     * Indexed string array of exception data in the case that a non-serialisable
-     * exception has been shunted into this class
-     *
-     * @var string[string] 
-     */
-    protected $sourceException;
-
-    /**
      *
      * @var string 
      */
@@ -48,6 +33,21 @@ class TransactionException extends SerialisableException {
      * @var string 
      */
     protected $line;
+
+    /**
+     * Indexed string array of exception data in the case that a non-serialisable
+     * exception has been shunted into this class
+     *
+     * @var string[string] 
+     */
+    protected $sourceException;
+
+    /**
+     * Nested array of errors
+     *
+     * @var \Netistrar\ClientAPI\Objects\Transaction\TransactionError[string] 
+     */
+    protected $transactionErrors;
 
 
     /**

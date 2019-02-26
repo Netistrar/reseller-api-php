@@ -11,6 +11,111 @@ use Kinikit\Core\Object\SerialisableObject;
 class DomainNameContact extends SerialisableObject {
 
     /**
+     * The full name of this contact
+     *
+     * @var string 
+     */
+    private $name;
+
+    /**
+     * The email address for this contact.
+     *
+     * @var string 
+     */
+    private $emailAddress;
+
+    /**
+     * The organisation if applicable for this contact.
+     *
+     * @var string 
+     */
+    private $organisation;
+
+    /**
+     * The first line of the street address for this contact
+     *
+     * @var string 
+     */
+    private $street1;
+
+    /**
+     * The second line of the street address for this contact
+     *
+     * @var string 
+     */
+    private $street2;
+
+    /**
+     * The city of the street address for this contact
+     *
+     * @var string 
+     */
+    private $city;
+
+    /**
+     * The county of the street address for this contact
+     *
+     * @var string 
+     */
+    private $county;
+
+    /**
+     * The postcode for this contact
+     *
+     * @var string 
+     */
+    private $postcode;
+
+    /**
+     * The 2 digit country code for this contact (e.g. GB).  If not supplied, this will default to <b>GB</b>
+     *
+     * @var string 
+     */
+    private $country;
+
+    /**
+     * The telephone international dialling code with leading + if a telephone number is being supplied (e.g. +44, +1 etc)
+     *
+     * @var string 
+     */
+    private $telephoneDiallingCode;
+
+    /**
+     * The local telephone number bit after the dialling code with no spaces (e.g. 1235987878)
+     *
+     * @var string 
+     */
+    private $telephone;
+
+    /**
+     * An optional telephone extension (e.g. 201)
+     *
+     * @var string 
+     */
+    private $telephoneExt;
+
+    /**
+     * The fax international dialling code with leading + if a fax number is being supplied (e.g. +44, +1 etc)
+     *
+     * @var string 
+     */
+    private $faxDiallingCode;
+
+    /**
+     * The local number bit after the dialling code with no spaces (e.g. 1235987878)
+     *
+     * @var string 
+     */
+    private $fax;
+
+    /**
+     * An optional fax extension (e.g. 201)
+     *
+     * @var string 
+     */
+    private $faxExt;
+
+    /**
      * An associative array of data where specific TLDs support / require additional properties
      * <b>Nominet UK domains:</b>
      * <br>
@@ -53,209 +158,146 @@ class DomainNameContact extends SerialisableObject {
      */
     protected $pendingContact;
 
-    /**
-     * The 2 digit country code for this contact (e.g. GB).  If not supplied, this will default to <b>GB</b>
-     *
-     * @var string 
-     */
-    private $country;
-
-    /**
-     * The city of the street address for this contact
-     *
-     * @var string 
-     */
-    private $city;
-
-    /**
-     * The county of the street address for this contact
-     *
-     * @var string 
-     */
-    private $county;
-
-    /**
-     * The postcode for this contact
-     *
-     * @var string 
-     */
-    private $postcode;
-
-    /**
-     * The organisation if applicable for this contact.
-     *
-     * @var string 
-     */
-    private $organisation;
-
-    /**
-     * The local telephone number bit after the dialling code with no spaces (e.g. 1235987878)
-     *
-     * @var string 
-     */
-    private $telephone;
-
-    /**
-     * The fax international dialling code with leading + if a fax number is being supplied (e.g. +44, +1 etc)
-     *
-     * @var string 
-     */
-    private $faxDiallingCode;
-
-    /**
-     * The email address for this contact.
-     *
-     * @var string 
-     */
-    private $emailAddress;
-
-    /**
-     * The full name of this contact
-     *
-     * @var string 
-     */
-    private $name;
-
-    /**
-     * An optional fax extension (e.g. 201)
-     *
-     * @var string 
-     */
-    private $faxExt;
-
-    /**
-     * The first line of the street address for this contact
-     *
-     * @var string 
-     */
-    private $street1;
-
-    /**
-     * An optional telephone extension (e.g. 201)
-     *
-     * @var string 
-     */
-    private $telephoneExt;
-
-    /**
-     * The second line of the street address for this contact
-     *
-     * @var string 
-     */
-    private $street2;
-
-    /**
-     * The local number bit after the dialling code with no spaces (e.g. 1235987878)
-     *
-     * @var string 
-     */
-    private $fax;
-
-    /**
-     * The telephone international dialling code with leading + if a telephone number is being supplied (e.g. +44, +1 etc)
-     *
-     * @var string 
-     */
-    private $telephoneDiallingCode;
-
 
 
     /**
      * Constructor
      *
-     * @param  $additionalData
-     * @param  $country
+     * @param  $name
+     * @param  $emailAddress
+     * @param  $organisation
+     * @param  $street1
+     * @param  $street2
      * @param  $city
      * @param  $county
      * @param  $postcode
-     * @param  $organisation
-     * @param  $telephone
-     * @param  $faxDiallingCode
-     * @param  $emailAddress
-     * @param  $name
-     * @param  $faxExt
-     * @param  $street1
-     * @param  $telephoneExt
-     * @param  $street2
-     * @param  $fax
+     * @param  $country
      * @param  $telephoneDiallingCode
+     * @param  $telephone
+     * @param  $telephoneExt
+     * @param  $faxDiallingCode
+     * @param  $fax
+     * @param  $faxExt
+     * @param  $additionalData
      */
-    public function __construct($additionalData = null, $country = null, $city = null, $county = null, $postcode = null, $organisation = null, $telephone = null, $faxDiallingCode = null, $emailAddress = null, $name = null, $faxExt = null, $street1 = null, $telephoneExt = null, $street2 = null, $fax = null, $telephoneDiallingCode = null){
+    public function __construct($name = null, $emailAddress = null, $organisation = null, $street1 = null, $street2 = null, $city = null, $county = null, $postcode = null, $country = null, $telephoneDiallingCode = null, $telephone = null, $telephoneExt = null, $faxDiallingCode = null, $fax = null, $faxExt = null, $additionalData = null){
 
-        $this->additionalData = $additionalData;
-        $this->country = $country;
+        $this->name = $name;
+        $this->emailAddress = $emailAddress;
+        $this->organisation = $organisation;
+        $this->street1 = $street1;
+        $this->street2 = $street2;
         $this->city = $city;
         $this->county = $county;
         $this->postcode = $postcode;
-        $this->organisation = $organisation;
-        $this->telephone = $telephone;
-        $this->faxDiallingCode = $faxDiallingCode;
-        $this->emailAddress = $emailAddress;
-        $this->name = $name;
-        $this->faxExt = $faxExt;
-        $this->street1 = $street1;
-        $this->telephoneExt = $telephoneExt;
-        $this->street2 = $street2;
-        $this->fax = $fax;
+        $this->country = $country;
         $this->telephoneDiallingCode = $telephoneDiallingCode;
+        $this->telephone = $telephone;
+        $this->telephoneExt = $telephoneExt;
+        $this->faxDiallingCode = $faxDiallingCode;
+        $this->fax = $fax;
+        $this->faxExt = $faxExt;
+        $this->additionalData = $additionalData;
         
     }
 
     /**
-     * Get the additionalData
+     * Get the name
      *
-     * @return mixed[string]
+     * @return string
      */
-    public function getAdditionalData(){
-        return $this->additionalData;
+    public function getName(){
+        return $this->name;
     }
 
     /**
-     * Set the additionalData
+     * Set the name
      *
-     * @param mixed[string] $additionalData
+     * @param string $name
      * @return DomainNameContact
      */
-    public function setAdditionalData($additionalData){
-        $this->additionalData = $additionalData;
+    public function setName($name){
+        $this->name = $name;
         return $this;
     }
 
     /**
-     * Get the status
+     * Get the emailAddress
      *
      * @return string
      */
-    public function getStatus(){
-        return $this->status;
+    public function getEmailAddress(){
+        return $this->emailAddress;
     }
 
     /**
-     * Get the pendingContact
+     * Set the emailAddress
      *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
-     */
-    public function getPendingContact(){
-        return $this->pendingContact;
-    }
-
-    /**
-     * Get the country
-     *
-     * @return string
-     */
-    public function getCountry(){
-        return $this->country;
-    }
-
-    /**
-     * Set the country
-     *
-     * @param string $country
+     * @param string $emailAddress
      * @return DomainNameContact
      */
-    public function setCountry($country){
-        $this->country = $country;
+    public function setEmailAddress($emailAddress){
+        $this->emailAddress = $emailAddress;
+        return $this;
+    }
+
+    /**
+     * Get the organisation
+     *
+     * @return string
+     */
+    public function getOrganisation(){
+        return $this->organisation;
+    }
+
+    /**
+     * Set the organisation
+     *
+     * @param string $organisation
+     * @return DomainNameContact
+     */
+    public function setOrganisation($organisation){
+        $this->organisation = $organisation;
+        return $this;
+    }
+
+    /**
+     * Get the street1
+     *
+     * @return string
+     */
+    public function getStreet1(){
+        return $this->street1;
+    }
+
+    /**
+     * Set the street1
+     *
+     * @param string $street1
+     * @return DomainNameContact
+     */
+    public function setStreet1($street1){
+        $this->street1 = $street1;
+        return $this;
+    }
+
+    /**
+     * Get the street2
+     *
+     * @return string
+     */
+    public function getStreet2(){
+        return $this->street2;
+    }
+
+    /**
+     * Set the street2
+     *
+     * @param string $street2
+     * @return DomainNameContact
+     */
+    public function setStreet2($street2){
+        $this->street2 = $street2;
         return $this;
     }
 
@@ -320,22 +362,42 @@ class DomainNameContact extends SerialisableObject {
     }
 
     /**
-     * Get the organisation
+     * Get the country
      *
      * @return string
      */
-    public function getOrganisation(){
-        return $this->organisation;
+    public function getCountry(){
+        return $this->country;
     }
 
     /**
-     * Set the organisation
+     * Set the country
      *
-     * @param string $organisation
+     * @param string $country
      * @return DomainNameContact
      */
-    public function setOrganisation($organisation){
-        $this->organisation = $organisation;
+    public function setCountry($country){
+        $this->country = $country;
+        return $this;
+    }
+
+    /**
+     * Get the telephoneDiallingCode
+     *
+     * @return string
+     */
+    public function getTelephoneDiallingCode(){
+        return $this->telephoneDiallingCode;
+    }
+
+    /**
+     * Set the telephoneDiallingCode
+     *
+     * @param string $telephoneDiallingCode
+     * @return DomainNameContact
+     */
+    public function setTelephoneDiallingCode($telephoneDiallingCode){
+        $this->telephoneDiallingCode = $telephoneDiallingCode;
         return $this;
     }
 
@@ -360,106 +422,6 @@ class DomainNameContact extends SerialisableObject {
     }
 
     /**
-     * Get the faxDiallingCode
-     *
-     * @return string
-     */
-    public function getFaxDiallingCode(){
-        return $this->faxDiallingCode;
-    }
-
-    /**
-     * Set the faxDiallingCode
-     *
-     * @param string $faxDiallingCode
-     * @return DomainNameContact
-     */
-    public function setFaxDiallingCode($faxDiallingCode){
-        $this->faxDiallingCode = $faxDiallingCode;
-        return $this;
-    }
-
-    /**
-     * Get the emailAddress
-     *
-     * @return string
-     */
-    public function getEmailAddress(){
-        return $this->emailAddress;
-    }
-
-    /**
-     * Set the emailAddress
-     *
-     * @param string $emailAddress
-     * @return DomainNameContact
-     */
-    public function setEmailAddress($emailAddress){
-        $this->emailAddress = $emailAddress;
-        return $this;
-    }
-
-    /**
-     * Get the name
-     *
-     * @return string
-     */
-    public function getName(){
-        return $this->name;
-    }
-
-    /**
-     * Set the name
-     *
-     * @param string $name
-     * @return DomainNameContact
-     */
-    public function setName($name){
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * Get the faxExt
-     *
-     * @return string
-     */
-    public function getFaxExt(){
-        return $this->faxExt;
-    }
-
-    /**
-     * Set the faxExt
-     *
-     * @param string $faxExt
-     * @return DomainNameContact
-     */
-    public function setFaxExt($faxExt){
-        $this->faxExt = $faxExt;
-        return $this;
-    }
-
-    /**
-     * Get the street1
-     *
-     * @return string
-     */
-    public function getStreet1(){
-        return $this->street1;
-    }
-
-    /**
-     * Set the street1
-     *
-     * @param string $street1
-     * @return DomainNameContact
-     */
-    public function setStreet1($street1){
-        $this->street1 = $street1;
-        return $this;
-    }
-
-    /**
      * Get the telephoneExt
      *
      * @return string
@@ -480,22 +442,22 @@ class DomainNameContact extends SerialisableObject {
     }
 
     /**
-     * Get the street2
+     * Get the faxDiallingCode
      *
      * @return string
      */
-    public function getStreet2(){
-        return $this->street2;
+    public function getFaxDiallingCode(){
+        return $this->faxDiallingCode;
     }
 
     /**
-     * Set the street2
+     * Set the faxDiallingCode
      *
-     * @param string $street2
+     * @param string $faxDiallingCode
      * @return DomainNameContact
      */
-    public function setStreet2($street2){
-        $this->street2 = $street2;
+    public function setFaxDiallingCode($faxDiallingCode){
+        $this->faxDiallingCode = $faxDiallingCode;
         return $this;
     }
 
@@ -520,23 +482,61 @@ class DomainNameContact extends SerialisableObject {
     }
 
     /**
-     * Get the telephoneDiallingCode
+     * Get the faxExt
      *
      * @return string
      */
-    public function getTelephoneDiallingCode(){
-        return $this->telephoneDiallingCode;
+    public function getFaxExt(){
+        return $this->faxExt;
     }
 
     /**
-     * Set the telephoneDiallingCode
+     * Set the faxExt
      *
-     * @param string $telephoneDiallingCode
+     * @param string $faxExt
      * @return DomainNameContact
      */
-    public function setTelephoneDiallingCode($telephoneDiallingCode){
-        $this->telephoneDiallingCode = $telephoneDiallingCode;
+    public function setFaxExt($faxExt){
+        $this->faxExt = $faxExt;
         return $this;
+    }
+
+    /**
+     * Get the additionalData
+     *
+     * @return mixed[string]
+     */
+    public function getAdditionalData(){
+        return $this->additionalData;
+    }
+
+    /**
+     * Set the additionalData
+     *
+     * @param mixed[string] $additionalData
+     * @return DomainNameContact
+     */
+    public function setAdditionalData($additionalData){
+        $this->additionalData = $additionalData;
+        return $this;
+    }
+
+    /**
+     * Get the status
+     *
+     * @return string
+     */
+    public function getStatus(){
+        return $this->status;
+    }
+
+    /**
+     * Get the pendingContact
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     */
+    public function getPendingContact(){
+        return $this->pendingContact;
     }
 
 

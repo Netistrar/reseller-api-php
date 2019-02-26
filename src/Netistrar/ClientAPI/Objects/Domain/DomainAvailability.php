@@ -42,6 +42,15 @@ class DomainAvailability extends SerialisableObject {
     protected $pricingType;
 
     /**
+     * An indicator as to whether or not the tld for this domain name
+     * supports premium domains.  This is particularly useful when searching for hinted availability as it
+     * allows marking up of prices as "from" etc.
+     *
+     * @var string 
+     */
+    protected $premiumSupported;
+
+    /**
      * An associative array containing sets of domain prices for Registration, Renewal and Transfer for this domain name.  These pricing sets are indexed using the keys <b>registration</b>, <b>renewal</b> and <b>transfer</b> and are included according
      * to the following rules depending upon the availability property.
      * Registration prices are included when the availability property is set to <b>AVAILABLE</b> or <b>HINTED_AVAILABLE</b> or <b>NO_HINTED_AVAILABILITY</b>,  these comprise an array of <a href="domain-availability-price-object">DomainAvailabilityPrice</a> items for all possible registration years (usually 10).
@@ -97,6 +106,15 @@ class DomainAvailability extends SerialisableObject {
      */
     public function getPricingType(){
         return $this->pricingType;
+    }
+
+    /**
+     * Get the premiumSupported
+     *
+     * @return string
+     */
+    public function getPremiumSupported(){
+        return $this->premiumSupported;
     }
 
     /**

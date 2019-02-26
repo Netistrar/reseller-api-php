@@ -1,6 +1,6 @@
 {
   "name": "netistrar/reseller-api",
-  "version": "1.0",
+  "version": "1.0.1",
   "description": "Reseller API for Netistrar Registrar Services",
   "keywords": [
     "PHP",

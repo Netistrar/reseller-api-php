@@ -9,13 +9,6 @@ use Kinikit\Core\Object\SerialisableObject;
 class DomainNameSummary extends SerialisableObject {
 
     /**
-     * The owner of this domain name
-     *
-     * @var string 
-     */
-    protected $ownerName;
-
-    /**
      * The full domain name as a string
      *
      * @var string 
@@ -114,6 +107,13 @@ class DomainNameSummary extends SerialisableObject {
      */
     protected $emailProvider;
 
+    /**
+     * The owner of this domain name
+     *
+     * @var string 
+     */
+    protected $ownerName;
+
 
 
     /**
@@ -123,15 +123,6 @@ class DomainNameSummary extends SerialisableObject {
     public function __construct(){
 
         
-    }
-
-    /**
-     * Get the ownerName
-     *
-     * @return string
-     */
-    public function getOwnerName(){
-        return $this->ownerName;
     }
 
     /**
@@ -240,6 +231,15 @@ class DomainNameSummary extends SerialisableObject {
      */
     public function getEmailProvider(){
         return $this->emailProvider;
+    }
+
+    /**
+     * Get the ownerName
+     *
+     * @return string
+     */
+    public function getOwnerName(){
+        return $this->ownerName;
     }
 
 

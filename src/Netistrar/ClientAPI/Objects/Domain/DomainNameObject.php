@@ -10,48 +10,6 @@ use Kinikit\Core\Object\SerialisableObject;
 class DomainNameObject extends SerialisableObject {
 
     /**
-     * The owner contact for this domain as a  <a href="domain-name-contact-object">DomainNameContact</a> object.
-     *
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
-     */
-    protected $ownerContact;
-
-    /**
-     * The admin contact for this domain (if defined) as a <a href="domain-name-contact-object">DomainNameContact</a> object.
-     *
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
-     */
-    protected $adminContact;
-
-    /**
-     * The billing contact for this domain (if defined) as a <a href="domain-name-contact-object">DomainNameContact</a> object.
-     *
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
-     */
-    protected $billingContact;
-
-    /**
-     * The technical contact for this domain (if defined) as a  <a href="domain-name-contact-object">DomainNameContact</a> object.
-     *
-     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
-     */
-    protected $technicalContact;
-
-    /**
-     * The array of nameservers currently in use for this domain name.
-     *
-     * @var string[] 
-     */
-    protected $nameservers;
-
-    /**
-     * Related information for this item
-     *
-     * @var string[] 
-     */
-    protected $relatedProductInfo;
-
-    /**
      * The full domain name as a string
      *
      * @var string 
@@ -150,6 +108,48 @@ class DomainNameObject extends SerialisableObject {
      */
     protected $emailProvider;
 
+    /**
+     * The owner contact for this domain as a  <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
+     */
+    protected $ownerContact;
+
+    /**
+     * The admin contact for this domain (if defined) as a <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
+     */
+    protected $adminContact;
+
+    /**
+     * The billing contact for this domain (if defined) as a <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
+     */
+    protected $billingContact;
+
+    /**
+     * The technical contact for this domain (if defined) as a  <a href="domain-name-contact-object">DomainNameContact</a> object.
+     *
+     * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
+     */
+    protected $technicalContact;
+
+    /**
+     * The array of nameservers currently in use for this domain name.
+     *
+     * @var string[] 
+     */
+    protected $nameservers;
+
+    /**
+     * Related information for this item
+     *
+     * @var string[] 
+     */
+    protected $relatedProductInfo;
+
 
 
     /**
@@ -159,60 +159,6 @@ class DomainNameObject extends SerialisableObject {
     public function __construct(){
 
         
-    }
-
-    /**
-     * Get the ownerContact
-     *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
-     */
-    public function getOwnerContact(){
-        return $this->ownerContact;
-    }
-
-    /**
-     * Get the adminContact
-     *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
-     */
-    public function getAdminContact(){
-        return $this->adminContact;
-    }
-
-    /**
-     * Get the billingContact
-     *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
-     */
-    public function getBillingContact(){
-        return $this->billingContact;
-    }
-
-    /**
-     * Get the technicalContact
-     *
-     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
-     */
-    public function getTechnicalContact(){
-        return $this->technicalContact;
-    }
-
-    /**
-     * Get the nameservers
-     *
-     * @return string[]
-     */
-    public function getNameservers(){
-        return $this->nameservers;
-    }
-
-    /**
-     * Get the relatedProductInfo
-     *
-     * @return string[]
-     */
-    public function getRelatedProductInfo(){
-        return $this->relatedProductInfo;
     }
 
     /**
@@ -321,6 +267,60 @@ class DomainNameObject extends SerialisableObject {
      */
     public function getEmailProvider(){
         return $this->emailProvider;
+    }
+
+    /**
+     * Get the ownerContact
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     */
+    public function getOwnerContact(){
+        return $this->ownerContact;
+    }
+
+    /**
+     * Get the adminContact
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     */
+    public function getAdminContact(){
+        return $this->adminContact;
+    }
+
+    /**
+     * Get the billingContact
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     */
+    public function getBillingContact(){
+        return $this->billingContact;
+    }
+
+    /**
+     * Get the technicalContact
+     *
+     * @return \Netistrar\ClientAPI\Objects\Domain\DomainNameContact
+     */
+    public function getTechnicalContact(){
+        return $this->technicalContact;
+    }
+
+    /**
+     * Get the nameservers
+     *
+     * @return string[]
+     */
+    public function getNameservers(){
+        return $this->nameservers;
+    }
+
+    /**
+     * Get the relatedProductInfo
+     *
+     * @return string[]
+     */
+    public function getRelatedProductInfo(){
+        return $this->relatedProductInfo;
     }
 
 

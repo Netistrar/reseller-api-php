@@ -105,7 +105,7 @@ class domainsTest extends \ClientAPITestBase {
     public function testValidUnavailableAndMyDomainsReturnTransactionWithOperationErrors() {
 
         $existingDomain = "ganymede-_netistrar.co.uk";
-        $myDomain = "businessasusual.computer";
+        $myDomain = "max63sagreatbigridiculouslylongdomainnamebutthatiswhatineed1234.xyz";
 
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My Org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));

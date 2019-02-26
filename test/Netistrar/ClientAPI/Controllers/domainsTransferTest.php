@@ -77,7 +77,6 @@ class domainsTransferTest extends \ClientAPITestBase {
 
         $this->assertEquals(2, sizeof($validationErrors));
 
-        var_dump($validationErrors);
 
         $this->assertNotNull($validationErrors["ganymede-netistrar_.co.uk"]["TRANSFER_DOMAIN_NOT_ASSIGNED"]);
         $this->assertNotNull($validationErrors["ganymede-2020media.co.uk"]["TRANSFER_DOMAIN_NOT_REGISTERED"]);
@@ -167,9 +166,9 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
         $this->assertNotNull($transaction->getOrderId());
         $this->assertEquals("GBP", $transaction->getOrderCurrency());
-        $this->assertEquals(110.23, $transaction->getOrderSubtotal());
+        $this->assertEquals(110.24, $transaction->getOrderSubtotal());
         $this->assertEquals(22.05, $transaction->getOrderTaxes());
-        $this->assertEquals(132.28, $transaction->getOrderTotal());
+        $this->assertEquals(132.29, $transaction->getOrderTotal());
 
         $this->assertEquals(2, sizeof($transaction->getTransactionElements()));
         $elements = $transaction->getTransactionElements();

@@ -54,7 +54,7 @@ class domainAvailabilityTest extends \ClientAPITestBase {
         $availability = $this->api->domains()->hintedAvailability($descriptor);
 
         $this->assertTrue($availability instanceof DomainAvailabilityResults);
-        $this->assertEquals(sizeof($availability->getSuggestions()), 0);
+        $this->assertEquals(sizeof($availability->getTldResults()), 0);
     }
 
 
@@ -81,7 +81,7 @@ class domainAvailabilityTest extends \ClientAPITestBase {
         $this->assertTrue(in_array("com", $tlds));
 
         $tlds = $this->api->domains()->tldList("National");
-        $this->assertEquals(6, sizeof($tlds));
+        $this->assertEquals(7, sizeof($tlds));
         $this->assertTrue(in_array("uk", $tlds));
         $this->assertTrue(in_array("scot", $tlds));
 
