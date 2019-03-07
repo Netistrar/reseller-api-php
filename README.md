@@ -1,5 +1,5 @@
 # reseller-api-php
-Reseller API for Netistrar Registrar Services
+This is the official PHP Reseller API for Netistrar Registrar Services
 
 #### Installation
 
@@ -12,4 +12,6 @@ composer require netistrar/reseller-api
 You may also checkout the latest version from GitHub [here](https://github.com/Netistrar/reseller-api-php) or download the latest
 source zip by clicking [here](https://github.com/Netistrar/reseller-api-php/archive/master.zip)
 
-For more detailed instructions please visit [https://netistrar.com/help/developers/api/reseller-api/](https://netistrar.com/help/developers/api/reseller-api/)
+#### Documentation
+
+For more detailed instructions and documentation please visit [https://netistrar.com/help/developers/api/reseller-api/](https://netistrar.com/help/developers/api/reseller-api/)
