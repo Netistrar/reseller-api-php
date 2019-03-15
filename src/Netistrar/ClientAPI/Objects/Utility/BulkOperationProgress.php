@@ -9,7 +9,7 @@ use Kinikit\Core\Object\SerialisableObject;
 class BulkOperationProgress extends SerialisableObject {
 
     /**
-     * The overall status of this bulk operation.  This will be set to one of the following values.
+     * The overall status of this bulk operation.  This will be set to one of the following values.<br />
      * <b>PENDING:</b> When the bulk operation has been created but not yet started.
      * <b>RUNNING:</b> When the bulk operation has been started.
      * <b>COMPLETED:</b> When the bulk operation has finished.

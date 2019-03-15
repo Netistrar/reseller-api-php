@@ -24,7 +24,7 @@ class BulkOperationProgressItem extends SerialisableObject {
     protected $progressPercentage;
 
     /**
-     * The status of this bulk operation element.  This will be one of the following values:
+     * The status of this bulk operation element.  This will be one of the following values:<br>
      * <b>PENDING:</b> If the element is still in the queue to be processed
      * <b>IN_PROGRESS:</b> If the element is currently being processed (in some cases the <a href="#progressPercentage">progressPercentage</a> property will give more detail about progression through this item)
      * <b>SUCCEEDED:</b> If the element has finished successfully

@@ -25,8 +25,7 @@ class DomainAvailabilityPrice extends SerialisableObject {
     protected $numberOfYears;
 
     /**
-     * The pricing type for the current operation for the domain represented by this price.  This is a string value with one of the following value:
-     * <br><br>
+     * The pricing type for the current operation for the domain represented by this price.  This is a string value with one of the following values:<br />
      * <b>STANDARD:</b> When the pricing for this domain operation is known to be standard i.e. when the TLD doesn't support premium domains or this pricing object has been returned as part of the results from a call to getLiveDomainAvailability on the <a href="netistrar-domain-availability-api">Netistrar Domain Availability API</a>
      * <b>PREMIUM:</b> When the pricing for this domain operation is known to be premium i.e. this object was returned from a call to getLiveDomainAvailability on the <a href="netistrar-domain-availability-api">Netistrar Domain Availability API</a>.
      * <b>HINTED_PREMIUM:</b> When this pricing object has been returned as part of the results from a call to getHintedDomainAvailability on the <a href="netistrar-domain-availability-api">Netistrar Domain Availability API</a> and the pricing for this domain operation is believed to be premium based upon the presence of an entry in the Netistrar cache of Premium Domains.
@@ -46,8 +45,8 @@ class DomainAvailabilityPrice extends SerialisableObject {
     protected $standardBuyPrice;
 
     /**
-     * This is only populated when the <a href="#priceType">priceType</a> property is set to <b>HINTED_PREMIUM</b> or <b>HINTED_STANDARD</b>.  This occurs when the pricing object is returned as part of results from a call to getHintedDomainAvailability on the <a href="netistrar-domain-availability-api">Netistrar Domain Availability API</a>.
-     * The value is either the same as the <a href="#standardBuyPrice">standardBuyPrice</a> property in the case that the <a href="#priceType">priceType</a> property is set to <b>HINTED_STANDARD</b> or to the value contained within the Netistrar pricing cache when set to <b>HINTED_PREMIUM</b>.
+     * This is only populated when the <a href="#priceType">priceType</a> property is set to <b>HINTED_PREMIUM</b> or <b>HINTED_STANDARD</b>.  This occurs when the pricing object is returned as part of results from a call to getHintedDomainAvailability on the <a href="netistrar-domain-availability-api">Netistrar Domain Availability API</a>.<br />
+     * The value is either the same as the <a href="#standardBuyPrice">standardBuyPrice</a> property in the case that the <a href="#priceType">priceType</a> property is set to <b>HINTED_STANDARD</b> or to the value contained within the Netistrar pricing cache when set to <b>HINTED_PREMIUM</b>.<br />
      * The value is converted to the current currency when available or set to <b>N/A</b> when unavailable.
      *
      * @var float 
@@ -56,7 +55,7 @@ class DomainAvailabilityPrice extends SerialisableObject {
 
     /**
      * This is only populated when the <a href="#priceType">priceType</a> property is set to <b>STANDARD</b> or <b>PREMIUM</b>.  This occurs when the pricing object is returned as part of results from a call to getLiveDomainAvailability on the <a href="netistrar-domain-availability-api">Netistrar Domain Availability API</a> or when the
-     * TLD in question does not support premium pricing (e.g. UK, COM) where the pricing is guaranteed to be standard.
+     * TLD in question does not support premium pricing (e.g. UK, COM) where the pricing is guaranteed to be standard.<br />
      * The value is converted to the current currency when available or set to <b>N/A</b> when unavailable.
      *
      * @var float 

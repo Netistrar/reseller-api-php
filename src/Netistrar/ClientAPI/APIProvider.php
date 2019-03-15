@@ -3,6 +3,8 @@
 namespace Netistrar\ClientAPI;
 
 use Netistrar\ClientAPI\Controllers\domains;
+use Netistrar\ClientAPI\Controllers\dns;
+use Netistrar\ClientAPI\Controllers\gsuite;
 use Netistrar\ClientAPI\Controllers\utility;
 use Netistrar\ClientAPI\Controllers\account;
 use Netistrar\ClientAPI\Controllers\test;
@@ -52,6 +54,30 @@ class APIProvider  {
             $this->instances["domains"] = new domains($this->apiURL."/domains", $this->globalParameters);
         }
         return $this->instances["domains"];
+    }
+
+    /**
+    * Get an instance of the  API
+    *
+    * @return \Netistrar\ClientAPI\Controllers\dns
+    */
+    public function dns(){
+        if (!isset($this->instances["dns"])){
+            $this->instances["dns"] = new dns($this->apiURL."/dns", $this->globalParameters);
+        }
+        return $this->instances["dns"];
+    }
+
+    /**
+    * Get an instance of the  API
+    *
+    * @return \Netistrar\ClientAPI\Controllers\gsuite
+    */
+    public function gsuite(){
+        if (!isset($this->instances["gsuite"])){
+            $this->instances["gsuite"] = new gsuite($this->apiURL."/gsuite", $this->globalParameters);
+        }
+        return $this->instances["gsuite"];
     }
 
     /**

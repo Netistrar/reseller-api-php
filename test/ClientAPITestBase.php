@@ -16,7 +16,7 @@ class ClientAPITestBase extends \PHPUnit\Framework\TestCase {
     protected $api;
 
     public function setUp() {
-        $this->api = new \Netistrar\ClientAPI\APIProvider("http://restapi.netistrar.test", "TESTAPIKEY", "TESTAPISECRET");
+        $this->api = new \Netistrar\ClientAPI\APIProvider("http://restapi.netistrar.test:8080", "TESTAPIKEY", "TESTAPISECRET");
     }
 
 

@@ -10,7 +10,7 @@ use Kinikit\Core\Object\SerialisableObject;
 class Transaction extends SerialisableObject {
 
     /**
-     * The type of transaction represented by this object.  This will contain one of the following values:
+     * The type of transaction represented by this object.  This will contain one of the following values:<br />
      * <b>DOMAIN_CREATE:</b> For domain create operations initiated by a call to <i>createDomainName</i> on the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a>.
      * <b>DOMAIN_RENEW:</b> For domain renew operations initiated by a call to <i>renewDomains</i> on the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a>.
      * <b>DOMAIN_UPDATE:</b> For domain update operations initiated by a call to <i>updateDomainNames</i> on the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a>.
@@ -36,7 +36,7 @@ class Transaction extends SerialisableObject {
     protected $transactionDateTime;
 
     /**
-     * The status of this transaction.  This will contain one of the following values.
+     * The status of this transaction.  This will contain one of the following values.<br />
      * <b>SUCCEEDED:</b> When the operation succeeded for all involved domain names.
      * <b>PARTIALLY_SUCCEEDED:</b> When the operation succeeded only for some of the involved domain names.  In this case any failed transaction elements will contain errors detailing the reasons for the partial failure.
      * <b>ALL_ELEMENTS_FAILED:</b> When the operation failed for all involved domain names and the errors were downstream in the operation workflow.  In this case all elements will contain errors detailing the reasons for the failure.
@@ -47,8 +47,8 @@ class Transaction extends SerialisableObject {
     protected $transactionStatus;
 
     /**
-     * A Netistrar Order ID if applicable for the given transaction.  This will be set when the transaction has resulted in a costed order and facilitates reconciliation with orders in the Netistrar Control Panel.
-     * Currently, this will be set when the transaction type is <b>DOMAIN_CREATE</b> or <b>DOMAIN_RENEW</b>.
+     * A Netistrar Order ID if applicable for the given transaction.  This will be set when the transaction has resulted in a costed order and facilitates reconciliation with orders in the Netistrar Control Panel.<br />
+     * Currently, this will be set when the transaction type is <b>DOMAIN_CREATE</b> or <b>DOMAIN_RENEW</b>.<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var integer 
@@ -56,7 +56,7 @@ class Transaction extends SerialisableObject {
     protected $orderId;
 
     /**
-     * The currency for the Netistrar Order if applicable for the given transaction.  This will be set when the <a href="#netistrarOrderId">netistrarOrderId</a> element is set and will be a 3 digit currency code (e.g. GBP)
+     * The currency for the Netistrar Order if applicable for the given transaction.  This will be set when the <a href="#netistrarOrderId">netistrarOrderId</a> element is set and will be a 3 digit currency code (e.g. GBP)<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var string 
@@ -65,7 +65,7 @@ class Transaction extends SerialisableObject {
 
     /**
      * The subtotal for the Netistrar Order if applicable for the given transaction.  This will be set when the <a href="#netistrarOrderId">netistrarOrderId</a> element is set and will be the net total (pre taxes) in the
-     * currency set in the <a href="netistrarOrderCurrency">netistrarOrderCurrency</a> member.
+     * currency set in the <a href="netistrarOrderCurrency">netistrarOrderCurrency</a> member.<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var float 
@@ -74,7 +74,7 @@ class Transaction extends SerialisableObject {
 
     /**
      * The taxes for the Netistrar Order if applicable for the given transaction.  This will be set when the <a href="#netistrarOrderId">netistrarOrderId</a> element is set and will be the taxes amount (VAT) in the
-     * currency set in the <a href="netistrarOrderCurrency">netistrarOrderCurrency</a> member.
+     * currency set in the <a href="netistrarOrderCurrency">netistrarOrderCurrency</a> member.<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var float 
@@ -83,7 +83,7 @@ class Transaction extends SerialisableObject {
 
     /**
      * The subtotal for the Netistrar Order if applicable for the given transaction.  This will be set when the <a href="#netistrarOrderId">netistrarOrderId</a> element is set and will be the total including taxes in the
-     * currency set in the <a href="netistrarOrderCurrency">netistrarOrderCurrency</a> member.
+     * currency set in the <a href="netistrarOrderCurrency">netistrarOrderCurrency</a> member.<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var float 

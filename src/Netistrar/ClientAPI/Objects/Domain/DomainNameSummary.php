@@ -30,10 +30,8 @@ class DomainNameSummary extends SerialisableObject {
     protected $expiryDate;
 
     /**
-     * An indicator as to whether or not this domain name is currently locked.  Locking a domain provides an extra level of security as it prevents it from being either deleted or transferred until the lock is removed.
-     * <br><br>
-     * When unlocked the <a href="#authCode">authCode</a> field will be populated with the authorisation code required to move this domain to another provider.
-     * <br><br>
+     * An indicator as to whether or not this domain name is currently locked.  Locking a domain provides an extra level of security as it prevents it from being either deleted or transferred until the lock is removed.<br />
+     * When unlocked the <a href="#authCode">authCode</a> field will be populated with the authorisation code required to move this domain to another provider.<br />
      * Some operations (e.g. new registration, transfer) result in a mandatory lock of a domain for a period of time.  In this case the <a href="#lockedUntil">lockedUntil</a> field will be populated with a date after which the domain will be available for unlocking.
      *
      * @var boolean 
@@ -72,7 +70,7 @@ class DomainNameSummary extends SerialisableObject {
     protected $privacyProxy;
 
     /**
-     * One of the following status values representing the current Netistrar Domain Name status for this domain name.
+     * One of the following status values representing the current Netistrar Domain Name status for this domain name.<br />
      * <b>ACTIVE</b> - The domain name is active and in use.
      * <b>EXPIRED</b> - The domain name has expired.
      * <b>SUSPENDED</b> - The domain name has been suspended (either for unlawful behaviour or invalid ownership details).
@@ -96,12 +94,14 @@ class DomainNameSummary extends SerialisableObject {
     protected $tags;
 
     /**
+     * A string either set to <b>External</b> or another DNS provider (for future use).
      *
      * @var string 
      */
     protected $dnsProvider;
 
     /**
+     * A string either set to <b>External</b> or another Mail provider (for future use).
      *
      * @var string 
      */
