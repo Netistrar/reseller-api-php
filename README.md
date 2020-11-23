@@ -14,4 +14,4 @@ source zip by clicking [here](https://github.com/Netistrar/reseller-api-php/arch
 
 #### Documentation
 
-For more detailed instructions and documentation please visit [https://netistrar.com/help/developers/api/reseller-api/](https://netistrar.com/help/developers/api/reseller-api/)
+For more detailed instructions and documentation please visit [https://netistrar.com/help/developers/api/reseller-api/](https://netistrar.com/help/developers/api/phpclient/)
