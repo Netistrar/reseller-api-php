@@ -4,7 +4,7 @@ namespace Netistrar\ClientAPI\Objects\Domain;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
- * An updatable contact object used within the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a> methods and as a related object to a <a href="domain-name-object">DomainNameObject</a>.
+ * An updatable contact object used within the  <a href="api:domains-api">Domains API</a> methods and as a related object to a <a href="object:Netistrar/WebServices/Common/Objects/Domain/DomainNameObject">DomainNameObject</a>.
  * Changes to key data for the owner contact for GTLD domain names require verification via email to the current owner for the domain name before these changes can be applied.  If the change is accepted the
  * domain name will be locked for 60 days for transfer.
 */
@@ -144,14 +144,14 @@ class DomainNameContact extends SerialisableObject {
     /**
      * The status of this contact (read only).  This will contain one of the following values.<br />
      * <b>LIVE:</b> For all Admin, Billing, Technical and newly created Owner contacts
-     * <b>PENDING_CHANGES:</b> For any GTLD Owner Contacts where key data has been changed and is awaiting verification by the owner.  This is usually following a call to <i>updateDomainNames</i> on the <a href="netistrar-domain-lifecycle-api">Netistrar Domain Lifecycle API</a>.  For contacts with pending changes, the <a href="#pendingContact">pendingContact</a> member will contain the queued data awaiting approval.
+     * <b>PENDING_CHANGES:</b> For any GTLD Owner Contacts where key data has been changed and is awaiting verification by the owner.  This is usually following a call to <b>updateDomainNames</b> on the <a href="api:domains-api">Domains API</a>.  For contacts with pending changes, the <b>pendingContact</b> member will contain the queued data awaiting approval.
      *
      * @var string 
      */
     protected $status;
 
     /**
-     * Pending contact field.  This is only populated when the <a href="#status">status</a> member is set to <b>PENDING_CHANGES</b>.  This will contain a nested <a href="domain-name-contact">DomainNameContact</a> object containing the data awaiting verification by the owner of the domain.
+     * Pending contact field.  This is only populated when the <b>status</b> member is set to <b>PENDING_CHANGES</b>.  This will contain a nested <a href="object:Netistrar/WebServices/Common/Objects/Domain/DomainNameContact">DomainNameContact</a> object containing the data awaiting verification by the owner of the domain.
      *
      * @var \Netistrar\ClientAPI\Objects\Domain\DomainNameContact 
      */

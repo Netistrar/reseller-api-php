@@ -54,7 +54,8 @@ class domainAvailabilityTest extends \ClientAPITestBase {
         $availability = $this->api->domains()->hintedAvailability($descriptor);
 
         $this->assertTrue($availability instanceof DomainAvailabilityResults);
-        $this->assertEquals(sizeof($availability->getTldResults()), 0);
+
+        $this->assertNull($availability->getTldResults());
     }
 
 
@@ -87,8 +88,8 @@ class domainAvailabilityTest extends \ClientAPITestBase {
 
         $tlds = $this->api->domains()->tldList("Popular");
         $this->assertEquals(7, sizeof($tlds));
-        $this->assertTrue(in_array("computer", $tlds));
-        $this->assertTrue(in_array("community", $tlds));
+        $this->assertTrue(in_array("website", $tlds));
+        $this->assertTrue(in_array("xyz", $tlds));
 
     }
 

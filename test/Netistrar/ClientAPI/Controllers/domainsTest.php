@@ -11,8 +11,10 @@ use Kinikit\Core\Util\SerialisableArrayUtils;
 use Netistrar\ClientAPI\Exception\TransactionException;
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameCreateDescriptor;
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameRenewDescriptor;
+use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameTransferDescriptor;
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameUpdateDescriptor;
 use Netistrar\ClientAPI\Objects\Domain\DomainNameContact;
+use Netistrar\ClientAPI\Objects\Domain\DomainNameDNSSECRecord;
 use Netistrar\ClientAPI\Objects\Domain\DomainNameGlueRecord;
 use Netistrar\ClientAPI\Objects\Domain\DomainNameListResults;
 use Netistrar\ClientAPI\Objects\Domain\DomainNameObject;
@@ -40,7 +42,6 @@ class domainsTest extends \ClientAPITestBase {
         $createDescriptor = new DomainNameCreateDescriptor(array($ukDomain, $comDomain), 1, $owner, array("monkeynameserver"));
 
         $validationErrors = $this->api->domains()->validate($createDescriptor);
-
 
         $this->assertTrue(is_array($validationErrors[$ukDomain]));
         $this->assertTrue(isset($validationErrors[$ukDomain]["DOMAIN_INVALID_OWNER_CONTACT"]));
@@ -178,7 +179,7 @@ class domainsTest extends \ClientAPITestBase {
 
         $key = $this->api->utility()->createBulkOperation();
 
-        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, 1), $key);
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1), $key);
 
         $this->assertTrue($transaction instanceof Transaction);
         $this->assertNotNull($transaction->getTransactionDateTime());
@@ -223,7 +224,7 @@ class domainsTest extends \ClientAPITestBase {
 
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
 
-        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newBlogDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 0, 1));
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newBlogDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 0, [], 1));
 
         $this->assertTrue($transaction instanceof Transaction);
         $this->assertNotNull($transaction->getTransactionDateTime());
@@ -243,7 +244,7 @@ class domainsTest extends \ClientAPITestBase {
 
         $key = $this->api->utility()->createBulkOperation();
 
-        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, 1), $key);
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, [], 1), $key);
 
         // Now confirm that the registration actually took place correctly.
         $domainName = $this->api->domains()->get($newUKDomain);
@@ -251,7 +252,7 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals("IND", $domainName->getOwnerContact()->getAdditionalData()["nominetRegistrantType"]);
         $this->assertEquals(1, $domainName->getLocked());
         $this->assertNull($domainName->getLockedUntil());
-        $this->assertEquals(2, $domainName->getPrivacyProxy());
+        $this->assertEquals(0, $domainName->getPrivacyProxy());
         $this->assertEquals(1, $domainName->getAutoRenew());
     }
 
@@ -413,9 +414,9 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
         $this->assertNotNull($transaction->getOrderId());
         $this->assertEquals("GBP", $transaction->getOrderCurrency());
-        $this->assertEquals(14.00, $transaction->getOrderSubtotal());
-        $this->assertEquals(2.80, $transaction->getOrderTaxes());
-        $this->assertEquals(16.80, $transaction->getOrderTotal());
+        $this->assertEquals(16.50, $transaction->getOrderSubtotal());
+        $this->assertEquals(3.30, $transaction->getOrderTaxes());
+        $this->assertEquals(19.80, $transaction->getOrderTotal());
 
         $this->assertEquals(2, sizeof($transaction->getTransactionElements()));
         $elements = $transaction->getTransactionElements();
@@ -427,9 +428,9 @@ class domainsTest extends \ClientAPITestBase {
         $expiryDate = new \DateTime();
         $expiryDate->add(new \DateInterval("P3Y"));
         $this->assertEquals(array("registrationYears" => 2, "expiryDate" => $expiryDate->format("d/m/Y")), $element->getOperationData());
-        $this->assertEquals(7.00, $element->getOrderLineSubtotal());
-        $this->assertEquals(1.40, $element->getOrderLineTaxes());
-        $this->assertEquals(8.40, $element->getOrderLineTotal());
+        $this->assertEquals(8.25, $element->getOrderLineSubtotal());
+        $this->assertEquals(1.65, $element->getOrderLineTaxes());
+        $this->assertEquals(9.90, $element->getOrderLineTotal());
 
         $element = $elements[$newUKDomain2];
         $this->assertEquals($newUKDomain2, $element->getDescription());
@@ -438,9 +439,9 @@ class domainsTest extends \ClientAPITestBase {
         $expiryDate = new DateTime();
         $expiryDate->add(new DateInterval("P3Y"));
         $this->assertEquals(array("registrationYears" => 2, "expiryDate" => $expiryDate->format("d/m/Y")), $element->getOperationData());
-        $this->assertEquals(7.00, $element->getOrderLineSubtotal());
-        $this->assertEquals(1.40, $element->getOrderLineTaxes());
-        $this->assertEquals(8.40, $element->getOrderLineTotal());
+        $this->assertEquals(8.25, $element->getOrderLineSubtotal());
+        $this->assertEquals(1.65, $element->getOrderLineTaxes());
+        $this->assertEquals(9.90, $element->getOrderLineTotal());
 
 
         // Check updated expiry data.
@@ -470,9 +471,9 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
         $this->assertNotNull($transaction->getOrderId());
         $this->assertEquals("GBP", $transaction->getOrderCurrency());
-        $this->assertEquals(7.00, $transaction->getOrderSubtotal());
-        $this->assertEquals(1.40, $transaction->getOrderTaxes());
-        $this->assertEquals(8.40, $transaction->getOrderTotal());
+        $this->assertEquals(8.25, $transaction->getOrderSubtotal());
+        $this->assertEquals(1.65, $transaction->getOrderTaxes());
+        $this->assertEquals(9.90, $transaction->getOrderTotal());
 
         $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
         $elements = $transaction->getTransactionElements();
@@ -484,9 +485,9 @@ class domainsTest extends \ClientAPITestBase {
         $expiryDate = new \DateTime();
         $expiryDate->add(new \DateInterval("P3Y"));
         $this->assertEquals(array("registrationYears" => 2, "expiryDate" => $expiryDate->format("d/m/Y")), $element->getOperationData());
-        $this->assertEquals(7.00, $element->getOrderLineSubtotal());
-        $this->assertEquals(1.40, $element->getOrderLineTaxes());
-        $this->assertEquals(8.40, $element->getOrderLineTotal());
+        $this->assertEquals(8.25, $element->getOrderLineSubtotal());
+        $this->assertEquals(1.65, $element->getOrderLineTaxes());
+        $this->assertEquals(9.90, $element->getOrderLineTotal());
 
     }
 
@@ -821,14 +822,13 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals(0, $domainName->getPrivacyProxy());
         $this->assertEquals(1, $domainName->getAutoRenew());
 
-        // Now try and set privacy proxy to 2
-        $transaction = $this->api->domains()->update(new DomainNameUpdateDescriptor(array($newUKDomain1, $newUKDomain2), null, null, null, null, null, null, 2, null));
+        // Now try and set privacy proxy to 1
+        $this->api->domains()->update(new DomainNameUpdateDescriptor(array($newUKDomain1, $newUKDomain2), null, null, null, null, null, null, 1, null));
 
         // Now actually pull the domain and check the update
-        $domainName = $this->api->domains()->get
-        ($newUKDomain1);
+        $domainName = $this->api->domains()->get($newUKDomain1);
         $this->assertEquals(0, $domainName->getLocked());
-        $this->assertEquals(2, $domainName->getPrivacyProxy());
+        $this->assertEquals(1, $domainName->getPrivacyProxy());
         $this->assertEquals(1, $domainName->getAutoRenew());
     }
 
@@ -883,7 +883,7 @@ class domainsTest extends \ClientAPITestBase {
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My Org", "33 My Street", "", "Oxford", "Oxon", "OX4 2RD", "GB", "", "", "", "", "", "", "", array());
         $owner->__setSerialisablePropertyValue("status", "LIVE");
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
-        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain1, $newUKDomain2), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, true));
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain1, $newUKDomain2), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1));
 
 
         $this->api->test()->updateDomains(new TestDomainNameUpdateDescriptor(array($newUKDomain1), null, "_UNSET", "_UNSET", 0));
@@ -1061,6 +1061,7 @@ class domainsTest extends \ClientAPITestBase {
 
         $transaction = $this->api->domains()->glueRecordsSet("nonexistent12344.com", array(new DomainNameGlueRecord("ns1", "89.44.55.55")));
 
+
         $this->assertTrue($transaction instanceof Transaction);
         $this->assertEquals("DOMAIN_GLUE_RECORD_SET", $transaction->getTransactionType());
         $this->assertEquals("FAILED", $transaction->getTransactionStatus());
@@ -1073,6 +1074,7 @@ class domainsTest extends \ClientAPITestBase {
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
 
         $this->api->domains()->create(new DomainNameCreateDescriptor(array($domainName), 1, $owner, array("me.com", "you.com")));
+
 
         $this->api->test()->updateDomains(new TestDomainNameUpdateDescriptor(array($domainName), "EXPIRED"));
 
@@ -1436,7 +1438,7 @@ class domainsTest extends \ClientAPITestBase {
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
 
-        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain, $newRodeoDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain, $newRodeoDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, [], true, array("Film", "Television", "Media")));
 
         // Now grab the domains in question and check for existence of tags
         $domains = $this->api->domains()->getMultiple(array($newUKDomain, $newRodeoDomain));
@@ -1475,6 +1477,683 @@ class domainsTest extends \ClientAPITestBase {
         $secondSummary = $list->getDomainNameSummaries()[1];
         $this->assertEquals($prefix . ".uk", $secondSummary->getDomainName());
         $this->assertEquals(array("Cooking", "Fishing", "Media", "Philosophy", "Shopping", "Television"), $secondSummary->getTags());
+
+
+    }
+
+
+    public function testAttemptsToAddDNSSECRecordsForBadDomainsOrTLDsNotEnabledForDNSSECReturnFailedTransactionWithOperationErrors() {
+
+
+        $transaction = $this->api->domains()->dnssecRecordsAdd("baddomain.com", [
+        ]);
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals("DOMAIN_NOT_IN_ACCOUNT", $transaction->getTransactionError());
+
+
+        $prefix = "validdomain-" . date("U");
+        $newUKDomain = $prefix . ".uk";
+        $newRodeoDomain = $prefix . ".scot";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain, $newRodeoDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+        $this->api->test()->updateDomains(new TestDomainNameUpdateDescriptor([$newUKDomain], "EXPIRED"));
+
+
+        $transaction = $this->api->domains()->dnssecRecordsAdd($newUKDomain, [
+        ]);
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals("DOMAIN_INVALID_FOR_DNSSEC", $transaction->getTransactionError());
+
+
+        $transaction = $this->api->domains()->dnssecRecordsAdd($newRodeoDomain, [
+        ]);
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals("DOMAIN_UNSUPPORTED_FOR_DNSSEC", $transaction->getTransactionError());
+
+
+    }
+
+    public function testInvalidAndBadlyFormedDNSSecRecordsThrowExceptionsWhenAdded() {
+
+        $blank = new DomainNameDNSSECRecord(null, null, null, null);
+        $justKeyTag = new DomainNameDNSSECRecord(1234567);
+        $badKeyTag = new DomainNameDNSSECRecord("ABCDE", "ABCDEF12345");
+        $badDigest = new DomainNameDNSSECRecord(1234678, "ABCDEFGHIJKLM");
+        $badAlgorithm = new DomainNameDNSSECRecord(1234789, "ABCDEF12345", 12);
+        $badDigestType = new DomainNameDNSSECRecord(1234890, "ABCDEF12345", 5, 12);
+
+        $transaction = $this->api->domains()->dnssecRecordsAdd("max63sagreatbigridiculouslylongdomainnamebutthatiswhatineed1234.xyz", [
+            $blank, $justKeyTag, $badKeyTag, $badDigest, $badAlgorithm, $badDigestType
+        ]);
+
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals(6, sizeof($transaction->getTransactionElements()));
+
+
+        $element = $transaction->getTransactionElements()[""];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals($blank->__toArray(), $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_MISSING_KEY_TAG", "DNSSEC_RECORD_MISSING_DIGEST", "DNSSEC_RECORD_MISSING_ALGORITHM", "DNSSEC_RECORD_MISSING_DIGEST_TYPE"), array_keys($element->getElementErrors()));
+
+        $element = $transaction->getTransactionElements()[1234567];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals($justKeyTag->__toArray(), $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_MISSING_DIGEST"), array_keys($element->getElementErrors()));
+
+        $element = $transaction->getTransactionElements()["ABCDE"];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals($badKeyTag->__toArray(), $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_INVALID_KEY_TAG"), array_keys($element->getElementErrors()));
+
+        $element = $transaction->getTransactionElements()[1234678];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals($badDigest->__toArray(), $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_INVALID_DIGEST"), array_keys($element->getElementErrors()));
+
+        $element = $transaction->getTransactionElements()[1234789];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals($badAlgorithm->__toArray(), $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_INVALID_ALGORITHM"), array_keys($element->getElementErrors()));
+
+        $element = $transaction->getTransactionElements()[1234890];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals($badDigestType->__toArray(), $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_INVALID_DIGEST_TYPE"), array_keys($element->getElementErrors()));
+
+    }
+
+
+    public function testUnsupportedAlgorithmExceptionRaisedIfNotSupportedByRegistry() {
+
+        $prefix = "validdomain-" . date("U");
+        $comDomain = $prefix . ".com";
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($comDomain), 1, $owner, array("ns1.netistrar.xyz", "ns2.netistrar.xyz"), null, null, null, 2, true, array("Film", "Television", "Media")));
+
+        $unsupported = new DomainNameDNSSECRecord(12345, "ABCDEF12345567", 3, 1);
+
+        $transaction = $this->api->domains()->dnssecRecordsAdd($comDomain, [
+            $unsupported
+        ]);
+
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals("DOMAIN_UNSUPPORTED_PARAMETER_FOR_DNSSEC", $transaction->getTransactionError());
+
+
+    }
+
+
+    public function testCanAddAndListValidDNSSECRecordsProvidedDomainExistsInAccount() {
+
+        $newDomain = "validdomain-" . date("U") . ".xyz";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+
+
+        $dnsSecRecord1 = new DomainNameDNSSECRecord("12345", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AC");
+        $dnsSecRecord2 = new DomainNameDNSSECRecord("12346", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AD");
+        $dnsSecRecord3 = new DomainNameDNSSECRecord("12347", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AE");
+
+
+        $transaction = $this->api->domains()->dnssecRecordsAdd($newDomain, [
+            $dnsSecRecord1, $dnsSecRecord2, $dnsSecRecord3
+        ]);
+
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+        try {
+            $this->api->domains()->dnssecRecordsList("idontexist.xyz");
+            $this->fail("Should have thrown here");
+        } catch (TransactionException $e) {
+            // Success
+        }
+
+        $list = $this->api->domains()->dnssecRecordsList($newDomain);
+        $this->assertEquals(12345, $list[0]->getKeyTag());
+        $this->assertEquals(12346, $list[1]->getKeyTag());
+        $this->assertEquals(12347, $list[2]->getKeyTag());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AC", $list[0]->getDigest());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AD", $list[1]->getDigest());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AE", $list[2]->getDigest());
+
+        $dnsSecRecord4 = new DomainNameDNSSECRecord("12348", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4A1");
+        $transaction = $this->api->domains()->dnssecRecordsAdd($newDomain, [
+            $dnsSecRecord4
+        ]);
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+        $list = $this->api->domains()->dnssecRecordsList($newDomain);
+        $this->assertEquals(4, sizeof($list));
+        $this->assertEquals(12345, $list[0]->getKeyTag());
+        $this->assertEquals(12346, $list[1]->getKeyTag());
+        $this->assertEquals(12347, $list[2]->getKeyTag());
+        $this->assertEquals(12348, $list[3]->getKeyTag());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AC", $list[0]->getDigest());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AD", $list[1]->getDigest());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AE", $list[2]->getDigest());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4A1", $list[3]->getDigest());
+
+
+    }
+
+
+    public function testCannotAddAlreadyExistingDNSSECRecord() {
+
+        $newDomain = "validdomain-" . date("U") . ".xyz";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+
+
+        $dnsSecRecord1 = new DomainNameDNSSECRecord("12345", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AC");
+        $dnsSecRecord2 = new DomainNameDNSSECRecord("12346", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AD");
+        $dnsSecRecord3 = new DomainNameDNSSECRecord("12347", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AE");
+
+
+        $transaction = $this->api->domains()->dnssecRecordsAdd($newDomain, [
+            $dnsSecRecord1, $dnsSecRecord2, $dnsSecRecord3
+        ]);
+
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+        $dnsSecRecord1->setDigest("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4A1");
+        $transaction = $this->api->domains()->dnssecRecordsAdd($newDomain, [
+            $dnsSecRecord1
+        ]);
+
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_SET", $transaction->getTransactionType());
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
+
+        $element = $transaction->getTransactionElements()["12345"];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals($dnsSecRecord1->__toArray(), $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_ALREADY_EXISTS"), array_keys($element->getElementErrors()));
+
+
+    }
+
+
+    public function testCannotRemoveDNSSECRecordsForBadOrInactiveDomainsOrMissingRecords() {
+
+
+        $transaction = $this->api->domains()->dnssecRecordsRemove("baddomain.com", [
+            "12345"
+        ]);
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_REMOVE", $transaction->getTransactionType());
+        $this->assertEquals("FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals("DOMAIN_NOT_IN_ACCOUNT", $transaction->getTransactionError());
+
+
+        $prefix = "validdomain-" . date("U");
+        $newUKDomain = $prefix . ".uk";
+        $newRodeoDomain = $prefix . ".rodeo";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain, $newRodeoDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+        $this->api->test()->updateDomains(new TestDomainNameUpdateDescriptor([$newUKDomain], "EXPIRED"));
+
+
+        $transaction = $this->api->domains()->dnssecRecordsRemove($newUKDomain, [
+            "12345"
+        ]);
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_REMOVE", $transaction->getTransactionType());
+        $this->assertEquals("FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals("DOMAIN_INVALID_FOR_DNSSEC", $transaction->getTransactionError());
+
+
+        $transaction = $this->api->domains()->dnssecRecordsRemove("max63sagreatbigridiculouslylongdomainnamebutthatiswhatineed1234.xyz", [
+            13579
+        ]);
+
+        $this->assertTrue($transaction instanceof Transaction);
+        $this->assertEquals("DOMAIN_DNSSEC_RECORD_REMOVE", $transaction->getTransactionType());
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
+
+        $element = $transaction->getTransactionElements()[13579];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(13579, $element->getOperationData());
+        $this->assertEquals(array("DNSSEC_RECORD_UNKNOWN"), array_keys($element->getElementErrors()));
+
+
+    }
+
+
+    public function testCanRemoveValidlyAddedDNSSECRecords() {
+
+        $newDomain = "validdomain-" . date("U") . ".xyz";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
+
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+
+        $dnsSecRecord1 = new DomainNameDNSSECRecord("12345", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AC");
+        $dnsSecRecord2 = new DomainNameDNSSECRecord("12346", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AD");
+        $dnsSecRecord3 = new DomainNameDNSSECRecord("12347", "49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AE");
+
+        $this->api->domains()->dnssecRecordsAdd($newDomain, [
+            $dnsSecRecord1, $dnsSecRecord2, $dnsSecRecord3
+        ]);
+
+        $list = $this->api->domains()->dnssecRecordsList($newDomain);
+        $this->assertEquals(3, sizeof($list));
+
+        $this->api->domains()->dnssecRecordsRemove($newDomain, [12346]);
+
+        $list = $this->api->domains()->dnssecRecordsList($newDomain);
+        $this->assertEquals(2, sizeof($list));
+        $this->assertEquals(12345, $list[0]->getKeyTag());
+        $this->assertEquals(12347, $list[1]->getKeyTag());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AC", $list[0]->getDigest());
+        $this->assertEquals("49FD46E6C4B45C55D4AC49FD46E6C4B45C55D4AE", $list[1]->getDigest());
+
+
+        // Check disable as well
+        $this->api->domains()->dnssecDisable($newDomain);
+
+        $list = $this->api->domains()->dnssecRecordsList($newDomain);
+        $this->assertEquals(0, sizeof($list));
+    }
+
+
+    public function testCanRegisterIDNsInCOManNET() {
+
+        $idnDomain = idn_to_ascii("點看" . date("U"), 0, INTL_IDNA_VARIANT_UTS46);
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($idnDomain . ".com", $idnDomain . ".net"), 1, $owner, array("ns1.netistrar.org", "ns2.netistrar.org")));
+
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+        // Confirm normal domain still succeeds.
+        $normalDomain = "normal-" . date("U");
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($normalDomain . ".com", $normalDomain . ".net"), 1, $owner, array("ns1.netistrar.org", "ns2.netistrar.org")));
+
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+    }
+
+
+    public function testCanRegisterScotWithIntendedUseExtension() {
+
+        $scotDomain = "validdomain-" . date("U") . ".scot";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($scotDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, true, array("Film", "Television", "Media")));
+
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+        $domain = $this->api->domains()->get($scotDomain);
+        $this->assertEquals("ACTIVE", $domain->getStatus());
+        $this->assertNotNull($domain->getExpiryDate());
+
+
+    }
+
+
+    public function testAttemptsToRestoreDomainsNotInAccountOrRGPReturnFailedTransaction() {
+
+
+        // Restore a bad domain
+        $transaction = $this->api->domains()->restore("not-existent.com", "65646463", 1);
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element = $transaction->getTransactionElements()["not-existent.com"];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(array("DOMAIN_NOT_IN_ACCOUNT"), array_keys($element->getElementErrors()));
+
+
+        // Restore a bad domain
+        $transaction = $this->api->domains()->restore("max63sagreatbigridiculouslylongdomainnamebutthatiswhatineed1234.xyz", "65646463", 1);
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element = $transaction->getTransactionElements()["max63sagreatbigridiculouslylongdomainnamebutthatiswhatineed1234.xyz"];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(array("DOMAIN_INVALID_FOR_RESTORE"), array_keys($element->getElementErrors()));
+
+
+    }
+
+
+    public function testAttemptsToRestoreValidRGPDomainAndAddTooManyRegistrationYearsReturnsFailedTransaction() {
+
+
+        // Create an RGP domain
+        $domainName = $this->api->test()->createRGPDomain();
+
+        // Restore a bad domain
+        $transaction = $this->api->domains()->restore($domainName, "65646463", 10);
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element = $transaction->getTransactionElements()[$domainName];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(array("DOMAIN_TOO_MANY_REGISTRATION_YEARS"), array_keys($element->getElementErrors()));
+
+
+    }
+
+
+    public function testAttemptsToRestoreValidRGPDomainWithInvalidRestoreCodeReturnsFailedTransaction() {
+
+        // Create an RGP domain
+        $domainName = $this->api->test()->createRGPDomain();
+
+        // Restore a bad domain
+        $transaction = $this->api->domains()->restore($domainName, "65646463", 3);
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element = $transaction->getTransactionElements()[$domainName];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(array("RESTORE_INVALID_CODE"), array_keys($element->getElementErrors()));
+
+
+    }
+
+
+    public function testAttemptsToRestoreRGPDomainWithNoRGPProductReturnsFailedTransaction() {
+
+        $newDomain = "validdomain-" . date("U") . ".xyz";
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $this->api->domains()->create(new DomainNameCreateDescriptor(array($newDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, [], true, array("Film", "Television", "Media")));
+
+        $this->api->test()->updateDomains(new TestDomainNameUpdateDescriptor([$newDomain], "RGP"));
+
+        // Restore a bad domain
+        $transaction = $this->api->domains()->restore($newDomain, "65646463", 3);
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element = $transaction->getTransactionElements()[$newDomain];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(array("RESTORE_MANUAL_ONLY"), array_keys($element->getElementErrors()));
+
+
+    }
+
+
+    public function testCanRestoreValidDomainsFromRGP() {
+
+        // Create an RGP domain
+        $domainName = $this->api->test()->createRGPDomain();
+
+        $liveAvailability = $this->api->domains()->liveAvailability($domainName);
+        $initialExpiry = date_create_from_format("d/m/Y", $liveAvailability->getAdditionalData()["expiryDate"]);
+
+        $transaction = $this->api->domains()->restore($domainName, $liveAvailability->getAdditionalData()["restoreCode"], 3);
+
+        // Check transaction succeeded
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+        // Check amounts taken correct
+        $this->assertEquals(275.36, $transaction->getOrderSubtotal());
+        $this->assertEquals(55.07, $transaction->getOrderTaxes());
+        $this->assertEquals(330.43, $transaction->getOrderTotal());
+
+        // Check status and expiry now updated on domain name
+        $reDomain = $this->api->domains()->get($domainName);
+        $this->assertEquals("ACTIVE", $reDomain->getStatus());
+        $currentExpiry = date_create_from_format("d/m/Y H:i:s", $reDomain->getExpiryDate());
+        $currentExpiry->sub(new DateInterval("P2Y"));
+        $this->assertEquals($initialExpiry->format("d/m/Y"), $currentExpiry->format("d/m/Y"));
+
+    }
+
+
+    public function testUnconfiguredTransactionErrorReturnedIfAttemptToBuyDomainWithNoProductsDefined() {
+
+        $unconfiguredDomain = "hello12345.boutique";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($unconfiguredDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1));
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element = $transaction->getTransactionElements()["hello12345.boutique"];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(array("DOMAIN_UNCONFIGURED_FOR_SALE"), array_keys($element->getElementErrors()));
+
+
+    }
+
+    public function testManualPremiumTransactionErrorReturnedIfAttemptToBuyDomainWithNoProductsDefined() {
+
+        $unconfiguredDomain = "fine.website";
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($unconfiguredDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1));
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element = $transaction->getTransactionElements()["fine.website"];
+        $this->assertEquals("FAILED", $element->getElementStatus());
+        $this->assertEquals(array("DOMAIN_MANUAL_PREMIUM"), array_keys($element->getElementErrors()));
+
+
+    }
+
+    public function testCannotCreatePremiumDomainsIfMissingOrInvalidRegistrationCodes() {
+
+        $chargeDomain = "industry.academy";
+        // $priceDomain = "wildmind.biz";
+        $feeDomain = "weather.xyz";
+
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($chargeDomain, $feeDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1));
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $chargeElement = $transaction->getTransactionElements()["industry.academy"];
+        $this->assertEquals("FAILED", $chargeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_MISSING_PREMIUM_REGISTRATION_CODE"], array_keys($chargeElement->getElementErrors()));
+
+        $feeElement = $transaction->getTransactionElements()["weather.xyz"];
+        $this->assertEquals("FAILED", $feeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_MISSING_PREMIUM_REGISTRATION_CODE"], array_keys($feeElement->getElementErrors()));
+
+
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($chargeDomain, $feeDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
+            ["industry.academy" => "BADCODE1", "weather.xyz" => "BADCODE2"]));
+
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $chargeElement = $transaction->getTransactionElements()["industry.academy"];
+        $this->assertEquals("FAILED", $chargeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_INVALID_PREMIUM_REGISTRATION_CODE"], array_keys($chargeElement->getElementErrors()));
+
+        $feeElement = $transaction->getTransactionElements()["weather.xyz"];
+        $this->assertEquals("FAILED", $feeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_INVALID_PREMIUM_REGISTRATION_CODE"], array_keys($feeElement->getElementErrors()));
+
+
+    }
+
+
+    public function testCanRegisterPremiumDomainsWhereValidRegistrationCodesAreSupplied() {
+
+        $chargeDomain = "industry.academy";
+        // $priceDomain = "wildmind.biz";
+        $feeDomain = "weather.xyz";
+
+        $chargeCode = $this->api->domains()->liveAvailability("industry.academy")->getAdditionalData()["premiumRegistrationCode"];
+        $feeCode = $this->api->domains()->liveAvailability("weather.xyz")->getAdditionalData()["premiumRegistrationCode"];
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($chargeDomain, $feeDomain), 2, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
+            ["industry.academy" => $chargeCode, "weather.xyz" => $feeCode]));
+
+
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+        $domainName = $this->api->domains()->get($chargeDomain);
+        $this->assertEquals("ACTIVE", $domainName->getStatus());
+        $this->assertEquals((new DateTime())->add(new DateInterval("P2Y"))->format("d/m/Y"), substr($domainName->getExpiryDate(), 0, 10));
+
+        $domainName = $this->api->domains()->get($feeDomain);
+        $this->assertEquals("ACTIVE", $domainName->getStatus());
+        $this->assertEquals((new DateTime())->add(new DateInterval("P2Y"))->format("d/m/Y"), substr($domainName->getExpiryDate(), 0, 10));
+
+
+        $this->api->test()->deleteDomain("industry.academy");
+        $this->api->test()->deleteDomain("weather.xyz");
+
+
+    }
+
+
+    public function testCannotRenewPremiumDomainsIfMissingOrInvalidRegistrationCodes() {
+
+        $chargeDomain = "dry.academy";
+        // $priceDomain = "wildmind.biz";
+        $feeDomain = "purple.xyz";
+
+
+        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumRegistrationCode"];
+        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRegistrationCode"];
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($chargeDomain, $feeDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
+            [$chargeDomain => $chargeCode, $feeDomain => $feeCode]));
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+        $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor([$chargeDomain, $feeDomain], 1));
+
+        $chargeElement = $transaction->getTransactionElements()[$chargeDomain];
+        $this->assertEquals("FAILED", $chargeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_MISSING_PREMIUM_RENEWAL_CODE"], array_keys($chargeElement->getElementErrors()));
+
+        $feeElement = $transaction->getTransactionElements()[$feeDomain];
+        $this->assertEquals("FAILED", $feeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_MISSING_PREMIUM_RENEWAL_CODE"], array_keys($feeElement->getElementErrors()));
+
+
+        $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor([$chargeDomain, $feeDomain], 1, [$chargeDomain => "BADCODE1", $feeDomain => "BADCODE2"]));
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $chargeElement = $transaction->getTransactionElements()[$chargeDomain];
+        $this->assertEquals("FAILED", $chargeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_INVALID_PREMIUM_RENEWAL_CODE"], array_keys($chargeElement->getElementErrors()));
+
+        $feeElement = $transaction->getTransactionElements()[$feeDomain];
+        $this->assertEquals("FAILED", $feeElement->getElementStatus());
+        $this->assertEquals(["DOMAIN_INVALID_PREMIUM_RENEWAL_CODE"], array_keys($feeElement->getElementErrors()));
+
+
+        $this->api->test()->deleteDomain($chargeDomain);
+        $this->api->test()->deleteDomain($feeDomain);
+
+
+    }
+
+
+    public function testCanRenewPremiumDomainsWhereValidRegistrationCodesAreSupplied() {
+
+        $chargeDomain = "green.academy";
+        // $priceDomain = "wildmind.biz";
+        $feeDomain = "brown.xyz";
+
+        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumRegistrationCode"];
+        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRegistrationCode"];
+
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($chargeDomain, $feeDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
+            [$chargeDomain => $chargeCode, $feeDomain => $feeCode]));
+
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumRenewalCode"];
+        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRenewalCode"];
+
+
+//        // Renew for 2 years
+        $transaction = $this->api->domains()->renew($chargeDomain, 2, $chargeCode);
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+        $domainName = $this->api->domains()->get($chargeDomain);
+        $this->assertEquals("ACTIVE", $domainName->getStatus());
+        $this->assertEquals((new DateTime())->add(new DateInterval("P3Y"))->format("d/m/Y"), substr($domainName->getExpiryDate(), 0, 10));
+
+
+        $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor([$feeDomain], 3, [$feeDomain => $feeCode]));
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+        $domainName = $this->api->domains()->get($feeDomain);
+        $this->assertEquals("ACTIVE", $domainName->getStatus());
+        $this->assertEquals((new DateTime())->add(new DateInterval("P4Y"))->format("d/m/Y"), substr($domainName->getExpiryDate(), 0, 10));
+
+
+        $this->api->test()->deleteDomain($chargeDomain);
+        $this->api->test()->deleteDomain($feeDomain);
 
 
     }

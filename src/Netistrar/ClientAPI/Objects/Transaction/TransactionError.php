@@ -19,7 +19,7 @@ class TransactionError extends SerialisableObject {
      * <b>PAYMENT_ERROR:</b> If it has not been possible to collect payment for a costed transaction.  This will be qualified with a reason message.
      * <b>DOMAIN_UNAVAILABLE_FOR_REGISTRATION:</b> When an attempt is made to register a domain which is not available.
      * <b>DOMAIN_ALREADY_IN_ACCOUNT:</b> When an attempt is made to register a domain which is already in your account.
-     * <b>DOMAIN_NOT_IN_ACCOUNT:</b> When an attempt is made to modify a domain which is not in your account.
+     * <b>DOMAIN_NOT_IN_ACCOUNT:</b> When an attempt is made to utilise a domain which is not in your account.
      * <b>DOMAIN_INVALID_FOR_CANCELLATION:</b> When an attempt is made to cancel a domain which is not in a valid state for cancellation
      * <b>DOMAIN_INVALID_FOR_RENEWAL:</b> An attempt has been made to renew a domain which is not valid for renewal.  Only domains with a status value of <b>ACTIVE</b> or <b>EXPIRED</b> can be renewed.
      * <b>DOMAIN_INVALID_FOR_GLUE_RECORD:</b> An attempt has been made to manage glue records for a domain which is not in <b>ACTIVE</b> status.
@@ -31,21 +31,23 @@ class TransactionError extends SerialisableObject {
      * <b>DOMAIN_REGISTRATION_ERROR:</b> An unexpected error occurred when attempting to register this domain at the registry.  This will be qualified with a registry specific message giving further details.
      * <b>DOMAIN_TRANSFER_ERROR:</b> An unexpected error occurred when attempting a transfer operation.  This will be qualified with a registry specific message giving further details.
      * <b>DOMAIN_OWNER_NOT_PENDING_CHANGES:</b> An attempt was made to cancel owner verification changes for a domain name owner which has no pending changes.
+     *  <b>GSUITE_DOMAIN_NOT_AVAILABLE:</b> When the domain supplied for a G Suite create operation is already attached to another subscription externally.
+     *  <b>GSUITE_DOMAIN_ALREADY_ATTACHED:</b> When the domain supplied for a G Suite create operation is already attached to a G Suite subscription in your account.
      * <b>UNEXPECTED_TRANSACTION_ERROR:</b> When a general unexpected error occurs with a transaction.  This will be qualified with a reason message where possible.
      * <br>
      * The following error codes can occur when the type is set to <b>VALIDATION</b><br />
      * For Domain name Validation errors the following codes can occur.<br />
      * <b>DOMAIN_MISSING_OWNER_CONTACT:</b> When a blank owner contact has been supplied to a domain operation
-     * <b>DOMAIN_INVALID_OWNER_CONTACT:</b> When the owner contact supplied for an operation is invalid.  In this case the <a href="#relatedValidationErrors">relatedValidationErrors</a> member will be populated with an array of
+     * <b>DOMAIN_INVALID_OWNER_CONTACT:</b> When the owner contact supplied for an operation is invalid.  In this case the <b>relatedValidationErrors</b> member will be populated with an array of
      * contact specific errors from the list of contact validation errors below.
      * <b>DOMAIN_MISSING_ADMIN_CONTACT:</b> When a blank admin contact has been supplied to a domain operation for which the TLD for that domain requires an admin contact.
-     * <b>DOMAIN_INVALID_ADMIN_CONTACT:</b> When the admin contact supplied for an operation is invalid.  In this case the <a href="#relatedValidationErrors">relatedValidationErrors</a> member will be populated with an array of
+     * <b>DOMAIN_INVALID_ADMIN_CONTACT:</b> When the admin contact supplied for an operation is invalid.  In this case the <b>relatedValidationErrors</b> member will be populated with an array of
      * contact specific errors from the list of contact validation errors below.
      * <b>DOMAIN_MISSING_TECHNICAL_CONTACT:</b> When a blank technical contact has been supplied to a domain operation for which the TLD for that domain requires a technical contact.
-     * <b>DOMAIN_INVALID_TECHNICAL_CONTACT:</b> When the technical contact supplied for an operation is invalid.  In this case the <a href="#relatedValidationErrors">relatedValidationErrors</a> member will be populated with an array of
+     * <b>DOMAIN_INVALID_TECHNICAL_CONTACT:</b> When the technical contact supplied for an operation is invalid.  In this case the <b>relatedValidationErrors</b> member will be populated with an array of
      * contact specific errors from the list of contact validation errors below.
      * <b>DOMAIN_MISSING_BILLING_CONTACT:</b> When a blank billing contact has been supplied to a domain operation for which the TLD for that domain requires a billing contact.
-     * <b>DOMAIN_INVALID_BILLING_CONTACT:</b> When the billing contact supplied for an operation is invalid.  In this case the <a href="#relatedValidationErrors">relatedValidationErrors</a> member will be populated with an array of
+     * <b>DOMAIN_INVALID_BILLING_CONTACT:</b> When the billing contact supplied for an operation is invalid.  In this case the <b>relatedValidationErrors</b> member will be populated with an array of
      * contact specific errors from the list of contact validation errors below.
      * <b>DOMAIN_TOO_FEW_NAMESERVERS:</b> When the set of nameservers supplied for a domain operation is fewer than is required for the TLD for the domain name in question.
      * <b>DOMAIN_INVALID_NAMESERVER_FORMAT:</b> When one or more of the array of nameservers supplied for a domain operation is not in valid nameserver format.  In this case the <a href="#extraData">extraData</a> member will be populated with an
@@ -88,8 +90,6 @@ class TransactionError extends SerialisableObject {
      * <b>GLUE_RECORD_MISSING_IP_ADDRESS:</b> When no IP address (either IPv4 or IPv6) has been supplied for a Domain Glue Record.
      * <b>GLUE_RECORD_INVALID_IPV4_ADDRESS:</b> When an invalid IPv4 address has been supplied for a Domain Glue Record.
      * <b>GLUE_RECORD_INVALID_IPV6_ADDRESS:</b> When an invalid IPv6 address has been supplied for a Domain Glue Record.
-     *
-     *
      *
      * @var string 
      */

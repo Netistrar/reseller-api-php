@@ -32,7 +32,7 @@ class TransactionElement extends SerialisableObject {
     protected $elementStatus;
 
     /**
-     * An associative array of operation data relevant to the operation type returned in the case that the <a href="#elementStatus">elementStatus</a> member is set to <b>SUCCEEDED</b>.<br />
+     * An associative array of operation data relevant to the operation type returned in the case that the <b>elementStatus</b> member is set to <b>SUCCEEDED</b>.<br />
      * For <b>DOMAIN_CREATE</b> and <b>DOMAIN_RENEW</b> operations this will contain an array with the following keys<br />
      * <b>expiryDate:</b> The new expiry date for this domain name following the operation in dd/mm/YYYY format.
      * <b>registrationYears:</b> The number of years added to this domain following the operation.
@@ -49,7 +49,7 @@ class TransactionElement extends SerialisableObject {
     protected $elementErrors;
 
     /**
-     * The subtotal for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <i>netistrarOrderId</i> element is defined for the wrapping <a href="domain-name-transaction">DomainNameTransaction</a> object and will be the net total (pre taxes) for this domain operation in the currency defined in the transaction.<br />
+     * The subtotal for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <b>orderId</b> element is defined for the wrapping <a href="object:Netistrar/WebServices/Common/Objects/Transaction/Transaction">Transaction</a> object and will be the net total (pre taxes) for this domain operation in the currency defined in the transaction.<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
      * @var float 
@@ -57,7 +57,7 @@ class TransactionElement extends SerialisableObject {
     protected $orderLineSubtotal;
 
     /**
-     * The taxes for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <i>netistrarOrderId</i> element is defined for the wrapping <a href="domain-name-transaction">DomainNameTransaction</a> object
+     * The taxes for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <b>orderId</b> element is defined for the wrapping <a href="object:Netistrar/WebServices/Common/Objects/Transaction/Transaction">Transaction</a> object
      * and will be the tax amount (VAT) for this domain operation in the currency defined in the transaction.<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *
@@ -66,7 +66,7 @@ class TransactionElement extends SerialisableObject {
     protected $orderLineTaxes;
 
     /**
-     * The total for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <i>netistrarOrderId</i> element is defined for the wrapping <a href="domain-name-transaction">DomainNameTransaction</a> object
+     * The total for the Netistrar order line for this domain name if applicable for this transaction.  This will be set when the <b>orderId</b> element is defined for the wrapping <a href="object:Netistrar/WebServices/Common/Objects/Transaction/Transaction">Transaction</a> object
      * and will be the total including taxes for this domain operation in the currency defined in the transaction.<br />
      * This property defaults to <b>N/A</b> if no order id is available for this transaction.
      *

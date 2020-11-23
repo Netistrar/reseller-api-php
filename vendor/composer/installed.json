@@ -1,17 +1,17 @@
 [
     {
         "name": "oxil/kinikit-core",
-        "version": "0.0.6",
-        "version_normalized": "0.0.6.0",
+        "version": "0.6",
+        "version_normalized": "0.6.0.0",
         "source": {
             "type": "git",
-            "url": "https://bitbucket.org/oxildev/kinikit-core.git",
-            "reference": "07af56019669a159f0826f30e237f047c52375b7"
+            "url": "https://github.com/OxfordInfoLabs/kinikit-core.git",
+            "reference": "5c4a94841e35ecea50f45e2319129d12ba4f2d30"
         },
         "dist": {
             "type": "zip",
-            "url": "https://bitbucket.org/oxildev/kinikit-core/get/07af56019669a159f0826f30e237f047c52375b7.zip",
-            "reference": "07af56019669a159f0826f30e237f047c52375b7",
+            "url": "https://api.github.com/repos/OxfordInfoLabs/kinikit-core/zipball/5c4a94841e35ecea50f45e2319129d12ba4f2d30",
+            "reference": "5c4a94841e35ecea50f45e2319129d12ba4f2d30",
             "shasum": ""
         },
         "require": {
@@ -20,7 +20,7 @@
             "ext-mbstring": "*",
             "php": "^5.6|^7.0"
         },
-        "time": "2018-10-23T16:30:47+00:00",
+        "time": "2019-02-27T10:38:49+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

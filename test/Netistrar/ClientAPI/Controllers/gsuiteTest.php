@@ -47,10 +47,6 @@ class gsuiteTest extends \ClientAPITestBase {
     }
 
 
-    public function testValidationErrorsReturnedIfInsufficientFieldsSuppliedToCreateDescriptor() {
-
-        
-    }
 
 
 }

@@ -38,7 +38,7 @@ class test extends WebServiceProxy {
 
     /**
      * Remove a domain name from your account.  This doesn't remove the domain from the registry if it has been previously registered.
-     * This is particularly useful when performing transfer testing etc.
+     * <br>This is particularly useful when performing transfer testing etc.
      *
      * @param string $domainName
     * @throws \Netistrar\ClientAPI\Exception\RateLimitExceededException
@@ -47,6 +47,45 @@ class test extends WebServiceProxy {
         $expectedExceptions = array();
         $expectedExceptions["\\Kinikit\\MVC\\Exception\\RateLimitExceededException"] = "\Netistrar\ClientAPI\Exception\RateLimitExceededException";
         parent::callMethod("removeDomainFromAccount/$domainName", "GET", array(),null,null,$expectedExceptions);
+    }
+
+    /**
+     * Delete a domain - this both removes the domain from your account and issues a delete.  NB:  The delete will behave
+     * differently at the Registry end according to the current status of the domain.  This is particularly useful for repeatable testing of
+     * registrations of known domains (e.g. Premium Domain testing)
+     *
+     * @param  $domainName
+    * @throws \Netistrar\ClientAPI\Exception\RateLimitExceededException
+     */
+    public function deleteDomain($domainName){
+        $expectedExceptions = array();
+        $expectedExceptions["\\Kinikit\\MVC\\Exception\\RateLimitExceededException"] = "\Netistrar\ClientAPI\Exception\RateLimitExceededException";
+        parent::callMethod("deleteDomain/$domainName", "GET", array(),null,null,$expectedExceptions);
+    }
+
+    /**
+     * Create a domain in RGP
+     *
+     * @return string
+    * @throws \Netistrar\ClientAPI\Exception\RateLimitExceededException
+     */
+    public function createRGPDomain(){
+        $expectedExceptions = array();
+        $expectedExceptions["\\Kinikit\\MVC\\Exception\\RateLimitExceededException"] = "\Netistrar\ClientAPI\Exception\RateLimitExceededException";
+        return parent::callMethod("createRGPDomain", "GET", array(),null,"string",$expectedExceptions);
+    }
+
+    /**
+     * Create a set of premium domains for transfer testing.  This will return an array of
+     * arrays containing a domain name and auth code
+     *
+     * @return string[][]
+    * @throws \Netistrar\ClientAPI\Exception\RateLimitExceededException
+     */
+    public function createTransferPremiums(){
+        $expectedExceptions = array();
+        $expectedExceptions["\\Kinikit\\MVC\\Exception\\RateLimitExceededException"] = "\Netistrar\ClientAPI\Exception\RateLimitExceededException";
+        return parent::callMethod("createTransferPremium", "GET", array(),null,"string[][]",$expectedExceptions);
     }
 
     /**
@@ -69,13 +108,14 @@ class test extends WebServiceProxy {
      * You can create up to 10 domains using this method and it will return an array of string domain names for the test domains created
      *
      * @param integer $numberOfDomains
+     * @param mixed[string] $contactAdditionalData
      * @return string[]
     * @throws \Netistrar\ClientAPI\Exception\RateLimitExceededException
      */
-    public function createPushTransferUKDomains($numberOfDomains){
+    public function createPushTransferUKDomains($numberOfDomains, $contactAdditionalData = 0){
         $expectedExceptions = array();
         $expectedExceptions["\\Kinikit\\MVC\\Exception\\RateLimitExceededException"] = "\Netistrar\ClientAPI\Exception\RateLimitExceededException";
-        return parent::callMethod("createPushTransfer/$numberOfDomains", "GET", array(),null,"string[]",$expectedExceptions);
+        return parent::callMethod("createPushTransfer/$numberOfDomains", "GET", array("contactAdditionalData" => $contactAdditionalData),null,"string[]",$expectedExceptions);
     }
 
     /**
@@ -93,11 +133,11 @@ class test extends WebServiceProxy {
 
     /**
      * Accept Ownership confirmation for a transfer for a set of domain names (either .RODEO or .UK) which have been started for transfer in / out
-     * using the <i>createIncomingTransferDomains</i> method on the <a href="netistrar-domain-transfer-api">Domain API</a> or
+     * using the <i>createIncomingTransferDomains</i> method on the <a href="api:domains-api">Domain API</a> or
      * using the <b>startTransferOutRodeo</b> method above respectively.
-     * This is equivalent to clicking the links sent via email to the owner to confirm that the transfer can proceed.
-     * In the case of an incoming transfer this will start the transfer operation at the Registry.
-     * In the case of an outgoing transfer this will accept the transfer operation started by the <a href="#startTransferOutForPullTransferRodeoDomains">startTransferOutForPullTransferRodeoDomains</a> method.
+     * <br>This is equivalent to clicking the links sent via email to the owner to confirm that the transfer can proceed.
+     * <br>In the case of an incoming transfer this will start the transfer operation at the Registry.
+     * <br>In the case of an outgoing transfer this will accept the transfer operation started by the <b>startTransferOutForPullTransferRodeoDomains</b> method.
      *
      * @param string[] $domainNames
     * @throws \Netistrar\ClientAPI\Exception\RateLimitExceededException
@@ -110,11 +150,11 @@ class test extends WebServiceProxy {
 
     /**
      * Decline Ownership confirmation for a transfer for a set of domain names (either .RODEO or .UK) which have been started for transfer in / out
-     * using the <i>createIncomingTransferDomains</i> method on the <a href="netistrar-domain-transfer-api">Domain API</a> or
+     * using the <b>createIncomingTransferDomains</b> method on the <a href="api:domains-api">Domain API</a> or
      * using the <b>startTransferOutRodeo</b> method above respectively.
-     * This is equivalent to clicking the links sent via email to the owner to decline  the transfer .
-     * In the case of an incoming transfer this will abandon the incoming transfer and restore the domain to active state.
-     * In the case of an outgoing transfer this will reject the operation started by the <b>startTransferOutForPullTransferRodeoDomains</b> method.
+     * <br>This is equivalent to clicking the links sent via email to the owner to decline  the transfer .
+     * <br>In the case of an incoming transfer this will abandon the incoming transfer and restore the domain to active state.
+     * <br>In the case of an outgoing transfer this will reject the operation started by the <b>startTransferOutForPullTransferRodeoDomains</b> method.
      *
      * @param string[] $domainNames
     * @throws \Netistrar\ClientAPI\Exception\RateLimitExceededException

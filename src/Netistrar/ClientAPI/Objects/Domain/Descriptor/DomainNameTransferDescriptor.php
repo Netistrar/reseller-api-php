@@ -43,7 +43,7 @@ class DomainNameTransferDescriptor extends SerialisableObject {
 
     /**
      *
-     * @var integer This should be set to one of the following values: <br><br><b>0</b> if all contact details are to be made public within the WHOIS system for all supplied domains<br><b>1</b> if the free Netistrar Privacy Proxy service will be used for all supplied domains<br><b>2</b> if partial details are to be made public within the WHOIS system with other details redacted.  (defaults to 1).
+     * @var integer This should be set to one of the following values: <br><br><b>0</b> If limited details are to be published via the WHOIS system for all supplied domains according to Registry policy.<br><b>1</b> if the free Netistrar Privacy Proxy service will be used for all supplied domains.
      */
     private $privacyProxy;
 
@@ -52,6 +52,12 @@ class DomainNameTransferDescriptor extends SerialisableObject {
      * @var boolean A boolean indicator as to whether the an attempt will be made to auto renew this domain using account payment methods (defaults to 0)
      */
     private $autoRenew;
+
+    /**
+     *
+     * @var string[string] An associative array of transfer codes indexed by domain name which must be supplied as a confirmation check for any domain names which are premium names.  These codes are obtained via a call to the <b>getLiveAvailability</b> function on the <a href="api:domains-api">Domain API</a> where it will be contained in the <b>premiumTransferCode</b> sub property of the <b>additionalData</b> member on the returned <a href="object:Netistrar/WebServices/Common/Objects/Domain/DomainAvailability">DomainAvailability</a> object.
+     */
+    private $premiumTransferCodes;
 
 
 
@@ -65,8 +71,9 @@ class DomainNameTransferDescriptor extends SerialisableObject {
      * @param  $technicalContact
      * @param  $privacyProxy
      * @param  $autoRenew
+     * @param  $premiumTransferCodes
      */
-    public function __construct($transferIdentifiers = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $autoRenew = null){
+    public function __construct($transferIdentifiers = null, $ownerContact = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $autoRenew = null, $premiumTransferCodes = null){
 
         $this->transferIdentifiers = $transferIdentifiers;
         $this->ownerContact = $ownerContact;
@@ -75,6 +82,7 @@ class DomainNameTransferDescriptor extends SerialisableObject {
         $this->technicalContact = $technicalContact;
         $this->privacyProxy = $privacyProxy;
         $this->autoRenew = $autoRenew;
+        $this->premiumTransferCodes = $premiumTransferCodes;
         
     }
 
@@ -215,6 +223,26 @@ class DomainNameTransferDescriptor extends SerialisableObject {
      */
     public function setAutoRenew($autoRenew){
         $this->autoRenew = $autoRenew;
+        return $this;
+    }
+
+    /**
+     * Get the premiumTransferCodes
+     *
+     * @return string[string]
+     */
+    public function getPremiumTransferCodes(){
+        return $this->premiumTransferCodes;
+    }
+
+    /**
+     * Set the premiumTransferCodes
+     *
+     * @param string[string] $premiumTransferCodes
+     * @return DomainNameTransferDescriptor
+     */
+    public function setPremiumTransferCodes($premiumTransferCodes){
+        $this->premiumTransferCodes = $premiumTransferCodes;
         return $this;
     }
 

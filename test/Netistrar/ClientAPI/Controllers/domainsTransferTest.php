@@ -2,10 +2,14 @@
 
 namespace Netistrar\ClientAPI\Controllers;
 
+use DateInterval;
+use DateTime;
 use Netistrar\ClientAPI\Exception\TransactionException;
 use Netistrar\ClientAPI\Objects\Account\AccountNotification;
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameCreateDescriptor;
+use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameRenewDescriptor;
 use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameTransferDescriptor;
+use Netistrar\ClientAPI\Objects\Domain\Descriptor\DomainNameUpdateDescriptor;
 use Netistrar\ClientAPI\Objects\Domain\DomainNameContact;
 use Netistrar\ClientAPI\Objects\Test\Domain\TestDomainNameUpdateDescriptor;
 use Netistrar\ClientAPI\Objects\Transaction\Transaction;
@@ -73,13 +77,13 @@ class domainsTransferTest extends \ClientAPITestBase {
         $validContact = new DomainNameContact("Test", "test@test.com", "myorg", "hello street", "hello road", "hello", "helloshire", "he12 144", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
 
         // Test for not assigned pull domains.
-        $validationErrors = $this->api->domains()->transferValidate(new DomainNameTransferDescriptor(array("ganymede-netistrar_.co.uk", "ganymede-2020media.co.uk"), $validContact));
+        $validationErrors = $this->api->domains()->transferValidate(new DomainNameTransferDescriptor(array("ganymede-netistrar_.co.uk", "ganymede-2030media.co.uk"), $validContact));
 
         $this->assertEquals(2, sizeof($validationErrors));
 
 
         $this->assertNotNull($validationErrors["ganymede-netistrar_.co.uk"]["TRANSFER_DOMAIN_NOT_ASSIGNED"]);
-        $this->assertNotNull($validationErrors["ganymede-2020media.co.uk"]["TRANSFER_DOMAIN_NOT_REGISTERED"]);
+        $this->assertNotNull($validationErrors["ganymede-2030media.co.uk"]["TRANSFER_DOMAIN_NOT_REGISTERED"]);
 
 
         // Test for an missing auth code first.
@@ -153,9 +157,9 @@ class domainsTransferTest extends \ClientAPITestBase {
         $rodeoTestAuth2 = $newDomains[1][1];
         $rodeoTestIdentifier2 = $rodeoTestDomain2 . "," . $rodeoTestAuth2;
 
-        $validContact = new DomainNameContact("Test", "test@test.com", "", "hello street", "hello road", "hello", "helloshire", "he12 144", "GB", "", "", "", "", "", "", array(), array("nominetRegistrantType" => "IND"));
+        $validContact = new DomainNameContact("Test", "test@test.com", "", "hello street", "hello road", "hello", "helloshire", "OX4 7ED", "GB", "", "", "", "", "", "", array(), array("nominetRegistrantType" => "IND"));
 
-        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoTestIdentifier, $rodeoTestIdentifier2), $validContact, null, null, null, 1, true));
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoTestIdentifier, $rodeoTestIdentifier2), $validContact, null, null, null, 2, true));
 
         // Add extra values we now expect
         $validContact->__setSerialisablePropertyMap(array("status" => "LIVE", "pendingContact" => ""));
@@ -195,7 +199,7 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertEquals("Oxford Information Labs", $domain1->getAdminContact()->getName());
         $this->assertEquals("Oxford Information Labs", $domain1->getBillingContact()->getName());
         $this->assertEquals("Oxford Information Labs", $domain1->getTechnicalContact()->getName());
-        $this->assertEquals(1, $domain1->getPrivacyProxy());
+        $this->assertEquals(0, $domain1->getPrivacyProxy());
         $this->assertEquals(1, $domain1->getAutoRenew());
 
 
@@ -205,8 +209,35 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertEquals("Oxford Information Labs", $domain2->getAdminContact()->getName());
         $this->assertEquals("Oxford Information Labs", $domain2->getBillingContact()->getName());
         $this->assertEquals("Oxford Information Labs", $domain2->getTechnicalContact()->getName());
-        $this->assertEquals(1, $domain2->getPrivacyProxy());
+        $this->assertEquals(0, $domain2->getPrivacyProxy());
         $this->assertEquals(1, $domain2->getAutoRenew());
+
+
+        // Now complete one of the transfers
+        $this->api->test()->approveIncomingTransferOtherRegistrar([$rodeoTestDomain]);
+
+        $domain = $this->api->domains()->get($rodeoTestDomain);
+        $this->assertNotNull($domain->getExpiryDate());
+        $this->assertEquals("ACTIVE", $domain->getStatus());
+        $this->assertEquals(3, sizeof($domain->getNameservers()));
+        $this->assertEquals("ns1.monkey.com", $domain->getNameservers()[0]);
+        $this->assertEquals("ns2.monkey.com", $domain->getNameservers()[1]);
+        $this->assertEquals("ns1." . $rodeoTestDomain, $domain->getNameservers()[2]);
+
+        // Check DNSSEC Records were imported correctly
+        $dnsSec = $this->api->domains()->dnssecRecordsList($rodeoTestDomain);
+        $this->assertEquals(2, sizeof($dnsSec));
+        $this->assertEquals(12345, $dnsSec[0]->getKeyTag());
+        $this->assertEquals(12346, $dnsSec[1]->getKeyTag());
+
+        // Check Glue records were imported correctly
+        $glueRecords = $this->api->domains()->glueRecordsList($rodeoTestDomain);
+        $this->assertEquals(2, sizeof($glueRecords));
+        $this->assertEquals("ns1", $glueRecords[0]->getSubDomainPrefix());
+        $this->assertEquals("8.8.8.8", $glueRecords[0]->getIpv4Address());
+        $this->assertEquals("ns2", $glueRecords[1]->getSubDomainPrefix());
+        $this->assertEquals("8.8.8.8", $glueRecords[1]->getIpv4Address());
+
     }
 
 
@@ -214,9 +245,9 @@ class domainsTransferTest extends \ClientAPITestBase {
 
         $pushTransferDomains = $this->api->test()->createPushTransferUKDomains(1);
 
-        $validContact = new DomainNameContact("Test", "test@test.com", "hello street", "hello road", "hello", "helloshire", "he12 144", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
+        $validContact = new DomainNameContact("Owner", "owner@dontreset.com", "Pinky Inc", "pinky strasse", "pink road", "pinkish", "pinkshire", "pe33 7YY", "GB", null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
 
-        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($pushTransferDomains[0]), $validContact));
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($pushTransferDomains[0]), $validContact, null, null, null, 2));
 
 
         $this->assertTrue($transaction instanceof Transaction);
@@ -224,11 +255,11 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertNotNull($transaction->getTransactionDateTime());
         $this->assertEquals("DOMAIN_TRANSFER_IN_CREATE", $transaction->getTransactionType());
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
-        $this->assertNull($transaction->getOrderId());
-        $this->assertNull($transaction->getOrderCurrency());
-        $this->assertNull($transaction->getOrderSubtotal());
-        $this->assertNull($transaction->getOrderTaxes());
-        $this->assertNull($transaction->getOrderTotal());
+        $this->assertNotNull($transaction->getOrderId());
+        $this->assertEquals("GBP", $transaction->getOrderCurrency());
+        $this->assertEquals(0, $transaction->getOrderSubtotal());
+        $this->assertEquals(0, $transaction->getOrderTaxes());
+        $this->assertEquals(0, $transaction->getOrderTotal());
 
         $this->assertEquals(1, sizeof($transaction->getTransactionElements()));
         $elements = $transaction->getTransactionElements();
@@ -236,9 +267,32 @@ class domainsTransferTest extends \ClientAPITestBase {
         $element = $elements[$pushTransferDomains[0]];
         $this->assertEquals($pushTransferDomains[0], $element->getDescription());
         $this->assertEquals("SUCCEEDED", $element->getElementStatus());
-        $this->assertNull($element->getOrderLineSubtotal());
-        $this->assertNull($element->getOrderLineTaxes());
-        $this->assertNull($element->getOrderLineTotal());
+        $this->assertEquals(0, $element->getOrderLineSubtotal());
+        $this->assertEquals(0, $element->getOrderLineTaxes());
+        $this->assertEquals(0, $element->getOrderLineTotal());
+
+
+        // Accept the ownership confirmation
+        $this->api->test()->acceptOwnershipConfirmation($pushTransferDomains);
+
+        // Confirm that domain is now active
+        $checkDomains = $this->api->domains()->getMultiple(array($pushTransferDomains[0]));
+        $reDomain = $checkDomains[$pushTransferDomains[0]];
+        $this->assertEquals("ACTIVE", $reDomain->getStatus());
+        $this->assertNotNull($reDomain->getExpiryDate());
+        $this->assertEquals(0, $reDomain->getPrivacyProxy());
+        $this->assertEquals(3, sizeof($reDomain->getNameservers()));
+        $this->assertContains("ns1.monkey.com", $reDomain->getNameservers());
+        $this->assertContains("ns2.monkey.com", $reDomain->getNameservers());
+        $this->assertContains("ns1." . $pushTransferDomains[0], $reDomain->getNameservers());
+
+
+        // Check Glue records were imported correctly
+        $glueRecords = $this->api->domains()->glueRecordsList($pushTransferDomains[0]);
+        $this->assertEquals(2, sizeof($glueRecords));
+        $this->assertEquals("8.8.8.8", $glueRecords[0]->getIpv4Address());
+        $this->assertEquals("8.8.8.8", $glueRecords[1]->getIpv4Address());
+
 
     }
 
@@ -342,6 +396,36 @@ class domainsTransferTest extends \ClientAPITestBase {
     }
 
 
+    public function testCanTransferDomainInWithPrivacyProxySetAndThenUpdateContacts() {
+
+        $testDomains = $this->api->test()->createPullTransferRodeoDomains(1);
+
+        $rodeoTestDomain = $testDomains[0][0];
+        $rodeoTestAuth = $testDomains[0][1];
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
+
+        // Start incoming transfers
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoTestDomain . "," . $rodeoTestAuth), $owner, null, null, null, 1));
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+        $this->api->test()->approveIncomingTransferOtherRegistrar(array($rodeoTestDomain));
+
+
+        $tech = new DomainNameContact("Mary Jane", "jane@oxil.co.uk", "My org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
+
+
+        $result = $this->api->domains()->update(new DomainNameUpdateDescriptor([$rodeoTestDomain], null, $tech, $tech, $tech));
+
+        $this->assertEquals("SUCCEEDED", $result->getTransactionStatus());
+
+        $domain = $this->api->domains()->get($rodeoTestDomain);
+        $this->assertEquals("Mary Jane", $domain->getTechnicalContact()->getName());
+
+
+    }
+
+
     public function testCheckingTransferStatusReturnsStatusObjectsOrThrowsExceptionsIfNotInTransfer() {
 
         $rodeoDomains = $this->api->test()->createPullTransferRodeoDomains(2);
@@ -390,6 +474,88 @@ class domainsTransferTest extends \ClientAPITestBase {
         } catch (TransactionException $e) {
             $this->assertEquals("DOMAIN_TRANSFER_NOT_MID_TRANSFER", $e->getTransactionErrors()["DOMAIN_TRANSFER_NOT_MID_TRANSFER"]->getCode());
         }
+    }
+
+
+    public function testCannotTransferPremiumDomainsIfMissingOrInvalidPremiumTransferCodes() {
+
+
+        $premiums = $this->api->test()->createTransferPremiums();
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
+
+        list($domainName1, $authCode1) = $premiums[0];
+        list($domainName2, $authCode2) = $premiums[1];
+
+
+        // Missing transfer code
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor([$domainName1 . "," . $authCode1,
+            $domainName2 . "," . $authCode2], $owner));
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element1 = $transaction->getTransactionElements()[$domainName1];
+        $this->assertEquals("FAILED", $element1->getElementStatus());
+        $this->assertEquals(["DOMAIN_MISSING_PREMIUM_TRANSFER_CODE"], array_keys($element1->getElementErrors()));
+
+
+        $element2 = $transaction->getTransactionElements()[$domainName2];
+        $this->assertEquals("FAILED", $element2->getElementStatus());
+        $this->assertEquals(["DOMAIN_MISSING_PREMIUM_TRANSFER_CODE"], array_keys($element2->getElementErrors()));
+
+
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor([$domainName1 . "," . $authCode1,
+            $domainName2 . "," . $authCode2], $owner, $owner, $owner, $owner, 1, 1, [
+            $domainName1 => "BADPREMIUMTRANSFERCODE",
+            $domainName2 => "ANOTHERBADCODE"
+        ]));
+        $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
+
+        $element1 = $transaction->getTransactionElements()[$domainName1];
+        $this->assertEquals("FAILED", $element1->getElementStatus());
+        $this->assertEquals(["DOMAIN_INVALID_PREMIUM_TRANSFER_CODE"], array_keys($element1->getElementErrors()));
+
+
+        $element2 = $transaction->getTransactionElements()[$domainName2];
+        $this->assertEquals("FAILED", $element2->getElementStatus());
+        $this->assertEquals(["DOMAIN_INVALID_PREMIUM_TRANSFER_CODE"], array_keys($element2->getElementErrors()));
+
+
+    }
+
+
+    public function testCanTransferPremiumDomainIfValidPremiumTransferCodeSupplied() {
+
+        $premiums = $this->api->test()->createTransferPremiums();
+
+        $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB", null, null, null, null, null, null, null, array("nominetRegistrantType" => "IND"));
+
+        list($domainName1, $authCode1) = $premiums[0];
+        list($domainName2, $authCode2) = $premiums[1];
+
+        $transferCode1 = $this->api->domains()->liveAvailability($domainName1)->getAdditionalData()["premiumTransferCode"];
+        $transferCode2 = $this->api->domains()->liveAvailability($domainName2)->getAdditionalData()["premiumTransferCode"];
+
+        // Missing transfer code
+        $transaction = $this->api->domains()->transferCreate(new DomainNameTransferDescriptor([$domainName1 . "," . $authCode1,
+            $domainName2 . "," . $authCode2], $owner, $owner, $owner, $owner, 1, 1, [
+            $domainName1 => $transferCode1,
+            $domainName2 => $transferCode2
+        ]));
+
+
+        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
+
+
+        $domainNameObj1 = $this->api->domains()->get($domainName1);
+        $this->assertEquals("TRANSFER_IN_AWAITING_RESPONSE", $domainNameObj1->getStatus());
+
+        $this->api->domains()->transferCancel([$domainName1]);
+
+        $domainNameObj2 = $this->api->domains()->get($domainName2);
+        $this->assertEquals("TRANSFER_IN_AWAITING_RESPONSE", $domainNameObj2->getStatus());
+
+        $this->api->domains()->transferCancel([$domainName2]);
+
     }
 
 

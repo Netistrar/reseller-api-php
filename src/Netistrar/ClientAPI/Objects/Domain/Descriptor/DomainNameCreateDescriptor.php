@@ -52,9 +52,15 @@ class DomainNameCreateDescriptor extends SerialisableObject {
 
     /**
      *
-     * @var integer This should be set to one of the following values: <br><br><b>0</b> if all contact details are to be made public within the WHOIS system for all supplied domains<br><b>1</b> if the free Netistrar Privacy Proxy service will be used for all supplied domains<br><b>2</b> if partial details are to be made public within the WHOIS system with other details redacted.  (defaults to 1).
+     * @var integer This should be set to one of the following values: <br><br><b>0</b> If limited details are to be published via the WHOIS system for all supplied domains according to Registry policy.<br><b>1</b> if the free Netistrar Privacy Proxy service will be used for all supplied domains.
      */
     private $privacyProxy;
+
+    /**
+     *
+     * @var bool[string] 
+     */
+    private $disclosedFields;
 
     /**
      *
@@ -67,6 +73,12 @@ class DomainNameCreateDescriptor extends SerialisableObject {
      * @var string[] An array of string tags to assign to this domain for organisational purposes.
      */
     private $tags;
+
+    /**
+     *
+     * @var string[string] An associative array of registration codes indexed by domain name which must be supplied as a confirmation check for any domain names which are premium names.  These codes are obtained via a call to the <b>getLiveAvailability</b> function on the <a href="api:domains-api">Domain API</a> where it will be contained in the <b>premiumRegistrationCode</b> sub property of the <b>additionalData</b> member on the returned <a href="object:Netistrar/WebServices/Common/Objects/Domain/DomainAvailability">DomainAvailability</a> object.
+     */
+    private $premiumRegistrationCodes;
 
 
 
@@ -81,10 +93,12 @@ class DomainNameCreateDescriptor extends SerialisableObject {
      * @param  $billingContact
      * @param  $technicalContact
      * @param  $privacyProxy
+     * @param  $disclosedFields
      * @param  $autoRenew
      * @param  $tags
+     * @param  $premiumRegistrationCodes
      */
-    public function __construct($domainNames = null, $registrationYears = null, $ownerContact = null, $nameservers = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $autoRenew = null, $tags = null){
+    public function __construct($domainNames = null, $registrationYears = null, $ownerContact = null, $nameservers = null, $adminContact = null, $billingContact = null, $technicalContact = null, $privacyProxy = 1, $disclosedFields = null, $autoRenew = null, $tags = null, $premiumRegistrationCodes = null){
 
         $this->domainNames = $domainNames;
         $this->registrationYears = $registrationYears;
@@ -94,8 +108,10 @@ class DomainNameCreateDescriptor extends SerialisableObject {
         $this->billingContact = $billingContact;
         $this->technicalContact = $technicalContact;
         $this->privacyProxy = $privacyProxy;
+        $this->disclosedFields = $disclosedFields;
         $this->autoRenew = $autoRenew;
         $this->tags = $tags;
+        $this->premiumRegistrationCodes = $premiumRegistrationCodes;
         
     }
 
@@ -260,6 +276,26 @@ class DomainNameCreateDescriptor extends SerialisableObject {
     }
 
     /**
+     * Get the disclosedFields
+     *
+     * @return bool[string]
+     */
+    public function getDisclosedFields(){
+        return $this->disclosedFields;
+    }
+
+    /**
+     * Set the disclosedFields
+     *
+     * @param bool[string] $disclosedFields
+     * @return DomainNameCreateDescriptor
+     */
+    public function setDisclosedFields($disclosedFields){
+        $this->disclosedFields = $disclosedFields;
+        return $this;
+    }
+
+    /**
      * Get the autoRenew
      *
      * @return boolean
@@ -296,6 +332,26 @@ class DomainNameCreateDescriptor extends SerialisableObject {
      */
     public function setTags($tags){
         $this->tags = $tags;
+        return $this;
+    }
+
+    /**
+     * Get the premiumRegistrationCodes
+     *
+     * @return string[string]
+     */
+    public function getPremiumRegistrationCodes(){
+        return $this->premiumRegistrationCodes;
+    }
+
+    /**
+     * Set the premiumRegistrationCodes
+     *
+     * @param string[string] $premiumRegistrationCodes
+     * @return DomainNameCreateDescriptor
+     */
+    public function setPremiumRegistrationCodes($premiumRegistrationCodes){
+        $this->premiumRegistrationCodes = $premiumRegistrationCodes;
         return $this;
     }
 

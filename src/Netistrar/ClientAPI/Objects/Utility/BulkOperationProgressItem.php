@@ -4,7 +4,7 @@ namespace Netistrar\ClientAPI\Objects\Utility;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
- * Encodes progress information about a single element within a bulk operation.  These are returned as part of the <a href="bulk-operation-progress">BulkOperationProgress</a> object as subordinate objects for e.g. use in GUIs to
+ * Encodes progress information about a single element within a bulk operation.  These are returned as part of the <a href="object:Netistrar/WebServices/Common/Objects/Utility/BulkOperationProgress">BulkOperationProgress</a> object as subordinate objects for e.g. use in GUIs to
  * update the progress as it completes.
 */
 class BulkOperationProgressItem extends SerialisableObject {
@@ -26,9 +26,9 @@ class BulkOperationProgressItem extends SerialisableObject {
     /**
      * The status of this bulk operation element.  This will be one of the following values:<br>
      * <b>PENDING:</b> If the element is still in the queue to be processed
-     * <b>IN_PROGRESS:</b> If the element is currently being processed (in some cases the <a href="#progressPercentage">progressPercentage</a> property will give more detail about progression through this item)
+     * <b>IN_PROGRESS:</b> If the element is currently being processed (in some cases the <b>progressPercentage</b> property will give more detail about progression through this item)
      * <b>SUCCEEDED:</b> If the element has finished successfully
-     * <b>FAILED:</b> If the element has finished but failed.  In this case the <a href="#failureErrors">failureErrors</a> property may be populated with an array of errors qualifying the failure.
+     * <b>FAILED:</b> If the element has finished but failed.  In this case the <b>failureErrors</b> property may be populated with an array of errors qualifying the failure.
      *
      * @var string 
      */

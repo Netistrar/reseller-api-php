@@ -32,6 +32,13 @@ class DomainNameSuggestionOptions extends SerialisableObject {
      */
     private $fillCount;
 
+    /**
+     * Max length of domain name to return for suggestions - between 2 and 63.
+     *
+     * @var integer 
+     */
+    private $maxNameLength;
+
 
 
     /**
@@ -40,12 +47,14 @@ class DomainNameSuggestionOptions extends SerialisableObject {
      * @param  $includeTlds
      * @param  $includeCategories
      * @param  $fillCount
+     * @param  $maxNameLength
      */
-    public function __construct($includeTlds = 1, $includeCategories = 1, $fillCount = 25){
+    public function __construct($includeTlds = 1, $includeCategories = 1, $fillCount = 25, $maxNameLength = 63){
 
         $this->includeTlds = $includeTlds;
         $this->includeCategories = $includeCategories;
         $this->fillCount = $fillCount;
+        $this->maxNameLength = $maxNameLength;
         
     }
 
@@ -106,6 +115,26 @@ class DomainNameSuggestionOptions extends SerialisableObject {
      */
     public function setFillCount($fillCount){
         $this->fillCount = $fillCount;
+        return $this;
+    }
+
+    /**
+     * Get the maxNameLength
+     *
+     * @return integer
+     */
+    public function getMaxNameLength(){
+        return $this->maxNameLength;
+    }
+
+    /**
+     * Set the maxNameLength
+     *
+     * @param integer $maxNameLength
+     * @return DomainNameSuggestionOptions
+     */
+    public function setMaxNameLength($maxNameLength){
+        $this->maxNameLength = $maxNameLength;
         return $this;
     }
 

@@ -20,6 +20,12 @@ class DomainNameRenewDescriptor extends SerialisableObject {
      */
     private $additionalYears;
 
+    /**
+     *
+     * @var string[string] An associative array of renewal codes indexed by domain name which must be supplied as a confirmation check for any domain names which are premium names.  These codes are obtained via a call to the <b>getLiveAvailability</b> function on the <a href="api:domains-api">Domain API</a> where it will be contained in the <b>premiumRenewalCode</b> sub property of the <b>additionalData</b> member on the returned <a href="object:Netistrar/WebServices/Common/Objects/Domain/DomainAvailability">DomainAvailability</a> object.
+     */
+    private $premiumRenewalCodes;
+
 
 
     /**
@@ -27,11 +33,13 @@ class DomainNameRenewDescriptor extends SerialisableObject {
      *
      * @param  $domainNames
      * @param  $additionalYears
+     * @param  $premiumRenewalCodes
      */
-    public function __construct($domainNames = null, $additionalYears = null){
+    public function __construct($domainNames = null, $additionalYears = null, $premiumRenewalCodes = null){
 
         $this->domainNames = $domainNames;
         $this->additionalYears = $additionalYears;
+        $this->premiumRenewalCodes = $premiumRenewalCodes;
         
     }
 
@@ -72,6 +80,26 @@ class DomainNameRenewDescriptor extends SerialisableObject {
      */
     public function setAdditionalYears($additionalYears){
         $this->additionalYears = $additionalYears;
+        return $this;
+    }
+
+    /**
+     * Get the premiumRenewalCodes
+     *
+     * @return string[string]
+     */
+    public function getPremiumRenewalCodes(){
+        return $this->premiumRenewalCodes;
+    }
+
+    /**
+     * Set the premiumRenewalCodes
+     *
+     * @param string[string] $premiumRenewalCodes
+     * @return DomainNameRenewDescriptor
+     */
+    public function setPremiumRenewalCodes($premiumRenewalCodes){
+        $this->premiumRenewalCodes = $premiumRenewalCodes;
         return $this;
     }
 

@@ -42,8 +42,9 @@ class accountTest extends \ClientAPITestBase {
         $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($rodeoTestIdentifier, $rodeoTestIdentifier2), $validContact, null, null, null, 1, true));
 
 
-
         $this->api->test()->approveIncomingTransferOtherRegistrar(array($rodeoTestDomain));
+
+
         $this->api->test()->rejectIncomingTransferOtherRegistrar(array($rodeoTestDomain2));
 
         $allAccountNotifications = $this->api->account()->listNotifications();

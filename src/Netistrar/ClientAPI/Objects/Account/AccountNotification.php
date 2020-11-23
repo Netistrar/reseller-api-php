@@ -4,8 +4,8 @@ namespace Netistrar\ClientAPI\Objects\Account;
 
 use Kinikit\Core\Object\SerialisableObject;
 /**
- * A generic account notification.  This are used to encode events described by the <a href="#notificationType">notificationType</a> and <a href="#notificationSubType">notificationSubType</a> properties.
- * A human readable message is also returned along with the description of an associated object contained in the <a href="#refersTo">refersTo</a> property if relevant to this notification.
+ * A generic account notification.  This are used to encode events described by the <b>notificationType</b> and <b>notificationSubType</b> properties.
+ * A human readable message is also returned along with the description of an associated object contained in the <b>refersTo</b> property if relevant to this notification.
 */
 class AccountNotification extends SerialisableObject {
 
