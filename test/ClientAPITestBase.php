@@ -15,9 +15,6 @@ class ClientAPITestBase extends \PHPUnit\Framework\TestCase {
     const API_KEY = "TESTAPIKEY";
     const API_SECRET = "TESTAPISECRET";
 
-//    const HOST_NAME = "http://restapi.netistrar-ote.uk";
-//    const API_KEY = "Ka5mPbxtMY";
-//    const API_SECRET = "U3plgiTpQr";
 
     /**
      * @var \Netistrar\ClientAPI\APIProvider

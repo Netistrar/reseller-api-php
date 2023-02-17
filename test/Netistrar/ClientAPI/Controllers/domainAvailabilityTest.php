@@ -31,6 +31,9 @@ class domainAvailabilityTest extends \ClientAPITestBase {
 
         $availability = $this->api->domains()->hintedAvailability(new DomainNameAvailabilityDescriptor("bodybuilding", null, array("com", "net", "org"), true));
 
+
+
+
         $this->assertEquals("bodybuilding.com", $availability->getTldResults()["com"]->getDomainName());
         $this->assertTrue(sizeof($availability->getTldSuggestions()["org"]) > 0);
 
@@ -65,6 +68,7 @@ class domainAvailabilityTest extends \ClientAPITestBase {
         $this->assertTrue($availability instanceof DomainAvailability);
         $this->assertEquals("AVAILABLE", $availability->getAvailability());
         $this->assertEquals(10, sizeof($availability->getPrices()["registration"]));
+
 
 
         $this->assertTrue($availability->getPrices()["registration"][0] instanceof DomainAvailabilityPrice);
