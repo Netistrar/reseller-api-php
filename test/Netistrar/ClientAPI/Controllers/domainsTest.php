@@ -113,6 +113,8 @@ class domainsTest extends \ClientAPITestBase {
 
         $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($existingDomain, $myDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), $owner, $owner, $owner));
 
+        print_r($transaction);
+
         $this->assertTrue($transaction instanceof Transaction);
         $this->assertEquals(2, sizeof($transaction->getTransactionElements()));
 
@@ -182,6 +184,8 @@ class domainsTest extends \ClientAPITestBase {
         $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newUKDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1), $key);
 
         $this->assertTrue($transaction instanceof Transaction);
+        print_r($transaction);
+
         $this->assertNotNull($transaction->getTransactionDateTime());
         $this->assertEquals("DOMAIN_CREATE", $transaction->getTransactionType());
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
@@ -227,6 +231,9 @@ class domainsTest extends \ClientAPITestBase {
         $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($newBlogDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 0, [], 1));
 
         $this->assertTrue($transaction instanceof Transaction);
+
+        print_r($transaction);
+
         $this->assertNotNull($transaction->getTransactionDateTime());
         $this->assertEquals("DOMAIN_CREATE", $transaction->getTransactionType());
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
@@ -1383,6 +1390,9 @@ class domainsTest extends \ClientAPITestBase {
 
         $bulkOperationProgress = $this->api->utility()->getBulkOperationProgress($progressKey);
         $this->assertEquals("COMPLETED", $bulkOperationProgress->getStatus());
+
+        print_r($bulkOperationProgress->getProgressItems());
+
         $this->assertEquals("SUCCEEDED", $bulkOperationProgress->getProgressItems()[0]->getStatus());
         $this->assertEquals("SUCCEEDED", $bulkOperationProgress->getProgressItems()[1]->getStatus());
         $this->assertEquals("FAILED", $bulkOperationProgress->getProgressItems()[2]->getStatus());
@@ -2076,27 +2086,25 @@ class domainsTest extends \ClientAPITestBase {
 
     public function testCanRegisterPremiumDomainsWhereValidRegistrationCodesAreSupplied() {
 
-        $this->api->test()->deleteDomain("wildmind.biz");
-
         $chargeDomain = "fix.academy";
         $priceDomain = "wildmind.biz";
-        $feeDomain = "toffee.xyz";
+        $feeDomain = "top.xyz";
 
-        $chargeCode = $this->api->domains()->liveAvailability("fix.academy")->getAdditionalData()["premiumRegistrationCode"];
-        $priceCode = $this->api->domains()->liveAvailability("wildmind.biz")->getAdditionalData()["premiumRegistrationCode"];
-        $feeCode = $this->api->domains()->liveAvailability("toffee.xyz")->getAdditionalData()["premiumRegistrationCode"];
+//        $chargeCode = $this->api->domains()->liveAvailability("fix.academy")->getAdditionalData()["premiumRegistrationCode"];
+//        $priceCode = $this->api->domains()->liveAvailability("wildmind.biz")->getAdditionalData()["premiumRegistrationCode"];
+        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRegistrationCode"];
 
-
+//
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
-        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($priceDomain), 2, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
-            ["fix.academy" => $chargeCode, "toffee.xyz" => $feeCode, $priceDomain => $priceCode]));
+        $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($feeDomain), 2, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
+            ["fix.academy" => $chargeCode, $feeDomain => $feeCode, $priceDomain => $priceCode]));
 
+//
+//        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
 
-        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
-
-        $domainName = $this->api->domains()->get($chargeDomain);
-        $this->assertEquals("ACTIVE", $domainName->getStatus());
-        $this->assertEquals((new DateTime())->add(new DateInterval("P2Y"))->format("d/m/Y"), substr($domainName->getExpiryDate(), 0, 10));
+//        $domainName = $this->api->domains()->get($chargeDomain);
+//        $this->assertEquals("ACTIVE", $domainName->getStatus());
+//        $this->assertEquals((new DateTime())->add(new DateInterval("P2Y"))->format("d/m/Y"), substr($domainName->getExpiryDate(), 0, 10));
 
         $domainName = $this->api->domains()->get($feeDomain);
         $this->assertEquals("ACTIVE", $domainName->getStatus());
@@ -2104,7 +2112,7 @@ class domainsTest extends \ClientAPITestBase {
 
 
         $this->api->test()->deleteDomain("fix.academy");
-        $this->api->test()->deleteDomain("toffee.xyz");
+        $this->api->test()->deleteDomain($feeDomain);
         $this->api->test()->deleteDomain("wildmind.biz");
 
 

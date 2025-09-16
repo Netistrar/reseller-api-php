@@ -86,7 +86,7 @@ class domainAvailabilityTest extends \ClientAPITestBase {
         $this->assertTrue(in_array("com", $tlds));
 
         $tlds = $this->api->domains()->tldList("National");
-        $this->assertEquals(7, sizeof($tlds));
+        $this->assertEquals(8, sizeof($tlds));
         $this->assertTrue(in_array("uk", $tlds));
         $this->assertTrue(in_array("scot", $tlds));
 

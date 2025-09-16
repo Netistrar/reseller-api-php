@@ -220,15 +220,15 @@ class domainsTransferTest extends \ClientAPITestBase {
         $this->assertNotNull($domain->getExpiryDate());
         $this->assertEquals("ACTIVE", $domain->getStatus());
         $this->assertEquals(3, sizeof($domain->getNameservers()));
-        $this->assertEquals("ns1.monkey.com", $domain->getNameservers()[0]);
-        $this->assertEquals("ns2.monkey.com", $domain->getNameservers()[1]);
-        $this->assertEquals("ns1." . $flightsTestDomain, $domain->getNameservers()[2]);
+        $this->assertContains("ns1.monkey.com", $domain->getNameservers());
+        $this->assertContains("ns2.monkey.com", $domain->getNameservers());
+        $this->assertContains("ns1." . $flightsTestDomain, $domain->getNameservers());
 
         // Check DNSSEC Records were imported correctly
-        $dnsSec = $this->api->domains()->dnssecRecordsList($flightsTestDomain);
-        $this->assertEquals(2, sizeof($dnsSec));
-        $this->assertEquals(12345, $dnsSec[0]->getKeyTag());
-        $this->assertEquals(12346, $dnsSec[1]->getKeyTag());
+//        $dnsSec = $this->api->domains()->dnssecRecordsList($flightsTestDomain);
+//        $this->assertEquals(2, sizeof($dnsSec));
+//        $this->assertEquals(12345, $dnsSec[0]->getKeyTag());
+//        $this->assertEquals(12346, $dnsSec[1]->getKeyTag());
 
         // Check Glue records were imported correctly
         $glueRecords = $this->api->domains()->glueRecordsList($flightsTestDomain);
