@@ -1520,8 +1520,6 @@ class domainsTest extends \ClientAPITestBase {
 
 
     public function testAttemptsToAddDNSSECRecordsForBadDomainsOrTLDsNotEnabledForDNSSECReturnFailedTransactionWithOperationErrors() {
-
-
         $transaction = $this->api->domains()->dnssecRecordsAdd("baddomain.com", [
         ]);
 
