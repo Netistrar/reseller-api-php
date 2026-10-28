@@ -11,7 +11,7 @@ include_once "autoloader.php";
 class ClientAPITestBase extends \PHPUnit\Framework\TestCase {
 
 
-    const HOST_NAME = "http://restapi.netistrar.test:8080";
+    const HOST_NAME = "http://restapi.netistrar.test:8082";
     const API_KEY = "TESTAPIKEY";
     const API_SECRET = "TESTAPISECRET";
 
@@ -21,7 +21,7 @@ class ClientAPITestBase extends \PHPUnit\Framework\TestCase {
      */
     protected $api;
 
-    public function setUp() {
+    public function setUp(): void {
         $this->api = new \Netistrar\ClientAPI\APIProvider(self::HOST_NAME, self::API_KEY, self::API_SECRET);
     }
 
