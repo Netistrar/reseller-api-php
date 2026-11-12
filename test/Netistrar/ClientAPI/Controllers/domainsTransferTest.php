@@ -36,7 +36,7 @@ class domainsTransferTest extends \ClientAPITestBase {
         // Try simple not registered domains and with invalid owner contact.
         $validationErrors = $this->api->domains()->transferValidate(new DomainNameTransferDescriptor(array("notregistered12345.flights", "shopping.flights", "ganymede-netistrar.co.uk", "notregistered12345.uk"),
             $domainContact));
-        var_dump($validationErrors);
+
         $this->assertEquals(4, sizeof($validationErrors));
 
         $this->assertEquals(array(

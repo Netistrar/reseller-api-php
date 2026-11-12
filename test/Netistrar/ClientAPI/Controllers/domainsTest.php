@@ -1950,7 +1950,6 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
 
         $element = $transaction->getTransactionElements()[$domainName];
-        var_dump($element);
         $this->assertEquals("FAILED", $element->getElementStatus());
         $this->assertEquals(array("RESTORE_INVALID_CODE"), array_keys($element->getElementErrors()));
 
@@ -2087,7 +2086,7 @@ class domainsTest extends \ClientAPITestBase {
         $chargeDomain = "fix.academy";
         $priceDomain = "wildmind.biz";
         $feeDomain = "top.xyz";
-        var_dump($this->api->domains()->liveAvailability($chargeDomain));
+
         $chargeCode = $this->api->domains()->liveAvailability("fix.academy")->getAdditionalData()["premiumTransferCode"];
         $priceCode = $this->api->domains()->liveAvailability("wildmind.biz")->getAdditionalData()["premiumTransferCode"];
         $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRegistrationCode"];
@@ -2203,7 +2202,6 @@ class domainsTest extends \ClientAPITestBase {
 
 
         $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor([$feeDomain, $priceDomain], 3, [$feeDomain => $feeCode, $priceDomain => $priceCode]));
-        var_dump($transaction);
 
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
 
