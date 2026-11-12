@@ -1520,8 +1520,6 @@ class domainsTest extends \ClientAPITestBase {
 
 
     public function testAttemptsToAddDNSSECRecordsForBadDomainsOrTLDsNotEnabledForDNSSECReturnFailedTransactionWithOperationErrors() {
-
-
         $transaction = $this->api->domains()->dnssecRecordsAdd("baddomain.com", [
         ]);
 
@@ -1534,7 +1532,7 @@ class domainsTest extends \ClientAPITestBase {
 
         $prefix = "validdomain-" . date("U");
         $newUKDomain = $prefix . ".uk";
-        $newRodeoDomain = $prefix . ".scot";
+        $newRodeoDomain = $prefix . ".wales";
 
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
         $owner->setAdditionalData(array("nominetRegistrantType" => "IND"));
@@ -1551,7 +1549,6 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals("FAILED", $transaction->getTransactionStatus());
 
         $this->assertEquals("DOMAIN_INVALID_FOR_DNSSEC", $transaction->getTransactionError());
-
 
         $transaction = $this->api->domains()->dnssecRecordsAdd($newRodeoDomain, [
         ]);
@@ -1948,10 +1945,8 @@ class domainsTest extends \ClientAPITestBase {
 
         // Create an RGP domain
         $domainName = $this->api->test()->createRGPDomain();
-
         // Restore a bad domain
         $transaction = $this->api->domains()->restore($domainName, "65646463", 3);
-
         $this->assertEquals("ALL_ELEMENTS_FAILED", $transaction->getTransactionStatus());
 
         $element = $transaction->getTransactionElements()[$domainName];
@@ -1964,7 +1959,7 @@ class domainsTest extends \ClientAPITestBase {
 
     public function testAttemptsToRestoreRGPDomainWithNoRGPProductReturnsFailedTransaction() {
 
-        $newDomain = "validdomain-" . date("U") . ".xyz";
+        $newDomain = "validdomain-" . date("U") . ".wales";
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "My ORG", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
         $this->api->domains()->create(new DomainNameCreateDescriptor(array($newDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 2, [], true, array("Film", "Television", "Media")));
 
@@ -1990,8 +1985,10 @@ class domainsTest extends \ClientAPITestBase {
 
         $liveAvailability = $this->api->domains()->liveAvailability($domainName);
         $initialExpiry = date_create_from_format("d/m/Y", $liveAvailability->getAdditionalData()["expiryDate"]);
-
         $transaction = $this->api->domains()->restore($domainName, $liveAvailability->getAdditionalData()["restoreCode"], 3);
+        print_r($liveAvailability);
+        print_r($initialExpiry);
+        print_r($transaction);
 
         // Check transaction succeeded
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
@@ -2090,14 +2087,14 @@ class domainsTest extends \ClientAPITestBase {
         $priceDomain = "wildmind.biz";
         $feeDomain = "top.xyz";
 
-//        $chargeCode = $this->api->domains()->liveAvailability("fix.academy")->getAdditionalData()["premiumRegistrationCode"];
-//        $priceCode = $this->api->domains()->liveAvailability("wildmind.biz")->getAdditionalData()["premiumRegistrationCode"];
+        $chargeCode = $this->api->domains()->liveAvailability("fix.academy")->getAdditionalData()["premiumTransferCode"];
+        $priceCode = $this->api->domains()->liveAvailability("wildmind.biz")->getAdditionalData()["premiumTransferCode"];
         $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRegistrationCode"];
 
 //
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
         $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($feeDomain), 2, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
-            ["fix.academy" => $chargeCode, $feeDomain => $feeCode, $priceDomain => $priceCode]));
+            [$chargeDomain => $chargeCode, $feeDomain => $feeCode, $priceDomain => $priceCode]));
 
 //
 //        $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
@@ -2111,7 +2108,7 @@ class domainsTest extends \ClientAPITestBase {
         $this->assertEquals((new DateTime())->add(new DateInterval("P2Y"))->format("d/m/Y"), substr($domainName->getExpiryDate(), 0, 10));
 
 
-        $this->api->test()->deleteDomain("fix.academy");
+        $this->api->test()->deleteDomain($chargeDomain);
         $this->api->test()->deleteDomain($feeDomain);
         $this->api->test()->deleteDomain("wildmind.biz");
 
@@ -2126,8 +2123,8 @@ class domainsTest extends \ClientAPITestBase {
         $feeDomain = "purple.xyz";
 
 
-        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumRegistrationCode"];
-        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRegistrationCode"];
+        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumTransferCode"];
+        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumTransferCode"];
 
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
         $transaction = $this->api->domains()->create(new DomainNameCreateDescriptor(array($chargeDomain, $feeDomain), 1, $owner, array("ns1.netistrar.com", "ns2.netistrar.com"), null, null, null, 1, null, 1, [],
@@ -2175,9 +2172,9 @@ class domainsTest extends \ClientAPITestBase {
         $this->api->test()->deleteDomain($priceDomain);
 
 
-        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumRegistrationCode"];
-        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRegistrationCode"];
-        $priceCode = $this->api->domains()->liveAvailability($priceDomain)->getAdditionalData()["premiumRegistrationCode"];
+        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumTransferCode"];
+        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumTransferCode"];
+        $priceCode = $this->api->domains()->liveAvailability($priceDomain)->getAdditionalData()["premiumTransferCode"];
 
 
         $owner = new DomainNameContact("Marky Babes", "mark@oxil.co.uk", "Test org", "33 My Street", null, "Oxford", "Oxon", "OX4 2RD", "GB");
@@ -2186,9 +2183,13 @@ class domainsTest extends \ClientAPITestBase {
 
         //  $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
 
-        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumRenewalCode"];
-        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumRenewalCode"];
-        $priceCode = $this->api->domains()->liveAvailability($priceDomain)->getAdditionalData()["premiumRenewalCode"];
+        $chargeCode = $this->api->domains()->liveAvailability($chargeDomain)->getAdditionalData()["premiumTransferCode"];
+        $feeCode = $this->api->domains()->liveAvailability($feeDomain)->getAdditionalData()["premiumTransferCode"];
+        $priceCode = $this->api->domains()->liveAvailability($priceDomain)->getAdditionalData()["premiumTransferCode"];
+
+        print_r($this->api->domains()->liveAvailability($chargeDomain));
+        print_r($this->api->domains()->liveAvailability($priceDomain));
+        print_r($this->api->domains()->liveAvailability($feeDomain));
 
 
 //        // Renew for 2 years
@@ -2201,7 +2202,6 @@ class domainsTest extends \ClientAPITestBase {
 
 
         $transaction = $this->api->domains()->renewMultiple(new DomainNameRenewDescriptor([$feeDomain, $priceDomain], 3, [$feeDomain => $feeCode, $priceDomain => $priceCode]));
-        var_dump($transaction);
 
         $this->assertEquals("SUCCEEDED", $transaction->getTransactionStatus());
 

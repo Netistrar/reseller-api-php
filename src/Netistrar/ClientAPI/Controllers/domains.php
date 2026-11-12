@@ -174,7 +174,7 @@ class domains extends WebServiceProxy {
     public function restore($domainName, $restoreCode, $numberOfRenewalYears){
         $expectedExceptions = array();
         $expectedExceptions["\\Kinikit\\MVC\\Exception\\RateLimitExceededException"] = "\Netistrar\ClientAPI\Exception\RateLimitExceededException";
-        return parent::callMethod("restore/$domainName/$redemptionCode/$numberOfRenewalYears", "GET", array("restoreCode" => $restoreCode),null,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
+        return parent::callMethod("restore/$domainName/$restoreCode/$numberOfRenewalYears", "GET", array("restoreCode" => $restoreCode),null,"\Netistrar\ClientAPI\Objects\Transaction\Transaction",$expectedExceptions);
     }
 
     /**

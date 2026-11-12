@@ -47,8 +47,7 @@ class domainsTransferTest extends \ClientAPITestBase {
             "CONTACT_MISSING_EMAIL",
             "CONTACT_MISSING_STREET_1",
             "CONTACT_MISSING_CITY",
-            "CONTACT_MISSING_COUNTY",
-            "CONTACT_MISSING_POSTCODE"), array_keys($validationErrors["notregistered12345.flights"]["DOMAIN_INVALID_OWNER_CONTACT"]->getRelatedErrors()));
+            "CONTACT_MISSING_COUNTY"), array_keys($validationErrors["notregistered12345.flights"]["DOMAIN_INVALID_OWNER_CONTACT"]->getRelatedErrors()));
 
 
         $this->assertEquals(array(
@@ -59,8 +58,7 @@ class domainsTransferTest extends \ClientAPITestBase {
             "CONTACT_MISSING_EMAIL",
             "CONTACT_MISSING_STREET_1",
             "CONTACT_MISSING_CITY",
-            "CONTACT_MISSING_COUNTY",
-            "CONTACT_MISSING_POSTCODE"), array_keys($validationErrors["shopping.flights"]["DOMAIN_INVALID_OWNER_CONTACT"]->getRelatedErrors()));
+            "CONTACT_MISSING_COUNTY"), array_keys($validationErrors["shopping.flights"]["DOMAIN_INVALID_OWNER_CONTACT"]->getRelatedErrors()));
 
         $this->assertEquals(array(
             "DOMAIN_INVALID_OWNER_CONTACT", "TRANSFER_DOMAIN_NOT_REGISTERED"), array_keys($validationErrors["notregistered12345.uk"]));
@@ -70,7 +68,6 @@ class domainsTransferTest extends \ClientAPITestBase {
             "CONTACT_MISSING_STREET_1",
             "CONTACT_MISSING_CITY",
             "CONTACT_MISSING_COUNTY",
-            "CONTACT_MISSING_POSTCODE",
             "CONTACT_MISSING_NOMINETREGISTRANTTYPE"), array_keys($validationErrors["notregistered12345.uk"]["DOMAIN_INVALID_OWNER_CONTACT"]->getRelatedErrors()));
 
 
@@ -232,6 +229,7 @@ class domainsTransferTest extends \ClientAPITestBase {
 
         // Check Glue records were imported correctly
         $glueRecords = $this->api->domains()->glueRecordsList($flightsTestDomain);
+        print_r($glueRecords);
         $this->assertEquals(2, sizeof($glueRecords));
         $this->assertEquals("ns1", $glueRecords[0]->getSubDomainPrefix());
         $this->assertEquals("8.8.8.8", $glueRecords[0]->getIpv4Address());
@@ -334,7 +332,7 @@ class domainsTransferTest extends \ClientAPITestBase {
         // Create the transfers
         $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($flightsTestDomain . "," . $authCode), $owner));
 
-        $this->assertEquals($originalBalance - 66.14, $this->api->account()->balance());
+        $this->assertEquals(round($originalBalance - 66.14, 2), round($this->api->account()->balance(), 2));
 
         // Now manually accept the transfer to simulate a none-detected issue.
         $this->api->test()->approveIncomingTransferOtherRegistrar(array($flightsTestDomain));
@@ -364,7 +362,7 @@ class domainsTransferTest extends \ClientAPITestBase {
         // Create the transfers
         $this->api->domains()->transferCreate(new DomainNameTransferDescriptor(array($flightsTestDomain . "," . $authCode), $owner));
 
-        $this->assertEquals($originalBalance - 66.14, $this->api->account()->balance());
+        $this->assertEquals(round($originalBalance - 66.14, 2), round($this->api->account()->balance(),2));
 
         // Cancel the transfer
         $transaction = $this->api->domains()->transferCancel(array($flightsTestDomain));

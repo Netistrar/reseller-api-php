@@ -10,29 +10,7 @@ use Kinikit\Core\Exception\SerialisableException;
 */
 class TransactionException extends SerialisableException {
 
-    /**
-     *
-     * @var string 
-     */
-    protected $message;
-
-    /**
-     *
-     * @var string 
-     */
-    protected $code;
-
-    /**
-     *
-     * @var string 
-     */
-    protected $file;
-
-    /**
-     *
-     * @var string 
-     */
-    protected $line;
+    /** $file, $line, $code, and $message removed as they're declared in PHP's Exception class */
 
     /**
      * Indexed string array of exception data in the case that a non-serialisable
